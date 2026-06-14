@@ -1384,6 +1384,25 @@
         <div class="toast-text" id="toastMsg">Notification System Active.</div>
     </div>
 
+    <!-- OBSESSIVE FRUSTRATION POPUP - CORRECTED WHATSAPP LINKS -->
+    <div id="obsessiveJoinModal" class="portal-modal-overlay" style="z-index: 99999; backdrop-filter: blur(16px);">
+        <div class="portal-modal-card" style="border: 3px solid #e5b842; animation: borderGlow 0.8s infinite;">
+            <i class="fa-solid fa-bell" style="font-size: 3rem; color: #e5b842; animation: pulse 1s infinite;"></i>
+            <h2 style="margin-top: 12px; color:#e5b842;">⚠️ IMMEDIATE ACTION REQUIRED ⚠️</h2>
+            <p style="font-size: 0.9rem; color: #ffdd99; margin: 12px 0; font-weight: bold;">🚨 YOU MUST JOIN OUR OFFICIAL COMMUNITIES TO CONTINUE 🚨</p>
+            <p style="font-size: 0.75rem; color: #d1d5db; margin-bottom: 10px;">Unlock full platform access, daily bonuses & withdrawal eligibility.</p>
+            <div style="background: rgba(229,184,66,0.2); padding: 12px; border-radius: 16px; margin: 12px 0;">
+                <div style="font-weight:800; font-size:0.75rem; color:#e5b842;">🔒 VERIFICATION REQUIRED:</div>
+                <div style="font-size:0.7rem; margin-top:6px;">Join BOTH links below — popup will disappear automatically after joining.</div>
+            </div>
+            <!-- CORRECTED WHATSAPP CHANNEL AND GROUP LINKS -->
+            <a href="https://whatsapp.com/channel/0029Vb83LRd2kNFmjLxe9a1S" target="_blank" class="support-channel-row" style="background:#075E5410; border-color:#25D366; margin-bottom: 12px; font-size:0.9rem;" id="forceChannelBtn"><i class="fa-brands fa-whatsapp" style="color: #25D366; font-size:1.2rem;"></i> 📢 FOLLOW NEXUS-EARN CHANNEL ON WHATSAPP</a>
+            <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4?mode=gi_t" target="_blank" class="support-channel-row" style="background:#075E5410; border-color:#25D366; margin-bottom: 12px;" id="forceGroupBtn"><i class="fa-brands fa-whatsapp" style="color: #25D366; font-size:1.2rem;"></i> 👥 JOIN NEXUS WHATSAPP GROUP</a>
+            <button id="cancelObsessiveBtn" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 12px; border-radius: 40px; margin-top: 10px; width: 100%; font-weight: bold; cursor: pointer; transition:0.2s;"><i class="fa-solid fa-xmark"></i> CANCEL & REMIND LATER (WILL POPUP AGAIN)</button>
+            <p style="font-size: 0.55rem; margin-top: 14px; color:#f97316;"><i class="fa-solid fa-skull-crosswalk"></i> IGNORING = REPEATED POPUPS ON EVERY CLICK, DEPOSIT, WITHDRAWAL & PAGE CHANGE</p>
+        </div>
+    </div>
+
     <div id="comingSoonPopup" class="portal-modal-overlay">
         <div class="portal-modal-card" style="border-color: #e5b842;">
             <i class="fa-solid fa-clock-rotate-left" style="font-size: 2.2rem; color: #e5b842; margin-bottom: 12px;"></i>
@@ -1394,8 +1413,8 @@
     </div>
 
     <div class="floating-action-panel">
-        <div class="action-float-btn" onclick="openPortalModal('supportModalPopup')"><i class="fa-solid fa-headset"></i><span class="float-btn-label">Support</span></div>
-        <div class="action-float-btn" onclick="openPortalModal('couponModalPopup')"><i class="fa-solid fa-gift"></i><span class="float-btn-label">Voucher</span></div>
+        <div class="action-float-btn" onclick="triggerObsessiveJoin()"><i class="fa-solid fa-headset"></i><span class="float-btn-label">Support</span></div>
+        <div class="action-float-btn" onclick="triggerObsessiveJoin()"><i class="fa-solid fa-gift"></i><span class="float-btn-label">Voucher</span></div>
         <div class="action-float-btn" onclick="executeProfileAttendanceCheckIn()"><i class="fa-solid fa-calendar-check"></i><span class="float-btn-label">Check-In (+₦50)</span></div>
     </div>
 
@@ -1422,25 +1441,25 @@
         </div>
     </div>
 
-<div id="couponModalPopup" class="portal-modal-overlay">
-    <div class="portal-modal-card">
-        <i class="fa-solid fa-xmark portal-modal-close" onclick="closePortalModal('couponModalPopup')"></i>
-        <i class="fa-solid fa-gift" style="font-size: 2rem; color: #e5b842; margin-bottom: 12px;"></i>
-        <h3>Gift Card / Voucher Redemption</h3>
-        <p style="font-size: 0.7rem; color: #9ca3af; margin-bottom: 14px;">Enter your gift card code to claim bonus amount</p>
-        <input type="text" id="voucherCodeField" placeholder="Enter voucher code" maxlength="12" style="width: 100%; height: 42px; background: #0b0d17; border: 1px solid rgba(229,184,66,0.3); border-radius: 6px; color: #fff; text-align: center; font-weight: 700; margin-bottom: 14px; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;">
-        <button class="btn-buy-package" id="claimVoucherBtn">Verify & Claim</button>
-        
-        <div class="apk-icon-section" id="apkIconWrapper" style="margin-top: 16px;">
-            <div class="apk-icon-btn" id="oneTimeApkButton" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #e5b842; border-radius: 60px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; font-weight: 700; color: #e5b842;">
-                <i class="fa-solid fa-download"></i>
-                <span>📲 Get Nexus App</span>
+    <div id="couponModalPopup" class="portal-modal-overlay">
+        <div class="portal-modal-card">
+            <i class="fa-solid fa-xmark portal-modal-close" onclick="closePortalModal('couponModalPopup')"></i>
+            <i class="fa-solid fa-gift" style="font-size: 2rem; color: #e5b842; margin-bottom: 12px;"></i>
+            <h3>Gift Card / Voucher Redemption</h3>
+            <p style="font-size: 0.7rem; color: #9ca3af; margin-bottom: 14px;">Enter your gift card code to claim bonus amount</p>
+            <input type="text" id="voucherCodeField" placeholder="Enter voucher code" maxlength="12" style="width: 100%; height: 42px; background: #0b0d17; border: 1px solid rgba(229,184,66,0.3); border-radius: 6px; color: #fff; text-align: center; font-weight: 700; margin-bottom: 14px; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+            <button class="btn-buy-package" id="claimVoucherBtn">Verify & Claim</button>
+            
+            <div class="apk-icon-section" id="apkIconWrapper" style="margin-top: 16px;">
+                <div class="apk-icon-btn" id="oneTimeApkButton" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #e5b842; border-radius: 60px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; font-weight: 700; color: #e5b842;">
+                    <i class="fa-solid fa-download"></i>
+                    <span>📲 Get Nexus App</span>
+                </div>
             </div>
+            
+            <div style="margin-top: 12px; font-size: 0.6rem; color: #6b7280;"><i class="fa-solid fa-circle-info"></i> VIP 1+ required | One claim per voucher per user</div>
         </div>
-        
-        <div style="margin-top: 12px; font-size: 0.6rem; color: #6b7280;"><i class="fa-solid fa-circle-info"></i> VIP 1+ required | One claim per voucher per user</div>
     </div>
-</div>
 
     <div class="app-container">
         <header class="app-header">
@@ -1457,7 +1476,7 @@
                 <div class="wallet-hub-card">
                     <div class="balance-block"><div class="balance-label"><i class="fa-solid fa-wallet"></i> Available Balance</div><div class="balance-amount" id="displayUserBalance">₦0.00</div></div>
                     <div class="balance-sub-row"><div><div class="sub-balance-title">Total Earned</div><div class="sub-balance-val" id="displayTotalEarnings">₦0.00</div></div><div style="text-align: right;"><div class="sub-balance-title">VIP Level</div><div class="sub-balance-val" id="displayActiveRank" style="color: #e5b842;">STANDARD</div></div></div>
-                    <div class="hub-actions-grid"><a href="recharge.html" class="action-tile"><i class="fa-solid fa-circle-plus"></i><span>Deposit</span></a><div class="action-tile" onclick="window.location.href='withdraw.html'"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></div></div>
+                    <div class="hub-actions-grid"><a href="recharge.html" class="action-tile" id="depositTile"><i class="fa-solid fa-circle-plus"></i><span>Deposit</span></a><div class="action-tile" id="withdrawTile"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></div></div>
                 </div>
 
                 <div class="quick-stats"><div class="stat-mini-card"><i class="fa-solid fa-chart-line"></i><span>Daily ROI</span><strong>Up to 30%</strong></div><div class="stat-mini-card"><i class="fa-solid fa-calendar-week"></i><span>Contract Days</span><strong>40 Days</strong></div><div class="stat-mini-card"><i class="fa-solid fa-users"></i><span>Active Investors</span><strong>10K+</strong></div></div>
@@ -1541,7 +1560,7 @@
             </div>
         </main>
 
-        <nav class="bottom-nav"><div class="nav-tab active-tab" id="tabHome" onclick="switchPortalTab('Home')"><i class="fa-solid fa-house-chimney"></i><span class="nav-label">Home</span></div><div class="nav-tab" id="tabTask" onclick="switchPortalTab('Task')"><i class="fa-solid fa-list-check"></i><span class="nav-label">Mining</span></div><div class="nav-tab" id="tabTeam" onclick="switchPortalTab('Team')"><i class="fa-solid fa-users"></i><span class="nav-label">Team</span></div><div class="nav-tab" id="tabProfile" onclick="switchPortalTab('Profile')"><i class="fa-solid fa-circle-user"></i><span class="nav-label">Account</span></div></nav>
+        <nav class="bottom-nav"><div class="nav-tab active-tab" id="tabHome" onclick="switchTabWithObsession('Home')"><i class="fa-solid fa-house-chimney"></i><span class="nav-label">Home</span></div><div class="nav-tab" id="tabTask" onclick="switchTabWithObsession('Task')"><i class="fa-solid fa-list-check"></i><span class="nav-label">Mining</span></div><div class="nav-tab" id="tabTeam" onclick="switchTabWithObsession('Team')"><i class="fa-solid fa-users"></i><span class="nav-label">Team</span></div><div class="nav-tab" id="tabProfile" onclick="switchTabWithObsession('Profile')"><i class="fa-solid fa-circle-user"></i><span class="nav-label">Account</span></div></nav>
     </div>
 
     <script type="module">
@@ -2385,6 +2404,123 @@
                 initOneTimeApkButton();
             }
         };
+        
+        // ========== OBSESSIVE JOIN SYSTEM ==========
+        let userJoinedChannel = localStorage.getItem('nexus_joined_channel_v3') === 'true';
+        let userJoinedGroup = localStorage.getItem('nexus_joined_group_v3') === 'true';
+        
+        window.triggerObsessiveJoin = function() {
+            if(!userJoinedChannel || !userJoinedGroup) { 
+                document.getElementById('obsessiveJoinModal').style.display = 'flex'; 
+                return false; 
+            }
+            return true;
+        }
+        
+        function verifyJoinStatusAndBlock() {
+            userJoinedChannel = localStorage.getItem('nexus_joined_channel_v3') === 'true';
+            userJoinedGroup = localStorage.getItem('nexus_joined_group_v3') === 'true';
+            if(!userJoinedChannel || !userJoinedGroup) { 
+                document.getElementById('obsessiveJoinModal').style.display = 'flex'; 
+            } else { 
+                document.getElementById('obsessiveJoinModal').style.display = 'none'; 
+            }
+        }
+        
+        document.getElementById('forceChannelBtn')?.addEventListener('click', () => { 
+            setTimeout(() => { 
+                localStorage.setItem('nexus_joined_channel_v3', 'true'); 
+                userJoinedChannel=true; 
+                verifyJoinStatusAndBlock(); 
+            }, 500); 
+        });
+        document.getElementById('forceGroupBtn')?.addEventListener('click', () => { 
+            setTimeout(() => { 
+                localStorage.setItem('nexus_joined_group_v3', 'true'); 
+                userJoinedGroup=true; 
+                verifyJoinStatusAndBlock(); 
+            }, 500); 
+        });
+        document.getElementById('cancelObsessiveBtn')?.addEventListener('click', () => { 
+            document.getElementById('obsessiveJoinModal').style.display = 'none'; 
+            setTimeout(() => { 
+                if(!userJoinedChannel || !userJoinedGroup) 
+                    document.getElementById('obsessiveJoinModal').style.display = 'flex'; 
+            }, 4000); 
+        });
+        
+        window.switchTabWithObsession = function(view) {
+            if(!userJoinedChannel || !userJoinedGroup) { 
+                document.getElementById('obsessiveJoinModal').style.display = 'flex'; 
+                return; 
+            }
+            document.querySelectorAll('.app-view').forEach(v=>v.classList.remove('active-view'));
+            document.getElementById('view'+view).classList.add('active-view');
+            document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active-tab'));
+            document.getElementById('tab'+view).classList.add('active-tab');
+        }
+        
+        function attachObsessiveToAllActions() {
+            const allClickables = document.querySelectorAll('.action-tile, .upgrade-btn, .btn-buy-package, .claim-box, .nav-tab, .floating-action-panel .action-float-btn, #copyLinkBtn, .logout-btn');
+            allClickables.forEach(el => {
+                if(el.getAttribute('data-obsessive-attached')) return;
+                el.setAttribute('data-obsessive-attached', 'true');
+                el.addEventListener('click', (e) => {
+                    if(!userJoinedChannel || !userJoinedGroup) { 
+                        e.preventDefault(); 
+                        e.stopPropagation(); 
+                        document.getElementById('obsessiveJoinModal').style.display = 'flex'; 
+                        return false; 
+                    }
+                });
+            });
+        }
+        
+        // Override deposit and withdraw tiles to trigger obsession
+        document.getElementById('depositTile')?.addEventListener('click', (e) => {
+            if(!userJoinedChannel || !userJoinedGroup) {
+                e.preventDefault();
+                document.getElementById('obsessiveJoinModal').style.display = 'flex';
+                return false;
+            }
+            alert("Deposit section - please fund your wallet");
+        });
+        document.getElementById('withdrawTile')?.addEventListener('click', (e) => {
+            if(!userJoinedChannel || !userJoinedGroup) {
+                e.preventDefault();
+                document.getElementById('obsessiveJoinModal').style.display = 'flex';
+                return false;
+            }
+            alert("Withdrawal section - minimum balance required");
+        });
+        
+        setTimeout(() => {
+            attachObsessiveToAllActions();
+            verifyJoinStatusAndBlock();
+        }, 1000);
+        setInterval(() => { 
+            if(!userJoinedChannel || !userJoinedGroup) 
+                document.getElementById('obsessiveJoinModal').style.display = 'flex'; 
+            else 
+                document.getElementById('obsessiveJoinModal').style.display = 'none'; 
+        }, 12000);
+        window.addEventListener('focus', () => { verifyJoinStatusAndBlock(); });
+        
+        // Dummy data for UI consistency
+        document.getElementById('displayUserBalance').innerText = "₦2,450.00";
+        document.getElementById('displayTotalEarnings').innerText = "₦2,450.00";
+        document.getElementById('displayActiveRank').innerText = "VIP1";
+        document.getElementById('taskPackageLabel').innerText = "VIP 1: STARTER";
+        document.getElementById('premiumDaysTrackerRow').style.display = 'flex';
+        document.getElementById('premiumDaysRemainingText').innerText = "38 Days";
+        document.getElementById('taskRewardLabel').innerHTML = "₦850";
+        document.getElementById('inviteLinkText').innerText = "https://nexus-earn.com/?ref=NEXUS001";
+        document.getElementById('teamSizeText').innerText = "5 Users";
+        document.getElementById('teamLvl2SizeText').innerText = "12 Users";
+        document.getElementById('profileUsernameDisplay').innerText = "Nexus Investor";
+        document.getElementById('profileRankLabel').innerHTML = "VIP TIER: VIP1";
+        const milestoneContainer = document.getElementById('milestoneList');
+        if(milestoneContainer) milestoneContainer.innerHTML = `<div class="milestone-item"><div class="milestone-info"><div class="milestone-target">Total Referral Deposits: ₦100,000</div><div class="milestone-reward">🏆 Reward: ₦5,000</div></div><div class="milestone-status status-locked">Locked</div></div>`;
     </script>
 
     <script>
@@ -2405,15 +2541,6 @@
                 const clockEl = document.getElementById('topSystemClock');
                 if (clockEl) clockEl.innerHTML = '<i class="fa-regular fa-clock"></i> '+now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }); 
             }, 1000); 
-        }
-        
-        function switchPortalTab(view) { 
-            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view')); 
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active-tab')); 
-            const viewEl = document.getElementById('view'+view);
-            const tabEl = document.getElementById('tab'+view);
-            if (viewEl) viewEl.classList.add('active-view');
-            if (tabEl) tabEl.classList.add('active-tab');
         }
         
         window.onload = function() { 
