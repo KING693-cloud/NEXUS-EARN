@@ -1,0 +1,1926 @@
+/**
+ * ================================================================
+ *  🔥 NEXUS EARN – MASTER DASHBOARD STYLESHEET
+ *  ================================================================
+ *  File: dashboard.css
+ *  Description: Complete styles for the NEXUS EARN investment
+ *  platform dashboard. Includes dark/light mode, responsive
+ *  design, animations, and all UI components.
+ *
+ *  Version: 2.0.0 (Extracted & Enhanced)
+ *  Author: NEXUS EARN Team
+ *  ================================================================
+ */
+
+/* ================================================================
+   SECTION 1: RESET & BASE
+   ================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #0b0d17;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-bottom: 90px;
+    transition: background-color 0.3s ease, color 0.2s ease;
+}
+
+/* ================================================================
+   SECTION 2: SCROLLBAR
+   ================================================================ */
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: #1b203a;
+}
+::-webkit-scrollbar-thumb {
+    background: #e5b842;
+    border-radius: 4px;
+}
+
+/* ================================================================
+   SECTION 3: APP CONTAINER
+   ================================================================ */
+
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    background: #111424;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    transition: background 0.3s ease;
+}
+
+/* ================================================================
+   SECTION 4: ANIMATIONS
+   ================================================================ */
+
+@keyframes borderGlow {
+    0% {
+        border-color: rgba(229, 184, 66, 0.3);
+        box-shadow: 0 0 5px rgba(229, 184, 66, 0.1);
+    }
+    50% {
+        border-color: rgba(229, 184, 66, 0.8);
+        box-shadow: 0 0 15px rgba(229, 184, 66, 0.3);
+    }
+    100% {
+        border-color: rgba(229, 184, 66, 0.3);
+        box-shadow: 0 0 5px rgba(229, 184, 66, 0.1);
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ================================================================
+   SECTION 5: TOAST NOTIFICATION
+   ================================================================ */
+
+.toast-notification {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120px);
+    width: calc(100% - 32px);
+    max-width: 400px;
+    background: #1b203a;
+    border-left: 4px solid #e5b842;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    z-index: 50000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-notification.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* ================================================================
+   SECTION 6: FLOATING ACTION PANEL
+   ================================================================ */
+
+.floating-action-panel {
+    position: fixed;
+    bottom: 85px;
+    right: calc(50% - 225px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10000;
+}
+
+@media (max-width: 480px) {
+    .floating-action-panel {
+        right: 16px;
+    }
+}
+
+.action-float-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
+    color: #111424;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    border: 2px solid #111424;
+    transition: transform 0.2s ease;
+    position: relative;
+    animation: borderGlow 2s infinite;
+}
+
+.action-float-btn:active {
+    transform: scale(0.9);
+}
+
+.float-btn-label {
+    position: absolute;
+    right: 52px;
+    background: #1b203a;
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #e5b842;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.action-float-btn:hover .float-btn-label {
+    opacity: 1;
+}
+
+/* ================================================================
+   SECTION 7: DARK MODE TOGGLE (Header)
+   ================================================================ */
+
+.dark-mode-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(229, 184, 66, 0.15);
+    border: 1px solid #e5b842;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    color: #e5b842;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.05);
+    background: rgba(229, 184, 66, 0.3);
+}
+
+/* ================================================================
+   SECTION 8: MODAL OVERLAYS
+   ================================================================ */
+
+.portal-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(7, 9, 19, 0.92);
+    backdrop-filter: blur(10px);
+    z-index: 20000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.portal-modal-card {
+    background: #111424;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 380px;
+    padding: 35px 24px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+}
+
+.portal-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 1.4rem;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.portal-modal-close:hover {
+    color: #ef4444;
+}
+
+/* ================================================================
+   SECTION 9: SUPPORT CHANNEL ROW
+   ================================================================ */
+
+.support-channel-row {
+    background: #161a2e;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.support-channel-row:hover {
+    background: rgba(229, 184, 66, 0.08);
+    border-color: #e5b842;
+    transform: translateX(3px);
+}
+
+/* ================================================================
+   SECTION 10: LOGOUT BUTTON
+   ================================================================ */
+
+.logout-btn {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+/* ================================================================
+   SECTION 11: APP HEADER
+   ================================================================ */
+
+.app-header {
+    width: 100%;
+    background: #1b203a;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(229, 184, 66, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-brand i {
+    color: #e5b842;
+    font-size: 1.4rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.header-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #fff, #e5b842);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-status-node {
+    font-size: 0.6rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid #10b981;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #10b981;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ================================================================
+   SECTION 12: APP WORKSPACE
+   ================================================================ */
+
+.app-workspace {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.app-view {
+    display: none;
+    animation: fadeSlideUp 0.3s ease;
+}
+
+.app-view.active-view {
+    display: block;
+}
+
+/* ================================================================
+   SECTION 13: WALLET HUB CARD
+   ================================================================ */
+
+.wallet-hub-card {
+    width: 100%;
+    background: linear-gradient(135deg, #1b203a 0%, #13172c 100%);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(229, 184, 66, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-hub-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(229, 184, 66, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.balance-label {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.balance-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 6px;
+}
+
+.balance-sub-row {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 14px;
+    margin-top: 16px;
+}
+
+.sub-balance-title {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+}
+
+.sub-balance-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #10b981;
+    margin-top: 2px;
+}
+
+/* ================================================================
+   SECTION 14: HUB ACTIONS GRID
+   ================================================================ */
+
+.hub-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 16px;
+}
+
+.action-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    gap: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.action-tile:hover {
+    background: rgba(229, 184, 66, 0.1);
+    border-color: #e5b842;
+    transform: translateY(-2px);
+}
+
+.action-tile i {
+    font-size: 1.1rem;
+    color: #e5b842;
+}
+
+.action-tile span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+/* ================================================================
+   SECTION 15: QUICK STATS
+   ================================================================ */
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-mini-card {
+    background: #161a2e;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s ease;
+}
+
+.stat-mini-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(229, 184, 66, 0.3);
+}
+
+.stat-mini-card i {
+    font-size: 1.2rem;
+    color: #e5b842;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.stat-mini-card span {
+    font-size: 0.6rem;
+    color: #9ca3af;
+    display: block;
+}
+
+.stat-mini-card strong {
+    font-size: 0.9rem;
+    color: #fff;
+    display: block;
+    margin-top: 4px;
+}
+
+/* ================================================================
+   SECTION 16: SECTION HEADLINES
+   ================================================================ */
+
+.section-headline {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #e5b842;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-subline {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-bottom: 18px;
+    line-height: 1.4;
+}
+
+/* ================================================================
+   SECTION 17: PACKAGE CARDS (VIP Plans)
+   ================================================================ */
+
+.package-card {
+    width: 100%;
+    background: linear-gradient(135deg, #1b203a 0%, #161a2e 100%);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    animation: fadeSlideUp 0.4s ease-out;
+}
+
+.package-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(229, 184, 66, 0.3);
+}
+
+.package-card .discount-tag {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    z-index: 2;
+}
+
+.package-card .discount-tag.gold {
+    background: linear-gradient(135deg, #e5b842, #f5d061);
+    color: #111424;
+}
+
+.package-card .discount-tag.purple {
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+
+.package-card .discount-tag.pink {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+.package-card .discount-tag.cyan {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.package-card .discount-tag.orange {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.package-card .discount-tag.blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.package-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    margin-top: 4px;
+}
+
+.package-title-text {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.package-title-text i {
+    margin-right: 6px;
+}
+
+.package-price {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #e5b842;
+}
+
+.package-price del {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-left: 4px;
+}
+
+.package-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #d1d5db;
+}
+
+.detail-item i {
+    color: #e5b842;
+    font-size: 0.75rem;
+    width: 16px;
+}
+
+/* ================================================================
+   SECTION 18: BUY PACKAGE BUTTON
+   ================================================================ */
+
+.btn-buy-package {
+    width: 100%;
+    height: 44px;
+    background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
+    color: #111424;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-buy-package:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(229, 184, 66, 0.3);
+}
+
+.btn-buy-package:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.btn-buy-package.locked {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    cursor: not-allowed;
+}
+
+/* ================================================================
+   SECTION 19: VIP TIER BORDER COLORS
+   ================================================================ */
+
+.package-card[data-tier="VIP1"] {
+    border-left: 3px solid #e5b842;
+}
+.package-card[data-tier="VIP2"] {
+    border-left: 3px solid #cd7f32;
+}
+.package-card[data-tier="VIP3"] {
+    border-left: 3px solid #c0c0c0;
+}
+.package-card[data-tier="VIP4"] {
+    border-left: 3px solid #ffd700;
+}
+.package-card[data-tier="VIP5"] {
+    border-left: 3px solid #e5e4e2;
+}
+.package-card[data-tier="VIP6"] {
+    border-left: 3px solid #b9f2ff;
+}
+.package-card[data-tier="VIP7"] {
+    border-left: 3px solid #ff6b6b;
+}
+.package-card[data-tier="VIP8"] {
+    border-left: 3px solid #e5b842;
+}
+.package-card[data-tier="VIP9"] {
+    border-left: 3px solid #3b82f6;
+}
+.package-card[data-tier="VIP10"] {
+    border-left: 3px solid #a855f7;
+}
+.package-card[data-tier="VIP11"] {
+    border-left: 3px solid #ec4899;
+}
+.package-card[data-tier="VIP12"] {
+    border-left: 3px solid #06b6d4;
+}
+.package-card[data-tier="VIP13"] {
+    border-left: 3px solid #f97316;
+}
+
+/* ================================================================
+   SECTION 20: TASK / DAILY CLAIM CONTAINER
+   ================================================================ */
+
+.task-container {
+    background: linear-gradient(135deg, #1b203a 0%, #161a2e 100%);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    border: 1px solid rgba(229, 184, 66, 0.15);
+}
+
+.task-status-banner {
+    font-size: 0.8rem;
+    color: #e5b842;
+    background: rgba(229, 184, 66, 0.1);
+    padding: 8px 16px;
+    border-radius: 30px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.premium-days-badge-container {
+    background: #0b0d17;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.days-title-text {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.days-value-counter {
+    font-size: 1rem;
+    color: #e5b842;
+    font-weight: 800;
+}
+
+/* ================================================================
+   SECTION 21: CLAIM BOX
+   ================================================================ */
+
+.claim-box {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin: 16px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.claim-box.claim-available {
+    border: 3px solid #e5b842;
+    background: rgba(229, 184, 66, 0.1);
+}
+.claim-box.claim-available i {
+    color: #e5b842;
+}
+
+.claim-box.claim-disabled {
+    border: 3px solid #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+.claim-box.claim-disabled i {
+    color: #ef4444;
+}
+
+.claim-box.claim-maintenance {
+    border: 3px solid #f97316;
+    background: rgba(249, 115, 22, 0.1);
+    cursor: not-allowed;
+}
+.claim-box.claim-maintenance i {
+    color: #f97316;
+}
+
+.claim-box.claim-completed {
+    border: 3px solid #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    cursor: default;
+}
+.claim-box.claim-completed i {
+    color: #10b981;
+}
+
+.claim-box.claim-loading {
+    border: 3px solid #636b8f;
+    background: rgba(99, 107, 143, 0.1);
+    cursor: wait;
+    animation: pulse 1s infinite;
+}
+
+.claim-box i {
+    font-size: 2.5rem;
+    margin-bottom: 6px;
+}
+
+.claim-box span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* ================================================================
+   SECTION 22: CLAIM STATUS MESSAGE
+   ================================================================ */
+
+.claim-status-message {
+    font-size: 0.7rem;
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.claim-status-message.success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+.claim-status-message.error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+.claim-status-message.warning {
+    background: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+}
+.claim-status-message.info {
+    background: rgba(229, 184, 66, 0.15);
+    color: #e5b842;
+}
+
+.task-expiry-note {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* ================================================================
+   SECTION 23: LINK COPY CARD
+   ================================================================ */
+
+.link-copy-card {
+    background: #1b203a;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px dashed rgba(229, 184, 66, 0.3);
+}
+
+.link-field {
+    background: #0b0d17;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    gap: 8px;
+    word-break: break-all;
+}
+
+.link-field span {
+    flex: 1;
+    font-size: 0.7rem;
+}
+
+.btn-copy {
+    background: rgba(229, 184, 66, 0.15);
+    border: none;
+    color: #e5b842;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+.btn-copy:hover {
+    background: rgba(229, 184, 66, 0.3);
+}
+
+/* ================================================================
+   SECTION 24: STATS ROW (EXPANDED)
+   ================================================================ */
+
+.stats-row-expanded {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, #151a30 0%, #111424 100%);
+    padding: 14px;
+    border-radius: 12px;
+    border-left: 3px solid #e5b842;
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: translateX(3px);
+}
+
+.stat-box h4 {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+}
+
+.stat-box p {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.stat-box .stat-highlight {
+    color: #e5b842;
+}
+
+/* ================================================================
+   SECTION 25: TEAM LIST
+   ================================================================ */
+
+.team-list-card {
+    background: #1b203a;
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.user-breakdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 8px;
+}
+
+.user-breakdown-row:last-child {
+    border-bottom: none;
+}
+
+.user-meta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.user-display-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.badge-holder {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    font-size: 0.55rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.status-badge.registered {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.status-badge.vip-tag {
+    background: rgba(229, 184, 66, 0.15);
+    color: #e5b842;
+}
+
+.status-badge.not-activated {
+    background: rgba(255, 255, 255, 0.05);
+    color: #636b8f;
+}
+
+.user-financial-contribution {
+    text-align: right;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.user-financial-contribution span {
+    font-size: 0.55rem;
+    color: #9ca3af;
+    display: block;
+    font-weight: 500;
+}
+
+/* ================================================================
+   SECTION 26: MILESTONE REWARDS
+   ================================================================ */
+
+.milestone-rewards-card {
+    background: linear-gradient(135deg, #1b203a, #161a2e);
+    border-radius: 16px;
+    padding: 18px;
+    margin-top: 16px;
+    border: 1px solid rgba(229, 184, 66, 0.2);
+}
+
+.milestone-rewards-title {
+    color: #e5b842;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.milestone-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.milestone-item {
+    background: #0b0d17;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.milestone-info {
+    flex: 1;
+}
+
+.milestone-target {
+    font-size: 0.65rem;
+    color: #9ca3af;
+}
+
+.milestone-reward {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #e5b842;
+}
+
+.milestone-status {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+.status-available {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.status-claimed {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.status-locked {
+    background: rgba(255, 255, 255, 0.05);
+    color: #636b8f;
+}
+
+.claim-milestone-btn {
+    background: linear-gradient(135deg, #f5d061, #e5b842);
+    border: none;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.claim-milestone-btn:hover:not(:disabled) {
+    transform: scale(1.02);
+}
+
+.claim-milestone-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ================================================================
+   SECTION 27: VOUCHER HISTORY
+   ================================================================ */
+
+.voucher-history-section {
+    margin-top: 16px;
+    background: #1b203a;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: none;
+}
+
+.voucher-history-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #e5b842;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.voucher-history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.voucher-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.7rem;
+}
+
+.voucher-history-item:last-child {
+    border-bottom: none;
+}
+
+.voucher-history-code {
+    font-family: monospace;
+    color: #e5b842;
+    font-weight: 700;
+}
+
+.voucher-history-amount {
+    color: #10b981;
+    font-weight: 700;
+}
+
+.voucher-history-date {
+    font-size: 0.6rem;
+    color: #6b7280;
+}
+
+.voucher-name {
+    font-size: 0.6rem;
+    color: #e5b842;
+    margin-left: 4px;
+}
+
+/* ================================================================
+   SECTION 28: PROFILE SECTION
+   ================================================================ */
+
+.profile-hero {
+    background: linear-gradient(135deg, #1b203a 0%, #161a2e 100%);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid rgba(229, 184, 66, 0.15);
+    margin-bottom: 16px;
+}
+
+.avatar-circle {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(229, 184, 66, 0.1), rgba(229, 184, 66, 0.05));
+    border: 2px solid #e5b842;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px auto;
+    font-size: 1.8rem;
+    color: #e5b842;
+}
+
+.profile-meta-line {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+/* ================================================================
+   SECTION 29: PROFILE MANAGEMENT GROUP
+   ================================================================ */
+
+.profile-management-group {
+    background: #1b203a;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    margin-bottom: 16px;
+}
+
+.group-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #e5b842;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-input-wrapper {
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.profile-input-wrapper label {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.profile-field {
+    width: 100%;
+    height: 44px;
+    background: #0b0d17;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: #fff;
+    padding: 0 14px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.profile-field:focus {
+    border-color: #e5b842;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(229, 184, 66, 0.1);
+}
+
+.profile-field option {
+    background: #111424;
+    color: #fff;
+}
+
+/* ================================================================
+   SECTION 30: SHRUNK BANK BADGE
+   ================================================================ */
+
+.shrunk-bank-badge {
+    display: none;
+    background: linear-gradient(135deg, #111424, #0b0d17);
+    border: 1px solid #10b981;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: left;
+}
+
+.shrunk-bank-badge h4 {
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.shrunk-item {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.shrunk-item span {
+    color: #9ca3af;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+}
+
+.modification-notice-box {
+    font-size: 0.65rem;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    font-weight: 600;
+    display: none;
+    line-height: 1.4;
+}
+
+/* ================================================================
+   SECTION 31: BOTTOM NAVIGATION
+   ================================================================ */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    height: 70px;
+    background: rgba(17, 20, 36, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    z-index: 9999;
+}
+
+.nav-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #71717a;
+    text-decoration: none;
+    cursor: pointer;
+    height: 100%;
+    gap: 2px;
+    transition: all 0.3s ease;
+}
+
+.nav-tab:hover {
+    color: #e5b842;
+    transform: translateY(-2px);
+}
+
+.nav-tab i {
+    font-size: 1.2rem;
+}
+
+.nav-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.nav-tab.active-tab {
+    color: #e5b842;
+}
+
+/* ================================================================
+   SECTION 32: APK DOWNLOAD BUTTON
+   ================================================================ */
+
+.apk-download-btn {
+    position: fixed;
+    bottom: 80px;
+    left: 16px;
+    background: #1b203a;
+    border: 1px solid #e5b842;
+    border-radius: 50px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #e5b842;
+    cursor: pointer;
+    z-index: 9998;
+    transition: all 0.2s;
+    display: none;
+}
+
+.apk-download-btn:hover {
+    background: rgba(229, 184, 66, 0.15);
+    transform: scale(1.02);
+}
+
+.apk-download-btn i {
+    font-size: 0.9rem;
+}
+
+#apkVersionBadge {
+    font-size: 0.5rem;
+    background: rgba(229, 184, 66, 0.2);
+    padding: 2px 6px;
+    border-radius: 20px;
+}
+
+/* ================================================================
+   SECTION 33: LOADING OVERLAY
+   ================================================================ */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0c15;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+}
+
+.loading-overlay.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #2d345a;
+    border-top: 4px solid #e5b842;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+.loader-text {
+    color: #e5b842;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.loader-sub {
+    color: #9ca3af;
+    font-size: 0.75rem;
+    margin-top: 6px;
+}
+
+/* ================================================================
+   SECTION 34: GIFT CARD SECTION (in coupon modal)
+   ================================================================ */
+
+.gift-card-section {
+    margin-top: 14px;
+    padding: 14px;
+    background: #161a2e;
+    border-radius: 12px;
+    border: 1px solid rgba(229, 184, 66, 0.15);
+}
+
+.gift-card-section input {
+    width: 100%;
+    height: 42px;
+    background: #0b0d17;
+    border: 1px solid rgba(229, 184, 66, 0.3);
+    border-radius: 6px;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.gift-card-section input:focus {
+    border-color: #e5b842;
+}
+
+/* ================================================================
+   SECTION 35: COMING SOON POPUP
+   ================================================================ */
+
+#comingSoonPopup .portal-modal-card {
+    border-color: #e5b842;
+}
+
+/* ================================================================
+   SECTION 36: RESPONSIVE DESIGN
+   ================================================================ */
+
+@media (max-width: 420px) {
+    .app-workspace {
+        padding: 14px;
+    }
+
+    .wallet-hub-card {
+        padding: 18px;
+    }
+
+    .balance-amount {
+        font-size: 1.6rem;
+    }
+
+    .package-card {
+        padding: 16px;
+    }
+
+    .package-title-text {
+        font-size: 0.85rem;
+    }
+
+    .package-price {
+        font-size: 0.95rem;
+    }
+
+    .quick-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+
+    .stat-mini-card {
+        padding: 8px;
+    }
+
+    .stat-mini-card strong {
+        font-size: 0.8rem;
+    }
+
+    .hub-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .action-tile {
+        padding: 10px;
+    }
+
+    .action-tile span {
+        font-size: 0.65rem;
+    }
+
+    .stats-row-expanded {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .header-title {
+        font-size: 0.9rem;
+    }
+
+    .floating-action-panel {
+        right: 10px;
+        bottom: 75px;
+    }
+
+    .action-float-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+
+    .portal-modal-card {
+        padding: 25px 16px;
+    }
+
+    .profile-hero {
+        padding: 18px;
+    }
+
+    .profile-management-group {
+        padding: 16px;
+    }
+
+    .task-container {
+        padding: 20px 16px;
+    }
+
+    .claim-box {
+        width: 120px;
+        height: 120px;
+    }
+    .claim-box i {
+        font-size: 2rem;
+    }
+    .claim-box span {
+        font-size: 0.65rem;
+    }
+
+    .milestone-item {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    .claim-milestone-btn {
+        width: 100%;
+    }
+
+    .bottom-nav {
+        height: 60px;
+    }
+    .nav-tab i {
+        font-size: 1rem;
+    }
+    .nav-label {
+        font-size: 0.55rem;
+    }
+
+    .link-field {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .btn-copy {
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+    }
+}
+
+/* ================================================================
+   SECTION 37: DARK MODE OVERRIDES
+   ================================================================ */
+
+body.light-mode {
+    background-color: #f0f2f8 !important;
+    color: #1a1e2e;
+}
+
+body.light-mode .app-container {
+    background: #ffffff;
+}
+
+body.light-mode .glass-header,
+body.light-mode .wallet-hub-card,
+body.light-mode .package-card,
+body.light-mode .task-container,
+body.light-mode .link-copy-card,
+body.light-mode .profile-hero,
+body.light-mode .profile-management-group,
+body.light-mode .team-list-card,
+body.light-mode .milestone-rewards-card,
+body.light-mode .stat-card,
+body.light-mode .column-card,
+body.light-mode .voucher-history-section {
+    background: #ffffff;
+    border-color: #e0e4ec;
+    color: #1a1e2e;
+}
+
+body.light-mode .info-row,
+body.light-mode .link-field,
+body.light-mode .profile-field,
+body.light-mode .vip-btn,
+body.light-mode .pending-item,
+body.light-mode .sent-item,
+body.light-mode .stat-box,
+body.light-mode .milestone-item {
+    background: #f0f2f8;
+    color: #1a1e2e;
+}
+
+body.light-mode .balance-amount,
+body.light-mode .stat-card .number,
+body.light-mode .package-title-text,
+body.light-mode .user-display-name,
+body.light-mode .user-financial-contribution {
+    color: #1a1e2e;
+}
+
+body.light-mode .info-value,
+body.light-mode .pending-phone span {
+    color: #1a1e2e;
+}
+
+body.light-mode .bottom-nav {
+    background: #ffffff;
+    border-top-color: #e0e4ec;
+}
+
+body.light-mode .nav-tab {
+    color: #8a94b0;
+}
+
+body.light-mode .nav-tab.active-tab {
+    color: #e5b842;
+}
+
+body.light-mode .stat-mini-card,
+body.light-mode .premium-days-badge-container {
+    background: #f0f2f8;
+}
+
+body.light-mode .profile-field {
+    background: #ffffff;
+    border-color: #d1d5db;
+    color: #1a1e2e;
+}
+
+body.light-mode .profile-field option {
+    background: #ffffff;
+    color: #1a1e2e;
+}
+
+body.light-mode .portal-modal-card {
+    background: #ffffff;
+    border-color: #e0e4ec;
+}
+
+body.light-mode .support-channel-row {
+    background: #f0f2f8;
+    color: #1a1e2e;
+}
+
+body.light-mode .action-tile {
+    background: #f0f2f8;
+    border-color: #e0e4ec;
+}
+
+body.light-mode .action-tile span {
+    color: #1a1e2e;
+}
+
+body.light-mode .detail-item {
+    color: #4b5563;
+}
+
+body.light-mode .apk-download-btn {
+    background: #ffffff;
+    border-color: #e5b842;
+    color: #e5b842;
+}
+
+body.light-mode .gift-card-section {
+    background: #f0f2f8;
+    border-color: #d1d5db;
+}
+
+body.light-mode .gift-card-section input {
+    color: #1a1e2e;
+    background: #ffffff;
+}
+
+body.light-mode .shrunk-bank-badge {
+    background: #f0f2f8;
+    border-color: #10b981;
+}
+body.light-mode .shrunk-bank-badge h4 {
+    color: #059669;
+}
+body.light-mode .shrunk-item {
+    color: #1a1e2e;
+}
+
+body.light-mode .modification-notice-box {
+    background: rgba(239, 68, 68, 0.05);
+    color: #dc2626;
+}
+
+body.light-mode .wallet-hub-card::before {
+    background: radial-gradient(circle, rgba(229, 184, 66, 0.03) 0%, transparent 70%);
+}
+
+body.light-mode .header-title {
+    background: linear-gradient(135deg, #1a1e2e, #e5b842);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .package-card {
+    background: #ffffff;
+}
+body.light-mode .package-card .discount-tag {
+    color: #fff;
+}
+body.light-mode .package-card .discount-tag.gold {
+    color: #111424;
+}
+
+body.light-mode .stat-box {
+    background: #f0f2f8;
+}
+
+body.light-mode .wallet-hub-card {
+    background: linear-gradient(135deg, #f0f2f8 0%, #e8ecf4 100%);
+}
+body.light-mode .wallet-hub-card .balance-amount {
+    color: #1a1e2e;
+}
+body.light-mode .wallet-hub-card .sub-balance-val {
+    color: #059669;
+}
+
+body.light-mode .task-container {
+    background: #ffffff;
+}
+
+body.light-mode .milestone-rewards-card {
+    background: #ffffff;
+}
+
+body.light-mode .package-card .package-title-text {
+    color: #1a1e2e;
+}
+body.light-mode .package-card .detail-item {
+    color: #4b5563;
+}
+
+body.light-mode .profile-hero {
+    background: #ffffff;
+}
+
+body.light-mode .user-status-node {
+    color: #059669;
+    background: rgba(16, 185, 129, 0.1);
+}

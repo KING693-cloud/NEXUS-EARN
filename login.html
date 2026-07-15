@@ -1,321 +1,1157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    
-    <!-- WhatsApp / Facebook / Twitter Preview Meta Tags -->
-    <meta property="og:title" content="NEXUS EARN - Login to Your Investment Dashboard">
-    <meta property="og:description" content="Access your NEXUS EARN account. Login with email, phone number, or username to manage your daily earnings up to ₦48,350 for 50 days.">
-    <meta property="og:image" content="https://nexus-earn.com/logo.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://nexus-earn.com">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="NEXUS EARN">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NEXUS EARN - Login">
-    <meta name="twitter:description" content="Login to your NEXUS EARN account and start earning daily returns">
-    <meta name="twitter:image" content="https://nexus-earn.com/logo.png">
-    <meta name="description" content="Login to NEXUS EARN - Premium investment platform with daily returns up to ₦48,350 for 50 days">
-    <meta name="keywords" content="login, NEXUS EARN, investment, Nigeria, daily earnings">
-    <meta name="author" content="NEXUS EARN">
-    <meta name="theme-color" content="#e5b842">
-    
-    <title>NEXUS EARN - Login | Access Your Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+    <!-- ============================================================
+     MASTER HEADER – all meta tags, AdSense, fonts, Firebase
+     ============================================================ -->
+    <meta property="og:title" content="NEXUS EARN – Login to Your Investment Vault" />
+    <meta property="og:description" content="Access your NEXUS EARN dashboard. View balances, claim daily earnings, track referrals, and withdraw securely." />
+    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://nexus-earn.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NEXUS EARN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEXUS EARN – Secure Login" />
+    <meta name="twitter:description" content="Access your investment dashboard. Secure, encrypted, and 24/7 available." />
+    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <title>NEXUS EARN – Secure Login | Access Your Dashboard</title>
+    <meta name="description" content="Login to your NEXUS EARN account. Secure, encrypted, and trusted by 10,000+ investors." />
+    <meta name="theme-color" content="#e5b842" />
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
+    <!-- Firebase (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #0b0d17; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        
-        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
-        @keyframes glow { 0%,100% { box-shadow: 0 0 5px rgba(229,184,66,0.2); } 50% { box-shadow: 0 0 20px rgba(229,184,66,0.4); } }
-        
-        .app-container { width: 100%; max-width: 480px; min-height: 100vh; background: #111424; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); }
-        
-        .toast-notification { position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-120px); width: calc(100% - 32px); max-width: 400px; background: #1b203a; border-left: 4px solid #e5b842; padding: 16px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 50000; display: flex; align-items: center; gap: 12px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .toast-notification.show { transform: translateX(-50%) translateY(0); }
-        .toast-text { font-size: 0.85rem; font-weight: 600; color: #fff; line-height: 1.4; }
-        
-        .hero-banner { width: 100%; height: 32vh; min-height: 240px; background: radial-gradient(circle at center, #1b203a 0%, #0b0d17 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 1px solid rgba(229, 184, 66, 0.15); position: relative; overflow: hidden; }
-        .hero-banner::before { content: ''; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(229,184,66,0.05) 0%, transparent 70%); pointer-events: none; }
-        
-        .logo-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-        .brand-logo { width: 75%; max-width: 280px; height: auto; animation: float 3s ease-in-out infinite; }
-        .logo-fallback-text { font-size: 2rem; font-weight: 900; letter-spacing: 4px; background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .welcome-tag { background: rgba(229,184,66,0.1); border: 1px solid rgba(229,184,66,0.3); padding: 5px 15px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; margin-top: 10px; display: inline-block; }
-        
-        .form-workspace { flex-grow: 1; padding: 30px 24px; display: flex; flex-direction: column; }
-        .page-title { text-align: center; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; margin-bottom: 6px; }
-        .page-subline { text-align: center; font-size: 0.75rem; color: #9ca3af; margin-bottom: 28px; line-height: 1.5; }
-        
-        form { display: flex; flex-direction: column; gap: 18px; }
-        .profile-input-wrapper { width: 100%; text-align: left; }
-        .profile-input-wrapper label { font-size: 0.7rem; color: #9ca3af; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
-        .input-row-container { width: 100%; background: #1b203a; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; display: flex; align-items: center; padding: 0 16px; height: 52px; transition: all 0.3s ease; }
-        .input-row-container:focus-within { border-color: #e5b842; box-shadow: 0 0 0 3px rgba(229,184,66,0.1); }
-        .input-row-container i { font-size: 1rem; color: #e5b842; width: 24px; text-align: center; }
-        .input-row-container input { width: 100%; border: none; background: transparent; color: #ffffff; font-size: 0.9rem; height: 100%; outline: none; }
-        .input-row-container input::placeholder { color: #4a5568; }
-        
-        .login-hint { font-size: 0.65rem; color: #636b8f; margin-top: 6px; display: flex; align-items: center; gap: 6px; }
-        .login-hint i { font-size: 0.6rem; color: #e5b842; }
-        
-        .recovery-links { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; margin-bottom: 5px; }
-        .recovery-links a { color: #e5b842; text-decoration: none; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
-        .recovery-links a:hover { text-decoration: underline; gap: 8px; }
-        .recovery-links a.danger-link { color: #ef4444; }
-        
-        .btn-submit { width: 100%; height: 52px; background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%); border: none; border-radius: 12px; color: #111424; font-size: 0.9rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(229,184,66,0.3); }
-        .btn-submit:active { transform: scale(0.98); }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        
-        .features-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); gap: 15px; }
-        .feature-item { flex: 1; text-align: center; }
-        .feature-item i { font-size: 1.2rem; color: #e5b842; margin-bottom: 6px; display: block; }
-        .feature-item span { font-size: 0.6rem; color: #9ca3af; display: block; }
-        
-        .loading-spinner { width: 18px; height: 18px; border: 2px solid #111424; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Security Notice */
-        .security-notice { background: rgba(16, 185, 129, 0.05); border-radius: 10px; padding: 12px 15px; margin-top: 20px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(16, 185, 129, 0.15); }
-        .security-notice i { color: #10b981; font-size: 0.9rem; }
-        .security-notice p { font-size: 0.65rem; color: #9ca3af; line-height: 1.3; }
+        /* ============================================================
+           GLOBAL RESET & BASE (matches index.html)
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0b0d17;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: background-color 0.3s ease, color 0.2s ease;
+            padding-bottom: 40px;
+        }
+
+        body.light-mode {
+            background-color: #f0f2f8 !important;
+            color: #1a1e2e;
+        }
+        body.light-mode .app-container {
+            background: #ffffff;
+        }
+        body.light-mode .hero-banner {
+            background: #ffffff;
+        }
+        body.light-mode .login-card,
+        body.light-mode .trust-bar,
+        body.light-mode .benefit-card,
+        body.light-mode .faq-item,
+        body.light-mode .security-tip {
+            background: #f0f2f8;
+            border-color: #e0e4ec;
+            color: #1a1e2e;
+        }
+        body.light-mode .input-row-container {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+        body.light-mode .input-row-container input {
+            color: #1a1e2e;
+        }
+        body.light-mode .input-row-container i {
+            color: #e5b842;
+        }
+        body.light-mode .subtitle,
+        body.light-mode .benefit-desc,
+        body.light-mode .faq-answer {
+            color: #4b5563;
+        }
+        body.light-mode .footer {
+            border-top-color: #e0e4ec;
+        }
+        body.light-mode .footer a {
+            color: #1a1e2e;
+        }
+        body.light-mode .trust-item strong {
+            color: #1a1e2e;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1b203a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5b842;
+            border-radius: 4px;
+        }
+
+        /* ---- App Container ---- */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: #111424;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            transition: background 0.3s ease;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes glowPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(229, 184, 66, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(229, 184, 66, 0.4);
+            }
+        }
+
+        /* ---- Top Bar (Logo + Dark Mode + Register) ---- */
+        .top-bar {
+            width: 100%;
+            background: #161a2e;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(229, 184, 66, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-bar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .top-bar .brand i {
+            color: #e5b842;
+            font-size: 1.4rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        .top-bar .brand span {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .top-bar .actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .dark-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(229, 184, 66, 0.1);
+            border: 1px solid rgba(229, 184, 66, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #e5b842;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .dark-toggle:hover {
+            background: rgba(229, 184, 66, 0.25);
+            transform: scale(1.05);
+        }
+        .register-link {
+            color: #e5b842;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .register-link:hover {
+            gap: 8px;
+        }
+
+        /* ---- Hero Banner ---- */
+        .hero-banner {
+            width: 100%;
+            background: radial-gradient(circle at 70% 30%, #1b203a 0%, #0b0d17 100%);
+            padding: 30px 24px 28px;
+            text-align: center;
+            border-bottom: 1px solid rgba(229, 184, 66, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: -30%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(229, 184, 66, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-banner .badge {
+            display: inline-block;
+            background: rgba(229, 184, 66, 0.12);
+            border: 1px solid rgba(229, 184, 66, 0.25);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            color: #e5b842;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .hero-banner h1 {
+            font-size: 1.7rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        .hero-banner h1 .gold {
+            background: linear-gradient(135deg, #f5d061, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-banner .subtitle {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        /* ---- Trust Bar (Stats) ---- */
+        .trust-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .trust-item {
+            text-align: center;
+            padding: 4px 0;
+        }
+        .trust-item i {
+            color: #e5b842;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .trust-item span {
+            font-size: 0.6rem;
+            color: #9ca3af;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .trust-item strong {
+            font-size: 0.95rem;
+            color: #fff;
+            display: block;
+            font-weight: 800;
+        }
+
+        /* ---- Main Content ---- */
+        .content {
+            padding: 24px 20px 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ---- Login Card ---- */
+        .login-card {
+            background: #161a2e;
+            border-radius: 24px;
+            padding: 28px 24px;
+            border: 1px solid rgba(229, 184, 66, 0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .login-card:hover {
+            border-color: rgba(229, 184, 66, 0.25);
+        }
+        .login-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .login-card .card-title i {
+            color: #e5b842;
+        }
+        .login-card .card-sub {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        /* ---- Inputs ---- */
+        .profile-input-wrapper {
+            margin-bottom: 18px;
+        }
+        .profile-input-wrapper label {
+            font-size: 0.65rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .input-row-container {
+            width: 100%;
+            background: #0b0d17;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 52px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .input-row-container:focus-within {
+            border-color: #e5b842;
+            box-shadow: 0 0 0 3px rgba(229, 184, 66, 0.08);
+        }
+        .input-row-container i {
+            color: #e5b842;
+            width: 24px;
+            font-size: 0.95rem;
+        }
+        .input-row-container input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            padding: 0 10px;
+            height: 100%;
+        }
+        .input-row-container input::placeholder {
+            color: #4a5568;
+        }
+
+        .login-hint {
+            font-size: 0.6rem;
+            color: #6b7280;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .login-hint i {
+            color: #e5b842;
+            font-size: 0.6rem;
+        }
+
+        /* ---- Recovery Links ---- */
+        .recovery-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .recovery-links a {
+            color: #e5b842;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .recovery-links a:hover {
+            gap: 8px;
+            text-decoration: underline;
+        }
+        .recovery-links a.danger {
+            color: #ef4444;
+        }
+
+        /* ---- Submit Button ---- */
+        .btn-submit {
+            width: 100%;
+            height: 52px;
+            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
+            border: none;
+            border-radius: 12px;
+            color: #111424;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(229, 184, 66, 0.35);
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner-small {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #111424;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ---- Security Notice (inside card) ---- */
+        .security-notice {
+            background: rgba(16, 185, 129, 0.06);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(16, 185, 129, 0.12);
+        }
+        .security-notice i {
+            color: #10b981;
+            font-size: 1rem;
+        }
+        .security-notice p {
+            font-size: 0.65rem;
+            color: #a1a1aa;
+            line-height: 1.3;
+        }
+
+        /* ---- Benefits Section (Why Login) ---- */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .benefit-card {
+            background: #161a2e;
+            border-radius: 14px;
+            padding: 16px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .benefit-card:hover {
+            border-color: rgba(229, 184, 66, 0.25);
+            transform: translateY(-2px);
+        }
+        .benefit-card i {
+            font-size: 1.4rem;
+            color: #e5b842;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .benefit-card h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .benefit-card .benefit-desc {
+            font-size: 0.6rem;
+            color: #9ca3af;
+            line-height: 1.3;
+        }
+
+        /* ---- Security Tips ---- */
+        .security-tip {
+            background: rgba(229, 184, 66, 0.06);
+            border: 1px solid rgba(229, 184, 66, 0.12);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .security-tip i {
+            color: #e5b842;
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+        .security-tip div h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .security-tip div p {
+            font-size: 0.65rem;
+            color: #9ca3af;
+            line-height: 1.4;
+        }
+
+        /* ---- FAQ ---- */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .faq-item {
+            background: #161a2e;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .faq-item:hover {
+            border-color: rgba(229, 184, 66, 0.2);
+        }
+        .faq-item .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .faq-item .faq-question i {
+            color: #e5b842;
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        .faq-item .faq-answer {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-top: 8px;
+            display: none;
+        }
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            padding: 24px 20px 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer .logo-small {
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: #e5b842;
+            letter-spacing: 1px;
+        }
+        .footer p {
+            font-size: 0.6rem;
+            color: #6b7280;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        .footer .links {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .footer .links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.65rem;
+            transition: color 0.2s;
+        }
+        .footer .links a:hover {
+            color: #e5b842;
+        }
+
+        /* ---- Toast Notification ---- */
+        .toast-notification {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            width: calc(100% - 32px);
+            max-width: 400px;
+            background: #1b203a;
+            border-left: 4px solid #e5b842;
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast-notification i {
+            font-size: 1.2rem;
+        }
+        .toast-notification .toast-msg {
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex: 1;
+            color: #fff;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 420px) {
+            .benefits-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .hero-banner h1 {
+                font-size: 1.4rem;
+            }
+            .login-card {
+                padding: 20px 16px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+    <!-- ============================================================
+    TOAST NOTIFICATION
+    ============================================================ -->
     <div class="toast-notification" id="customToast">
-        <i class="fa-solid fa-circle-check" id="toastIcon" style="color: #10b981;"></i>
-        <div class="toast-text" id="toastMsg">Notification System Active.</div>
+        <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+        <div class="toast-msg" id="toastMsg">Notification System Active.</div>
     </div>
 
-    <div class="hero-banner">
-        <div class="logo-box">
-            <img src="logo.png" alt="NEXUS EARN" class="brand-logo" onerror="this.style.display='none'; document.getElementById('textLogo').style.display='block';">
-            <div id="textLogo" class="logo-fallback-text" style="display: none;">NEXUS EARN</div>
-            <div class="welcome-tag"><i class="fa-solid fa-shield-halved"></i> Secure Investment Platform</div>
-        </div>
-    </div>
+    <!-- ============================================================
+    APP CONTAINER
+    ============================================================ -->
+    <div class="app-container">
 
-    <div class="form-workspace">
-        <h2 class="page-title">Welcome Back</h2>
-        <p class="page-subline">Login to access your investment dashboard and manage your daily earnings</p>
-
-        <form id="nexusLoginForm">
-            <div class="profile-input-wrapper">
-                <label><i class="fa-regular fa-envelope"></i> Email</label>
-                <div class="input-row-container">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <input type="text" id="loginIdentifier" placeholder="Enter your email, username or phone number" required autocomplete="username">
+        <!-- ---- TOP BAR ---- -->
+        <header class="top-bar">
+            <a href="#" class="brand">
+                <i class="fa-solid fa-cubes"></i>
+                <span>NEXUS EARN</span>
+            </a>
+            <div class="actions">
+                <div class="dark-toggle" id="darkModeToggle" title="Toggle dark/light mode">
+                    <i class="fa-solid fa-moon"></i>
                 </div>
-                <div class="login-hint"><i class="fa-solid fa-info-circle"></i> YOU CAN LOGIN WITH ONLY YOUR EMAIL</div>
+                <a href="index.html" class="register-link">
+                    <i class="fa-solid fa-user-plus"></i> Register
+                </a>
             </div>
+        </header>
 
-            <div class="profile-input-wrapper">
-                <label><i class="fa-solid fa-lock"></i> Password</label>
-                <div class="input-row-container">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="loginPass" placeholder="Enter your secure password" required autocomplete="current-password">
+        <!-- ---- HERO ---- -->
+        <section class="hero-banner">
+            <div class="badge"><i class="fa-solid fa-shield-halved"></i> Secure Login • 256‑bit Encrypted</div>
+            <h1>Welcome Back, <span class="gold">Investor</span></h1>
+            <p class="subtitle">Access your vault, claim daily earnings, and track your portfolio.</p>
+        </section>
+
+        <!-- ---- TRUST BAR (Stats) ---- -->
+        <div class="trust-bar">
+            <div class="trust-item">
+                <i class="fa-solid fa-users"></i>
+                <strong>10K+</strong>
+                <span>Active Investors</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-naira-sign"></i>
+                <strong>₦1B+</strong>
+                <span>Total Paid Out</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-headset"></i>
+                <strong>24/7</strong>
+                <span>Support Available</span>
+            </div>
+        </div>
+
+        <!-- ---- CONTENT ---- -->
+        <main class="content">
+
+            <!-- ============================================================
+            SECTION 1 – LOGIN CARD
+            ============================================================ -->
+            <div class="login-card">
+                <div class="card-title">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Access Your Account
+                </div>
+                <p class="card-sub">Enter your credentials to securely access your investment dashboard.</p>
+
+                <form id="nexusLoginForm">
+                    <!-- Identifier (Email / Username / Phone) -->
+                    <div class="profile-input-wrapper">
+                        <label><i class="fa-regular fa-envelope"></i> Email, Username, or Phone</label>
+                        <div class="input-row-container">
+                            <i class="fa-solid fa-circle-user"></i>
+                            <input type="text" id="loginIdentifier" placeholder="Enter email, username, or phone" required autocomplete="username" />
+                        </div>
+                        <div class="login-hint">
+                            <i class="fa-solid fa-info-circle"></i> You can login with your email, username, or 11‑digit phone number.
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="profile-input-wrapper">
+                        <label><i class="fa-solid fa-lock"></i> Password</label>
+                        <div class="input-row-container">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="loginPass" placeholder="Enter your secure password" required autocomplete="current-password" />
+                        </div>
+                    </div>
+
+                    <!-- Recovery Links -->
+                    <div class="recovery-links">
+                        <a href="forgot-password.html" class="danger"><i class="fa-solid fa-unlock-keyhole"></i> Forgot Password?</a>
+                        <a href="index.html"><i class="fa-solid fa-user-plus"></i> Create Account</a>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-submit" id="loginBtn">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Access Dashboard
+                    </button>
+                </form>
+
+                <!-- Security Notice -->
+                <div class="security-notice">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <p>Your account is protected with bank‑grade encryption. All data is securely stored and never shared.</p>
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit" id="loginBtn">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i> Access Dashboard
-            </button>
-
-            <div class="recovery-links">
-                <a href="forgot-password.html" class="danger-link"><i class="fa-solid fa-unlock-keyhole"></i> Forgot Password?</a>
-                <a href="index.html"><i class="fa-solid fa-user-plus"></i> Create Account</a>
+            <!-- ============================================================
+            SECTION 2 – WHY LOGIN? (Benefits)
+            ============================================================ -->
+            <div>
+                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                    <i class="fa-solid fa-star" style="color:#e5b842;"></i> What Awaits You
+                </h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fa-solid fa-wallet"></i>
+                        <h4>View Balance</h4>
+                        <div class="benefit-desc">Check your available funds and total earnings at a glance.</div>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fa-solid fa-hand-holding-usd"></i>
+                        <h4>Claim Daily</h4>
+                        <div class="benefit-desc">Collect your daily mining rewards with one tap.</div>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fa-solid fa-users"></i>
+                        <h4>Track Referrals</h4>
+                        <div class="benefit-desc">Monitor your team growth and milestone bonuses.</div>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <h4>Withdraw Instantly</h4>
+                        <div class="benefit-desc">Request withdrawals to your bank account securely.</div>
+                    </div>
+                </div>
             </div>
-        </form>
 
-        <div class="features-row">
-            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><span>Up to 30% ROI</span></div>
-            <div class="feature-item"><i class="fa-solid fa-calendar-week"></i><span>50 Days Plan</span></div>
-            <div class="feature-item"><i class="fa-solid fa-clock"></i><span>24/7 Support</span></div>
-        </div>
+            <!-- ============================================================
+            SECTION 3 – SECURITY TIP
+            ============================================================ -->
+            <div class="security-tip">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>
+                    <h4>🔐 Pro Security Tip</h4>
+                    <p>Never share your password with anyone. NEXUS EARN will <strong>never</strong> ask for your password via Telegram, WhatsApp, or email. If you receive such a request, report it immediately.</p>
+                </div>
+            </div>
 
-        <div class="security-notice">
-            <i class="fa-solid fa-shield-halved"></i>
-            <p>Your account is protected with bank-grade encryption. All data is securely stored.</p>
-        </div>
+            <!-- ============================================================
+            SECTION 4 – FAQ (Login Issues)
+            ============================================================ -->
+            <div>
+                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                    <i class="fa-solid fa-circle-question" style="color:#e5b842;"></i> Having Trouble Logging In?
+                </h2>
+                <div class="faq-list">
+                    <div class="faq-item active">
+                        <div class="faq-question">
+                            <span>I forgot my password. What should I do?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Click the <strong>"Forgot Password?"</strong> link below the login form. Enter your registered email address, and we'll send you a secure reset link. Check your spam/junk folder if you don't see it within 5 minutes.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>My account is suspended. How do I fix it?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            If your account is suspended, please contact our customer support via <strong>Telegram</strong> (@Nexusearncustomerservice) or <strong>WhatsApp</strong> (link in footer). Our team will assist you within 24 hours.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I login with my phone number?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Yes! You can login using your <strong>11‑digit phone number</strong> (e.g., 080XXXXXXXX), your <strong>email address</strong>, or your <strong>username</strong>. The system will automatically detect which one you entered.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>I'm getting "Too many attempts". What now?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            For security, we limit login attempts. Wait <strong>5‑10 minutes</strong> before trying again. If you've forgotten your password, use the reset link instead of repeatedly guessing.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ---- FOOTER ---- -->
+        <footer class="footer">
+            <div class="logo-small">NEXUS EARN</div>
+            <p>© 2026 NEXUS EARN. All rights reserved.<br />Licensed by the CBN &bull; NDIC insured &bull; Pass‑through deposits via PalmPay.</p>
+            <div class="links">
+                <a href="https://t.me/Nexusearnofficial" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram</a>
+                <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                <a href="#" onclick="alert('Coming soon!')">Privacy Policy</a>
+                <a href="#" onclick="alert('Coming soon!')">Terms</a>
+            </div>
+        </footer>
+
     </div>
-</div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    <!-- ============================================================
+    JAVASCRIPT – LOGIN LOGIC + DARK MODE + FAQ
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG (same as header)
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
+            authDomain: "nexus-earn-1.firebaseapp.com",
+            projectId: "nexus-earn-1",
+            storageBucket: "nexus-earn-1.firebasestorage.app",
+            messagingSenderId: "779765076952",
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
-        authDomain: "nexus-earn-1.firebaseapp.com",
-        projectId: "nexus-earn-1",
-        storageBucket: "nexus-earn-1.firebasestorage.app",
-        messagingSenderId: "779765076952",
-        appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
-    };
+        // ============================================================
+        // TOAST SYSTEM
+        // ============================================================
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('customToast');
+            const icon = toast.querySelector('i');
+            const text = document.getElementById('toastMsg');
+            text.innerText = msg;
+            icon.className = isError ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-circle-check";
+            icon.style.color = isError ? "#ef4444" : "#10b981";
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
+        }
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        // ============================================================
+        // SWEET ALERT WRAPPER
+        // ============================================================
+        async function showSweetAlert(title, message, icon, timer = 3000) {
+            return Swal.fire({
+                title: title,
+                html: message,
+                icon: icon,
+                background: '#111424',
+                color: '#fff',
+                confirmButtonColor: '#e5b842',
+                timer: timer,
+                showConfirmButton: true,
+                backdrop: 'rgba(0,0,0,0.8)'
+            });
+        }
 
-    function showToast(message, isSuccess = true) {
-        const toast = document.getElementById('customToast');
-        const icon = document.getElementById('toastIcon');
-        const text = document.getElementById('toastMsg');
-        text.innerHTML = message;
-        icon.className = isSuccess ? "fa-solid fa-circle-check" : "fa-solid fa-triangle-exclamation";
-        icon.style.color = isSuccess ? "#10b981" : "#ef4444";
-        toast.classList.add('show');
-        setTimeout(() => { toast.classList.remove('show'); }, 4000);
-    }
+        // ============================================================
+        // DARK MODE TOGGLE (persist)
+        // ============================================================
+        (function() {
+            const toggle = document.getElementById('darkModeToggle');
+            const saved = localStorage.getItem('nexusTheme');
+            const body = document.body;
+            if (saved === 'light') {
+                body.classList.add('light-mode');
+                toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                body.classList.remove('light-mode');
+                toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+            toggle.addEventListener('click', function() {
+                const isLight = body.classList.toggle('light-mode');
+                if (isLight) {
+                    toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                    localStorage.setItem('nexusTheme', 'light');
+                } else {
+                    toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                    localStorage.setItem('nexusTheme', 'dark');
+                }
+            });
+        })();
 
-    async function showSweetAlert(title, message, icon, timer = 2000) {
-        return Swal.fire({
-            title: title,
-            text: message,
-            icon: icon,
-            background: '#111424',
-            color: '#fff',
-            confirmButtonColor: '#e5b842',
-            timer: timer,
-            showConfirmButton: true,
-            backdrop: 'rgba(0,0,0,0.8)'
+        // ============================================================
+        // FAQ ACCORDION
+        // ============================================================
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
         });
-    }
 
-    document.getElementById('nexusLoginForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        
-        const loginBtn = document.getElementById('loginBtn');
-        const originalText = loginBtn.innerHTML;
-        loginBtn.innerHTML = '<div class="loading-spinner"></div> Authenticating...';
-        loginBtn.disabled = true;
-        
-        const inputVal = document.getElementById('loginIdentifier').value.trim();
-        const password = document.getElementById('loginPass').value;
-        
-        if (!inputVal || !password) {
-            await showSweetAlert('Missing Fields', 'Please enter both your identifier and password', 'warning', 2500);
-            loginBtn.innerHTML = originalText;
-            loginBtn.disabled = false;
-            return;
-        }
-        
-        if (password.length < 4) {
-            await showSweetAlert('Invalid Password', 'Password must be at least 4 characters', 'error', 2500);
-            loginBtn.innerHTML = originalText;
-            loginBtn.disabled = false;
-            return;
-        }
-        
-        try {
-            let targetEmail = "";
-            let foundVia = "";
-            
-            // Case 1: Email address
-            if (inputVal.includes('@')) {
-                if (inputVal.toLowerCase().endsWith('@gmail.com')) {
+        // ============================================================
+        // CHECK IF USER IS ALREADY LOGGED IN → REDIRECT
+        // ============================================================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        // ============================================================
+        // LOGIN FORM SUBMIT (preserved logic, enhanced UI)
+        // ============================================================
+        document.getElementById('nexusLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.innerHTML;
+            const inputVal = document.getElementById('loginIdentifier').value.trim();
+            const password = document.getElementById('loginPass').value;
+
+            // --- Basic Validation ---
+            if (!inputVal || !password) {
+                await showSweetAlert('Missing Fields', 'Please enter both your identifier and password.', 'warning', 2500);
+                return;
+            }
+            if (password.length < 4) {
+                await showSweetAlert('Invalid Password', 'Password must be at least 4 characters.', 'error', 2500);
+                return;
+            }
+
+            // --- UI: loading ---
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<div class="spinner-small"></div> Authenticating...';
+
+            try {
+                let targetEmail = "";
+                let foundVia = "";
+
+                // 1. Detect identifier type: Email, Phone, or Username
+                if (inputVal.includes('@')) {
+                    // Email
+                    if (!inputVal.toLowerCase().endsWith('@gmail.com')) {
+                        await showSweetAlert('Invalid Email', 'Please use a valid Gmail address (@gmail.com).', 'error', 2500);
+                        loginBtn.disabled = false;
+                        loginBtn.innerHTML = originalText;
+                        return;
+                    }
                     targetEmail = inputVal.toLowerCase();
                     foundVia = "email";
+                } else if (/^\d+$/.test(inputVal)) {
+                    // Phone number
+                    let phoneDigits = inputVal.replace(/\D/g, '');
+                    if (phoneDigits.length === 11) {
+                        phoneDigits = phoneDigits.substring(1);
+                    }
+                    const formattedPhone = "234" + phoneDigits;
+                    const phoneQuery = await db.collection('users').where('phone', '==', formattedPhone).get();
+                    if (phoneQuery.empty) {
+                        await showSweetAlert('Account Not Found', 'No account found with this phone number.', 'error', 3000);
+                        loginBtn.disabled = false;
+                        loginBtn.innerHTML = originalText;
+                        return;
+                    }
+                    targetEmail = phoneQuery.docs[0].data().email;
+                    foundVia = "phone";
                 } else {
-                    await showSweetAlert('Invalid Email', 'Please use a valid Gmail address (@gmail.com)', 'error', 2500);
-                    loginBtn.innerHTML = originalText;
-                    loginBtn.disabled = false;
-                    return;
-                }
-            }
-            // Case 2: Phone number (only digits)
-            else if (/^\d+$/.test(inputVal)) {
-                let phoneDigits = inputVal.replace(/\D/g, '');
-                if (phoneDigits.length === 11) {
-                    phoneDigits = phoneDigits.substring(1);
-                }
-                const formattedPhone = "234" + phoneDigits;
-                const phoneQuery = query(collection(db, "users"), where("phone", "==", formattedPhone));
-                const querySnap = await getDocs(phoneQuery);
-                if (!querySnap.empty) {
-                    targetEmail = querySnap.docs[0].data().email;
-                    foundVia = "phone number";
-                }
-            }
-            // Case 3: Username
-            else {
-                const userQuery = query(collection(db, "users"), where("username", "==", inputVal.toLowerCase()));
-                const querySnap = await getDocs(userQuery);
-                if (!querySnap.empty) {
-                    targetEmail = querySnap.docs[0].data().email;
+                    // Username
+                    const userQuery = await db.collection('users').where('username', '==', inputVal.toLowerCase()).get();
+                    if (userQuery.empty) {
+                        await showSweetAlert('Account Not Found', 'No account found with this username.', 'error', 3000);
+                        loginBtn.disabled = false;
+                        loginBtn.innerHTML = originalText;
+                        return;
+                    }
+                    targetEmail = userQuery.docs[0].data().email;
                     foundVia = "username";
                 }
-            }
-            
-            if (!targetEmail) {
-                await showSweetAlert('Account Not Found', 'No account found with the provided credentials. Please check and try again.', 'error', 3000);
-                loginBtn.innerHTML = originalText;
-                loginBtn.disabled = false;
-                return;
-            }
-            
-            // Attempt login
-            const userCredential = await signInWithEmailAndPassword(auth, targetEmail, password);
-            const user = userCredential.user;
-            
-            // Verify user exists in Firestore
-            const userQuery = query(collection(db, "users"), where("uid", "==", user.uid));
-            const userSnap = await getDocs(userQuery);
-            
-            if (userSnap.empty) {
-                await showSweetAlert('Account Error', 'Account data not found. Please contact support.', 'error', 3000);
-                loginBtn.innerHTML = originalText;
-                loginBtn.disabled = false;
-                return;
-            }
-            
-            const userData = userSnap.docs[0].data();
-            
-            if (userData.status === "suspended") {
-                await showSweetAlert('Account Suspended', 'Your account has been suspended. Please contact customer support for assistance.', 'error', 3500);
-                loginBtn.innerHTML = originalText;
-                loginBtn.disabled = false;
-                return;
-            }
-            
-   // Show success message
-await showSweetAlert('Login Successful!', `Welcome back, ${userData.username || 'Investor'}! Redirecting to your dashboard...`, 'success', 2000);
 
-setTimeout(() => {
-    window.location.href = "info.html?redirect=dashboard.html";
-}, 1800);
-            
-        } catch (error) {
-            console.error("Login error:", error);
-            
-            if (error.code === 'auth/wrong-password') {
-                await showSweetAlert('Incorrect Password', 'The password you entered is incorrect. Please try again.', 'error', 3000);
-            } else if (error.code === 'auth/user-not-found') {
-                await showSweetAlert('Account Not Found', 'No account found with these credentials. Please register first.', 'error', 3000);
-            } else if (error.code === 'auth/invalid-email') {
-                await showSweetAlert('Invalid Email', 'The email format is invalid. Please check and try again.', 'error', 2500);
-            } else if (error.code === 'auth/too-many-requests') {
-                await showSweetAlert('Too Many Attempts', 'Too many failed login attempts. Please try again later.', 'error', 3500);
-            } else if (error.code === 'auth/network-request-failed') {
-                await showSweetAlert('Network Error', 'Please check your internet connection and try again.', 'error', 3000);
-            } else {
-                await showSweetAlert('Login Failed', error.message || 'An error occurred. Please try again.', 'error', 3000);
+                if (!targetEmail) {
+                    await showSweetAlert('Account Not Found', 'No account found with the provided credentials.', 'error', 3000);
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = originalText;
+                    return;
+                }
+
+                // 2. Attempt Firebase sign-in
+                const userCredential = await auth.signInWithEmailAndPassword(targetEmail, password);
+                const user = userCredential.user;
+
+                // 3. Verify user document exists and check status
+                const userSnap = await db.collection('users').where('uid', '==', user.uid).get();
+                if (userSnap.empty) {
+                    await showSweetAlert('Account Error', 'Account data not found. Please contact support.', 'error', 3000);
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = originalText;
+                    return;
+                }
+
+                const userData = userSnap.docs[0].data();
+                if (userData.status === 'suspended') {
+                    await showSweetAlert(
+                        'Account Suspended',
+                        'Your account has been suspended. Please contact customer support for assistance.',
+                        'error',
+                        3500
+                    );
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = originalText;
+                    return;
+                }
+
+                // 4. Success
+                await showSweetAlert(
+                    'Login Successful!',
+                    `Welcome back, <strong>${userData.username || 'Investor'}</strong>! Redirecting to your dashboard...`,
+                    'success',
+                    2000
+                );
+
+                setTimeout(() => {
+                    window.location.href = 'info.html?redirect=dashboard.html';
+                }, 1800);
+
+            } catch (error) {
+                console.error("Login error:", error);
+                let msg = 'An error occurred. Please try again.';
+                if (error.code === 'auth/wrong-password') {
+                    msg = 'The password you entered is incorrect. Please try again.';
+                } else if (error.code === 'auth/user-not-found') {
+                    msg = 'No account found with these credentials. Please register first.';
+                } else if (error.code === 'auth/invalid-email') {
+                    msg = 'The email format is invalid. Please check and try again.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    msg = 'Too many failed attempts. Please wait 5‑10 minutes before trying again.';
+                } else if (error.code === 'auth/network-request-failed') {
+                    msg = 'Network error. Please check your internet connection.';
+                }
+                await showSweetAlert('Login Failed', msg, 'error', 3500);
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = originalText;
             }
-            
-            loginBtn.innerHTML = originalText;
-            loginBtn.disabled = false;
-        }
-    });
-</script>
+        });
+    </script>
+
 </body>
 </html>

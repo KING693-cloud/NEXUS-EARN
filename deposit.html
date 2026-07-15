@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <!-- ============================================================
+     MASTER HEADER – meta, AdSense, fonts, Firebase
+     ============================================================ -->
+    <meta property="og:title" content="NEXUS EARN – Secure Deposit via Bank Transfer" />
+    <meta property="og:description" content="Fund your NEXUS EARN wallet via PalmPay bank transfer. Use your unique narration code, submit the form, and admin credits your balance instantly." />
+    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://nexus-earn.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NEXUS EARN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEXUS EARN – Deposit via Bank Transfer" />
+    <meta name="twitter:description" content="Deposit ₦15,000+ via PalmPay with a unique narration code. Fast, secure, and admin‑approved." />
+    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <title>NEXUS EARN – Deposit | Bank Transfer via PalmPay</title>
+    <meta name="description" content="Deposit securely via PalmPay bank transfer. Minimum ₦15,000. Unique narration code required. Admin approves within 24 hours." />
+    <meta name="theme-color" content="#e5b842" />
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Firebase (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* ============================================================
+           GLOBAL RESET & BASE (same as before – kept perfect)
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0b0d17;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: background-color 0.3s ease, color 0.2s ease;
+            padding-bottom: 40px;
+        }
+
+        body.light-mode {
+            background-color: #f0f2f8 !important;
+            color: #1a1e2e;
+        }
+        body.light-mode .app-container {
+            background: #ffffff;
+        }
+        body.light-mode .hero-banner {
+            background: #ffffff;
+        }
+        body.light-mode .deposit-card,
+        body.light-mode .bank-details-box,
+        body.light-mode .info-box,
+        body.light-mode .trust-bar {
+            background: #f0f2f8;
+            border-color: #e0e4ec;
+            color: #1a1e2e;
+        }
+        body.light-mode .input-row-container {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+        body.light-mode .input-row-container input {
+            color: #1a1e2e;
+        }
+        body.light-mode .input-row-container i {
+            color: #e5b842;
+        }
+        body.light-mode .subtitle,
+        body.light-mode .label-text,
+        body.light-mode .form-hint {
+            color: #4b5563;
+        }
+        body.light-mode .footer {
+            border-top-color: #e0e4ec;
+        }
+        body.light-mode .footer a {
+            color: #1a1e2e;
+        }
+        body.light-mode .trust-item strong {
+            color: #1a1e2e;
+        }
+        body.light-mode .timer-warning {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        body.light-mode .opay-note {
+            background: rgba(229, 184, 66, 0.08);
+            border-color: rgba(229, 184, 66, 0.2);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1b203a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5b842;
+            border-radius: 4px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: #111424;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            transition: background 0.3s ease;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ---- Top Bar ---- */
+        .top-bar {
+            width: 100%;
+            background: #161a2e;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(229, 184, 66, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-bar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .top-bar .brand i {
+            color: #e5b842;
+            font-size: 1.4rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        .top-bar .brand span {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .top-bar .actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .dark-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(229, 184, 66, 0.1);
+            border: 1px solid rgba(229, 184, 66, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #e5b842;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .dark-toggle:hover {
+            background: rgba(229, 184, 66, 0.25);
+            transform: scale(1.05);
+        }
+        .dash-link {
+            color: #e5b842;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .dash-link:hover {
+            gap: 8px;
+        }
+
+        /* ---- Hero Banner ---- */
+        .hero-banner {
+            width: 100%;
+            background: radial-gradient(circle at 50% 40%, #1b203a 0%, #0b0d17 100%);
+            padding: 28px 24px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(229, 184, 66, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(229, 184, 66, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-banner .badge {
+            display: inline-block;
+            background: rgba(229, 184, 66, 0.12);
+            border: 1px solid rgba(229, 184, 66, 0.25);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            color: #e5b842;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .hero-banner h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+        .hero-banner h1 .gold {
+            background: linear-gradient(135deg, #f5d061, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-banner .subtitle {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        /* ---- Trust Bar ---- */
+        .trust-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .trust-item {
+            text-align: center;
+            padding: 4px 0;
+        }
+        .trust-item i {
+            color: #e5b842;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .trust-item span {
+            font-size: 0.6rem;
+            color: #9ca3af;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .trust-item strong {
+            font-size: 0.9rem;
+            color: #fff;
+            display: block;
+            font-weight: 800;
+        }
+
+        /* ---- Content ---- */
+        .content {
+            padding: 20px 20px 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ---- Deposit Card ---- */
+        .deposit-card {
+            background: #161a2e;
+            border-radius: 24px;
+            padding: 24px 20px;
+            border: 1px solid rgba(229, 184, 66, 0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .deposit-card:hover {
+            border-color: rgba(229, 184, 66, 0.25);
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-label i {
+            color: #e5b842;
+        }
+
+        /* ---- Bank Details Box ---- */
+        .bank-details-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 8px 0 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .bank-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .bank-row:last-child {
+            border-bottom: none;
+        }
+        .bank-row .label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .bank-row .value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bank-row .value .copy-btn {
+            background: rgba(229, 184, 66, 0.15);
+            border: none;
+            color: #e5b842;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+        .bank-row .value .copy-btn:hover {
+            background: rgba(229, 184, 66, 0.3);
+        }
+        body.light-mode .bank-row .value {
+            color: #1a1e2e;
+        }
+        body.light-mode .bank-details-box {
+            background: #f0f2f8;
+            border-color: #d1d5db;
+        }
+
+        /* ---- Narration Code Section ---- */
+        .narration-box {
+            background: rgba(229, 184, 66, 0.06);
+            border: 1px dashed rgba(229, 184, 66, 0.3);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 12px 0;
+            text-align: center;
+        }
+        .narration-box .code-label {
+            font-size: 0.6rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .narration-box .code-value {
+            font-size: 1.6rem;
+            font-weight: 900;
+            font-family: monospace;
+            color: #e5b842;
+            letter-spacing: 3px;
+            margin: 6px 0;
+        }
+        .narration-box .code-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .narration-box .code-actions button {
+            background: rgba(229, 184, 66, 0.12);
+            border: 1px solid rgba(229, 184, 66, 0.2);
+            color: #e5b842;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .narration-box .code-actions button:hover {
+            background: rgba(229, 184, 66, 0.25);
+        }
+
+        /* ---- Timer ---- */
+        .timer-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #e5b842;
+            margin: 6px 0 10px 0;
+        }
+        .timer-display i {
+            font-size: 1rem;
+        }
+        .timer-display .time-value {
+            font-size: 1.4rem;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 12px;
+            border-radius: 8px;
+            min-width: 70px;
+            text-align: center;
+        }
+        .timer-display.expired .time-value {
+            color: #ef4444;
+        }
+        .timer-warning {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #ef4444;
+            margin-top: 8px;
+            display: none;
+        }
+        .timer-warning.active {
+            display: block;
+        }
+
+        /* ---- Form Inputs ---- */
+        .profile-input-wrapper {
+            margin-bottom: 16px;
+        }
+        .profile-input-wrapper label {
+            font-size: 0.65rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            letter-spacing: 0.3px;
+        }
+        .profile-input-wrapper label .optional {
+            font-weight: 400;
+            text-transform: none;
+            color: #6b7280;
+            font-size: 0.6rem;
+        }
+        .input-row-container {
+            width: 100%;
+            background: #0b0d17;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 50px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .input-row-container:focus-within {
+            border-color: #e5b842;
+            box-shadow: 0 0 0 3px rgba(229, 184, 66, 0.08);
+        }
+        .input-row-container i {
+            color: #e5b842;
+            width: 22px;
+            font-size: 0.9rem;
+        }
+        .input-row-container input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            padding: 0 10px;
+            height: 100%;
+        }
+        .input-row-container input::placeholder {
+            color: #4a5568;
+        }
+        .input-row-container input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .form-hint {
+            font-size: 0.6rem;
+            color: #6b7280;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .form-hint i {
+            color: #e5b842;
+            font-size: 0.55rem;
+        }
+
+        /* ---- OPay Note ---- */
+        .opay-note {
+            background: rgba(229, 184, 66, 0.06);
+            border: 1px solid rgba(229, 184, 66, 0.15);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 6px 0 12px 0;
+        }
+        .opay-note i {
+            color: #e5b842;
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+        .opay-note p {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            line-height: 1.4;
+        }
+        .opay-note p strong {
+            color: #e5b842;
+        }
+
+        /* ---- Submit Button ---- */
+        .btn-submit {
+            width: 100%;
+            height: 52px;
+            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
+            border: none;
+            border-radius: 12px;
+            color: #111424;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            margin-top: 8px;
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(229, 184, 66, 0.35);
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner-small {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #111424;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        /* ---- Info Box (tips) ---- */
+        .info-box {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .info-box i {
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+        .info-box p {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            line-height: 1.4;
+        }
+
+        /* ---- Mini History (FIXED: no orderBy in query) ---- */
+        .mini-history {
+            margin-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 14px;
+        }
+        .mini-history .mini-title {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .mini-history .mini-title i {
+            color: #e5b842;
+        }
+        .mini-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.7rem;
+        }
+        .mini-history-item:last-child {
+            border-bottom: none;
+        }
+        .mini-history-item .status {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .status-pending {
+            background: rgba(229, 184, 66, 0.15);
+            color: #e5b842;
+        }
+        .status-approved {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+        .mini-history-item .code {
+            font-family: monospace;
+            color: #e5b842;
+            font-size: 0.6rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            padding: 24px 20px 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer .logo-small {
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: #e5b842;
+            letter-spacing: 1px;
+        }
+        .footer p {
+            font-size: 0.6rem;
+            color: #6b7280;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        .footer .links {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .footer .links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.65rem;
+            transition: color 0.2s;
+        }
+        .footer .links a:hover {
+            color: #e5b842;
+        }
+
+        /* ---- Toast ---- */
+        .toast-notification {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            width: calc(100% - 32px);
+            max-width: 400px;
+            background: #1b203a;
+            border-left: 4px solid #e5b842;
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast-notification i {
+            font-size: 1.2rem;
+        }
+        .toast-notification .toast-msg {
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex: 1;
+            color: #fff;
+        }
+
+        /* ---- Loading Overlay (for fetching bank details) ---- */
+        .deposit-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 9, 19, 0.96);
+            backdrop-filter: blur(8px);
+            z-index: 20000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .deposit-loading-overlay.active {
+            display: flex;
+        }
+        .deposit-loading-overlay .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #2d345a;
+            border-top: 4px solid #e5b842;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .deposit-loading-overlay h3 {
+            color: #e5b842;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+        .deposit-loading-overlay p {
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+        .deposit-loading-overlay .dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .deposit-loading-overlay .dots span {
+            width: 8px;
+            height: 8px;
+            background: #e5b842;
+            border-radius: 50%;
+            animation: pulse 1.4s infinite;
+        }
+        .deposit-loading-overlay .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .deposit-loading-overlay .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 420px) {
+            .hero-banner h1 {
+                font-size: 1.2rem;
+            }
+            .deposit-card {
+                padding: 18px 14px;
+            }
+            .narration-box .code-value {
+                font-size: 1.3rem;
+            }
+            .bank-row .value {
+                font-size: 0.8rem;
+                flex-wrap: wrap;
+            }
+            .timer-display .time-value {
+                font-size: 1.1rem;
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    LOADING OVERLAY
+    ============================================================ -->
+    <div class="deposit-loading-overlay" id="depositLoadingOverlay">
+        <div class="spinner"></div>
+        <h3><i class="fa-solid fa-building-columns"></i> Loading Vault Details</h3>
+        <p>Fetching secure bank account information...</p>
+        <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- ============================================================
+    TOAST
+    ============================================================ -->
+    <div class="toast-notification" id="customToast">
+        <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+        <div class="toast-msg" id="toastMsg">Notification System Active.</div>
+    </div>
+
+    <!-- ============================================================
+    APP CONTAINER
+    ============================================================ -->
+    <div class="app-container">
+
+        <!-- ---- TOP BAR ---- -->
+        <header class="top-bar">
+            <a href="#" class="brand">
+                <i class="fa-solid fa-cubes"></i>
+                <span>NEXUS EARN</span>
+            </a>
+            <div class="actions">
+                <div class="dark-toggle" id="darkModeToggle" title="Toggle dark/light mode">
+                    <i class="fa-solid fa-moon"></i>
+                </div>
+                <a href="dashboard.html" class="dash-link">
+                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                </a>
+            </div>
+        </header>
+
+        <!-- ---- HERO ---- -->
+        <section class="hero-banner">
+            <div class="badge"><i class="fa-solid fa-shield-halved"></i> Secure Bank Transfer</div>
+            <h1>Deposit via <span class="gold">Bank Transfer</span></h1>
+            <p class="subtitle">Send money via PalmPay, include your unique code, and admin credits your wallet.</p>
+        </section>
+
+        <!-- ---- TRUST BAR ---- -->
+        <div class="trust-bar">
+            <div class="trust-item">
+                <i class="fa-solid fa-building-columns"></i>
+                <strong>PalmPay</strong>
+                <span>Bank Partner</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-clock"></i>
+                <strong>15 Min</strong>
+                <span>Code Validity</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-naira-sign"></i>
+                <strong>₦0 Fee</strong>
+                <span>Exact Amount Credited</span>
+            </div>
+        </div>
+
+        <!-- ---- CONTENT ---- -->
+        <main class="content">
+
+            <!-- ============================================================
+            DEPOSIT CARD
+            ============================================================ -->
+            <div class="deposit-card">
+
+                <!-- 1. Bank Details -->
+                <div class="section-label"><i class="fa-solid fa-circle-info"></i> Bank Account Details</div>
+                <div class="bank-details-box" id="bankDetailsBox">
+                    <div class="bank-row">
+                        <span class="label">Bank</span>
+                        <span class="value">PalmPay</span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="label">Account Number</span>
+                        <span class="value">
+                            <span id="bankAccountNumber">896-2925-124</span>
+                            <button class="copy-btn" data-copy="896-2925-124"><i class="fa-regular fa-copy"></i> Copy</button>
+                        </span>
+                    </div>
+                    <div class="bank-row">
+                        <span class="label">Account Name</span>
+                        <span class="value">
+                            <span id="bankAccountName">NEXUS EARN LIMITED(TAIWO)</span>
+                            <button class="copy-btn" data-copy="NEXUS EARN LIMITED(TAIWO)"><i class="fa-regular fa-copy"></i> Copy</button>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- OPay Warning -->
+                <div class="opay-note">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <p><strong>⚠️ OPay &amp; Other Banks:</strong> On OPay and some banks, the account name may display as <strong>NEXUS(TAIWO)</strong> instead of the full name. That's the same account – just proceed.</p>
+                </div>
+
+                <!-- 2. Narration Code -->
+                <div class="section-label"><i class="fa-solid fa-key"></i> Your Narration Code <span style="color:#ef4444;font-weight:700;">(Required)</span></div>
+                <div class="narration-box" id="narrationBox">
+                    <div class="code-label">Include this code in your transfer description:</div>
+                    <div class="code-value" id="narrationCodeDisplay">------</div>
+                    <div class="code-actions">
+                        <button id="copyNarrationBtn"><i class="fa-regular fa-copy"></i> Copy Code</button>
+                        <button id="regenerateNarrationBtn"><i class="fa-solid fa-arrows-rotate"></i> Regenerate</button>
+                    </div>
+                </div>
+
+                <!-- 3. Timer -->
+                <div class="section-label"><i class="fa-regular fa-clock"></i> Time Remaining</div>
+                <div class="timer-display" id="timerDisplay">
+                    <i class="fa-regular fa-hourglass-half"></i>
+                    <span class="time-value" id="timerValue">15:00</span>
+                </div>
+                <div class="timer-warning" id="timerWarning">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Your narration code has expired. Please regenerate to continue.
+                </div>
+
+                <!-- 4. Deposit Form -->
+                <form id="depositForm">
+                    <!-- Amount -->
+                    <div class="profile-input-wrapper">
+                        <label><i class="fa-solid fa-naira-sign"></i> Amount (₦) <span style="color:#ef4444;">*</span></label>
+                        <div class="input-row-container">
+                            <i class="fa-solid fa-naira-sign"></i>
+                            <input type="number" id="depositAmount" placeholder="Minimum ₦15,000" min="15000" step="100" required />
+                        </div>
+                        <div class="form-hint"><i class="fa-solid fa-info-circle"></i> Minimum deposit is ₦15,000 to activate VIP 1.</div>
+                    </div>
+
+                    <!-- Sender Name -->
+                    <div class="profile-input-wrapper">
+                        <label><i class="fa-regular fa-user"></i> Sender Name <span style="color:#ef4444;">*</span></label>
+                        <div class="input-row-container">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="senderName" placeholder="Enter the name you used for the transfer" required />
+                        </div>
+                        <div class="form-hint"><i class="fa-solid fa-info-circle"></i> This helps admin match your payment.</div>
+                    </div>
+
+                    <!-- Sender Account Number (optional) -->
+                    <div class="profile-input-wrapper">
+                        <label><i class="fa-regular fa-credit-card"></i> Sender Account Number <span class="optional">(optional)</span></label>
+                        <div class="input-row-container">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <input type="text" id="senderAccount" placeholder="Enter your 10-digit account number (optional)" maxlength="10" />
+                        </div>
+                        <div class="form-hint"><i class="fa-solid fa-info-circle"></i> Helps admin verify your identity faster.</div>
+                    </div>
+
+                    <!-- Hidden narration code -->
+                    <input type="hidden" id="narrationCodeHidden" value="" />
+
+                    <button type="submit" class="btn-submit" id="submitDepositBtn">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Deposit Request
+                    </button>
+                </form>
+
+                <!-- 5. Info Box -->
+                <div class="info-box" style="margin-top:16px;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <p><strong>How it works:</strong> Send your money to the bank details above, include your unique narration code, then submit this form. Admin verifies and credits your balance – <strong>0% fee</strong>. You'll see the status in your History page.</p>
+                </div>
+
+                <!-- 6. Mini History (FIXED: no index error) -->
+                <div class="mini-history" id="miniHistoryContainer">
+                    <div class="mini-title"><i class="fa-solid fa-clock-rotate-left"></i> Your Recent Deposit Requests</div>
+                    <div id="miniHistoryList">
+                        <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
+                            <i class="fa-solid fa-spinner fa-pulse"></i> Loading...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- ---- FOOTER ---- -->
+        <footer class="footer">
+            <div class="logo-small">NEXUS EARN</div>
+            <p>© 2026 NEXUS EARN. All rights reserved.<br />Licensed by the CBN &bull; NDIC insured &bull; Pass‑through deposits via PalmPay.</p>
+            <div class="links">
+                <a href="https://t.me/Nexusearnofficial" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram</a>
+                <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                <a href="#" onclick="alert('Coming soon!')">Privacy Policy</a>
+                <a href="#" onclick="alert('Coming soon!')">Terms</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT – FIXED: no orderBy, sorted client‑side
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
+            authDomain: "nexus-earn-1.firebaseapp.com",
+            projectId: "nexus-earn-1",
+            storageBucket: "nexus-earn-1.firebasestorage.app",
+            messagingSenderId: "779765076952",
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // ============================================================
+        // GLOBALS
+        // ============================================================
+        let currentUser = null;
+        let timerInterval = null;
+        let timerSeconds = 900;
+        let isTimerRunning = false;
+        let currentNarrationCode = '';
+        let isSubmitting = false;
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const depositLoading = document.getElementById('depositLoadingOverlay');
+        const narrationDisplay = document.getElementById('narrationCodeDisplay');
+        const narrationHidden = document.getElementById('narrationCodeHidden');
+        const timerValue = document.getElementById('timerValue');
+        const timerWarning = document.getElementById('timerWarning');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const copyNarrationBtn = document.getElementById('copyNarrationBtn');
+        const regenNarrationBtn = document.getElementById('regenerateNarrationBtn');
+        const depositForm = document.getElementById('depositForm');
+        const submitBtn = document.getElementById('submitDepositBtn');
+        const miniHistoryList = document.getElementById('miniHistoryList');
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('customToast');
+            const icon = toast.querySelector('i');
+            const text = document.getElementById('toastMsg');
+            text.innerText = msg;
+            icon.className = isError ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-circle-check";
+            icon.style.color = isError ? "#ef4444" : "#10b981";
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // ============================================================
+        // SWEET ALERT
+        // ============================================================
+        async function showSweetAlert(title, message, icon, timer = 4000) {
+            return Swal.fire({
+                title: title,
+                html: message,
+                icon: icon,
+                background: '#111424',
+                color: '#fff',
+                confirmButtonColor: '#e5b842',
+                timer: timer,
+                showConfirmButton: true,
+                backdrop: 'rgba(0,0,0,0.8)'
+            });
+        }
+
+        // ============================================================
+        // DARK MODE
+        // ============================================================
+        (function() {
+            const toggle = document.getElementById('darkModeToggle');
+            const saved = localStorage.getItem('nexusTheme');
+            const body = document.body;
+            if (saved === 'light') {
+                body.classList.add('light-mode');
+                toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                body.classList.remove('light-mode');
+                toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+            toggle.addEventListener('click', function() {
+                const isLight = body.classList.toggle('light-mode');
+                if (isLight) {
+                    toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                    localStorage.setItem('nexusTheme', 'light');
+                } else {
+                    toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                    localStorage.setItem('nexusTheme', 'dark');
+                }
+            });
+        })();
+
+        // ============================================================
+        // GENERATE NARRATION CODE
+        // ============================================================
+        function generateNarrationCode() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let code = "";
+            for (let i = 0; i < 10; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // ============================================================
+        // SET NEW CODE & RESET TIMER
+        // ============================================================
+        function setNewNarrationCode() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            currentNarrationCode = generateNarrationCode();
+            narrationDisplay.textContent = currentNarrationCode;
+            narrationHidden.value = currentNarrationCode;
+            timerSeconds = 900;
+            updateTimerDisplay();
+            timerWarning.classList.remove('active');
+            timerDisplay.classList.remove('expired');
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    isTimerRunning = false;
+                    timerDisplay.classList.add('expired');
+                    timerWarning.classList.add('active');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            timerValue.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // ============================================================
+        // COPY
+        // ============================================================
+        function copyText(text, successMsg = 'Copied!') {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg);
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Copied!');
+            } catch (e) {
+                showToast('Failed to copy. Please copy manually.', true);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // ============================================================
+        // LOAD MINI HISTORY (FIXED: no orderBy, client-side sort)
+        // ============================================================
+        async function loadMiniHistory(uid) {
+            try {
+                // Query WITHOUT orderBy – just filter by uid
+                const q = await db.collection('deposits')
+                    .where('uid', '==', uid)
+                    .get();
+
+                if (q.empty) {
+                    miniHistoryList.innerHTML = `
+                        <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
+                            <i class="fa-regular fa-folder-open"></i> No deposit requests yet.
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Build array, sort by timestamp descending (client-side)
+                const items = [];
+                q.forEach(doc => {
+                    const data = doc.data();
+                    // Convert timestamp to Date for sorting
+                    let date = data.timestamp ? data.timestamp.toDate() : new Date(0);
+                    items.push({ ...data, id: doc.id, _date: date });
+                });
+
+                // Sort newest first
+                items.sort((a, b) => b._date - a._date);
+
+                // Take only the 5 most recent
+                const recent = items.slice(0, 5);
+
+                let html = '';
+                recent.forEach(item => {
+                    const amount = item.amount || 0;
+                    const status = item.status || 'pending';
+                    const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                    const statusClass = `status-${status}`;
+                    const date = item._date ? item._date.toLocaleDateString() : 'Unknown';
+                    const code = item.narrationCode || '----';
+                    html += `
+                        <div class="mini-history-item">
+                            <div>
+                                <span>₦${amount.toLocaleString()}</span>
+                                <span style="color:#6b7280;font-size:0.6rem;margin-left:6px;">${date}</span>
+                                <span class="code" style="display:block;font-size:0.55rem;">${code}</span>
+                            </div>
+                            <span class="status ${statusClass}">${statusText}</span>
+                        </div>
+                    `;
+                });
+                miniHistoryList.innerHTML = html;
+            } catch (e) {
+                console.error('Mini history error:', e);
+                miniHistoryList.innerHTML = `
+                    <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#ef4444;">
+                        <i class="fa-solid fa-circle-exclamation"></i> Error loading history.
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================================
+        // AUTH CHECK
+        // ============================================================
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                await showSweetAlert('Session Expired', 'Please login to deposit funds.', 'warning', 2000);
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = user;
+            // Show loading overlay
+            depositLoading.classList.add('active');
+            // Simulate fetching bank details (just for UX)
+            setTimeout(() => {
+                depositLoading.classList.remove('active');
+                setNewNarrationCode();
+                loadMiniHistory(user.uid);
+                // Real-time listener for history updates (without orderBy)
+                db.collection('deposits')
+                    .where('uid', '==', user.uid)
+                    .onSnapshot(() => {
+                        loadMiniHistory(user.uid);
+                    });
+            }, 1200);
+        });
+
+        // ============================================================
+        // COPY BUTTONS (Bank details & Narration)
+        // ============================================================
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const text = this.getAttribute('data-copy');
+                if (text) copyText(text, 'Copied!');
+            });
+        });
+
+        copyNarrationBtn.addEventListener('click', function() {
+            if (currentNarrationCode) {
+                copyText(currentNarrationCode, 'Narration code copied!');
+            } else {
+                showToast('No code generated yet.', true);
+            }
+        });
+
+        // ============================================================
+        // REGENERATE
+        // ============================================================
+        regenNarrationBtn.addEventListener('click', function() {
+            if (isTimerRunning && timerSeconds > 0) {
+                Swal.fire({
+                    title: 'Regenerate Code?',
+                    text: 'This will expire your current code and start a new 15‑minute timer.',
+                    icon: 'question',
+                    background: '#111424',
+                    color: '#fff',
+                    confirmButtonColor: '#e5b842',
+                    cancelButtonColor: '#ef4444',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, regenerate',
+                    cancelButtonText: 'Cancel'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        setNewNarrationCode();
+                        showToast('✅ New narration code generated!');
+                    }
+                });
+            } else {
+                setNewNarrationCode();
+                showToast('✅ New narration code generated!');
+            }
+        });
+
+        // ============================================================
+        // DEPOSIT FORM SUBMIT
+        // ============================================================
+        depositForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                showToast('Please login first.', true);
+                return;
+            }
+            if (isSubmitting) return;
+
+            // Timer check
+            if (!isTimerRunning || timerSeconds <= 0) {
+                await showSweetAlert(
+                    '⏰ Code Expired',
+                    'Your narration code has expired. Please regenerate a new code and try again.',
+                    'warning',
+                    3000
+                );
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const senderName = document.getElementById('senderName').value.trim();
+            const senderAccount = document.getElementById('senderAccount').value.trim();
+            const narrationCode = narrationHidden.value;
+
+            if (!amount || amount < 15000) {
+                showToast('Minimum deposit is ₦15,000.', true);
+                return;
+            }
+            if (amount > 10000000) {
+                showToast('Maximum deposit is ₦10,000,000 per request.', true);
+                return;
+            }
+            if (!senderName || senderName.length < 2) {
+                showToast('Please enter your full sender name.', true);
+                return;
+            }
+            if (!narrationCode) {
+                showToast('Narration code is missing. Please regenerate.', true);
+                return;
+            }
+
+            // Confirm
+            const confirmResult = await Swal.fire({
+                title: 'Confirm Deposit Request',
+                html: `
+                    <div style="text-align:left;">
+                        <p><strong>Amount:</strong> ₦${amount.toLocaleString()}</p>
+                        <p><strong>Narration Code:</strong> <span style="color:#e5b842;font-weight:700;">${narrationCode}</span></p>
+                        <p><strong>Sender:</strong> ${senderName}</p>
+                        <p style="margin-top:10px;font-size:0.75rem;color:#a1a1aa;">
+                            <i class="fa-solid fa-triangle-exclamation" style="color:#e5b842;"></i>
+                            Double‑check that you used the <strong>exact</strong> narration code in your bank transfer description.
+                        </p>
+                    </div>
+                `,
+                icon: 'question',
+                background: '#111424',
+                color: '#fff',
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#ef4444',
+                showCancelButton: true,
+                confirmButtonText: '✅ Yes, Submit',
+                cancelButtonText: 'Cancel'
+            });
+
+            if (!confirmResult.isConfirmed) return;
+
+            isSubmitting = true;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="spinner-small"></div> Submitting...';
+
+            try {
+                await db.collection('deposits').add({
+                    uid: currentUser.uid,
+                    username: currentUser.displayName || 'User',
+                    email: currentUser.email,
+                    amount: amount,
+                    narrationCode: narrationCode,
+                    senderName: senderName,
+                    senderAccount: senderAccount || '',
+                    status: 'pending',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await showSweetAlert(
+                    '✅ Deposit Request Submitted!',
+                    `
+                        <div style="text-align:left;">
+                            <p><strong>Amount:</strong> ₦${amount.toLocaleString()}</p>
+                            <p><strong>Narration Code:</strong> <span style="color:#e5b842;font-weight:700;">${narrationCode}</span></p>
+                            <p><strong>Sender Name:</strong> ${senderName}</p>
+                            <div style="background:rgba(229,184,66,0.1);padding:12px;border-radius:8px;margin-top:12px;">
+                                <p style="color:#e5b842;font-weight:700;">⏳ Status: PENDING</p>
+                                <p style="font-size:0.7rem;color:#a1a1aa;">Admin will verify and approve your deposit within 24 hours.</p>
+                                <p style="font-size:0.7rem;color:#a1a1aa;">You'll see the status update in your History page.</p>
+                            </div>
+                        </div>
+                    `,
+                    'success',
+                    5000
+                );
+
+                // Reset form
+                document.getElementById('depositAmount').value = '';
+                document.getElementById('senderName').value = '';
+                document.getElementById('senderAccount').value = '';
+                // Reload mini history
+                loadMiniHistory(currentUser.uid);
+
+            } catch (error) {
+                console.error('Deposit submit error:', error);
+                showToast('Error submitting deposit. Please try again.', true);
+            } finally {
+                isSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Deposit Request';
+            }
+        });
+
+        // ============================================================
+        // CLEANUP TIMER ON PAGE UNLOAD
+        // ============================================================
+        window.addEventListener('beforeunload', function() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+        });
+    </script>
+</body>
+</html>

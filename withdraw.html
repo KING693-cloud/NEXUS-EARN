@@ -1,266 +1,1099 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    
-    <meta property="og:title" content="NEXUS EARN - Secure Withdrawal Portal">
-    <meta property="og:description" content="Withdraw your earnings securely. VIP 1+ required. 10% processing fee applies. Minimum ₦1,500.">
-    <meta property="og:image" content="https://nexus-earn.com/logo.png">
-    <meta property="og:url" content="https://nexus-earn.com">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    
-    <title>NEXUS EARN - Secure Withdrawal Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <!-- ============================================================
+     MASTER HEADER – meta, AdSense, fonts, Firebase
+     ============================================================ -->
+    <meta property="og:title" content="NEXUS EARN – Secure Withdrawals" />
+    <meta property="og:description" content="Withdraw your earnings securely. VIP 1+ required. ₦500 minimum. 10% processing fee. Admin approved within 24-48 hours." />
+    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://nexus-earn.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NEXUS EARN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEXUS EARN – Withdraw Funds" />
+    <meta name="twitter:description" content="Withdraw your earnings to your bank account. Fast, secure, and admin‑verified." />
+    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <title>NEXUS EARN – Withdraw | Secure Cash Out</title>
+    <meta name="description" content="Withdraw your NEXUS EARN earnings. VIP 1+ required. ₦500 min. 10% fee. Admin approves within 24-48 hours." />
+    <meta name="theme-color" content="#e5b842" />
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
+    <!-- Firebase (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #0b0d17; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-        
-        /* Loading Animation */
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0b0d17 0%, #111424 100%);
-            z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease;
+        /* ============================================================
+           GLOBAL RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-        .loading-overlay.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-        
-        .nexus-logo-animate {
-            width: 100px; height: 100px; background: linear-gradient(135deg, #e5b842 0%, #f5d061 100%);
-            border-radius: 25px; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 25px; animation: pulse 1.5s ease-in-out infinite;
+
+        body {
+            background-color: #0b0d17;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: background-color 0.3s ease, color 0.2s ease;
+            padding-bottom: 40px;
         }
-        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .nexus-logo-animate i { font-size: 50px; color: #111424; }
-        .loading-text { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #e5b842, #f5d061); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
-        .loading-progress { width: 200px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin: 0 auto; }
-        .loading-progress-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #e5b842, #f5d061); animation: progress 2s ease-out; }
-        @keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }
-        .loading-dots { display: flex; gap: 8px; margin-top: 15px; justify-content: center; }
-        .loading-dots span { width: 7px; height: 7px; background: #e5b842; border-radius: 50%; animation: bounce 1.4s infinite; }
-        @keyframes bounce { 0%,80%,100% { transform: scale(0.6); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
-        
-        .app-container { max-width: 480px; width: 100%; min-height: 100vh; background: #111424; margin: auto; padding-bottom: 40px; }
-        
-        .page-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; background: #161a2e; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .back-btn { color: #e5b842; font-size: 1.1rem; cursor: pointer; text-decoration: none; }
-        .header-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; color: #fff; }
-        
-        .content-panel { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-        
-        /* Balance Card */
-        .balance-card { background: linear-gradient(135deg, #1b203a, #161a2e); border-radius: 20px; padding: 24px; display: flex; align-items: center; gap: 18px; border: 1px solid rgba(229,184,66,0.2); margin-bottom: 8px; }
-        .balance-icon { width: 60px; height: 60px; background: rgba(229,184,66,0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #e5b842; font-size: 1.6rem; }
-        .balance-details p { font-size: 0.7rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.5px; }
-        .balance-details h3 { font-size: 1.8rem; font-weight: 800; margin-top: 4px; }
-        
-        /* Info Note */
-        .info-note { background: rgba(59,130,246,0.1); border-radius: 12px; padding: 12px; display: flex; align-items: flex-start; gap: 10px; margin-top: 5px; }
-        .info-note i { color: #3b82f6; margin-top: 2px; }
-        .info-note p { font-size: 0.7rem; color: #9ca3af; line-height: 1.4; }
-        
-        /* Input Box */
-        .input-box label { font-size: 0.7rem; color: #a1a1aa; text-transform: uppercase; display: block; margin-bottom: 8px; }
-        .input-row { background: #1b203a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; padding: 0 16px; height: 54px; }
-        .input-row:focus-within { border-color: #e5b842; }
-        .currency-symbol { color: #e5b842; font-weight: 800; font-size: 1.2rem; margin-right: 12px; }
-        .input-row input { width: 100%; background: transparent; border: none; color: #fff; font-size: 1.2rem; font-weight: 700; outline: none; }
-        .static-display { background: #14182c; border-color: rgba(255,255,255,0.05); }
-        .static-text { color: #cbd5e1; font-weight: 600; }
-        
-        /* Tax Card */
-        .tax-card { background: #161a2e; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .tax-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: #a1a1aa; }
-        .tax-row.total { border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px; font-weight: 700; color: #fff; }
-        .tax-highlight { color: #ef4444; font-weight: 600; }
-        .receive-highlight { color: #10b981; font-weight: 800; }
-        
-        /* Lockout & Warnings */
-        .lockout-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px; display: none; align-items: center; gap: 12px; }
-        .lockout-box.active { display: flex; }
-        .lockout-box i { color: #ef4444; font-size: 1.2rem; }
-        
-        .vip-warning { background: rgba(229,184,66,0.08); border: 1px solid rgba(229,184,66,0.2); border-radius: 12px; padding: 16px; display: none; align-items: center; gap: 12px; }
-        .vip-warning.active { display: flex; }
-        .vip-warning i { color: #e5b842; font-size: 1.2rem; }
-        
-        .bank-warning { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 12px; display: none; align-items: center; gap: 10px; margin-top: 5px; }
-        .bank-warning i { color: #ef4444; }
-        .bank-warning p { font-size: 0.65rem; color: #ef4444; }
-        
-        /* Withdraw Button */
-        .withdraw-btn { width: 100%; height: 52px; background: linear-gradient(135deg, #f5d061, #e5b842); border: none; border-radius: 12px; color: #111424; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: all 0.3s; }
-        .withdraw-btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(229,184,66,0.3); }
-        .withdraw-btn:disabled { background: #2a314d !important; color: #636b8f !important; cursor: not-allowed; transform: none; }
-        
-        /* Telegram Support */
-        .telegram-support { background: rgba(36, 161, 222, 0.1); border: 1px solid rgba(36, 161, 222, 0.3); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; text-decoration: none; margin-top: 10px; }
-        .telegram-support:hover { background: rgba(36, 161, 222, 0.2); transform: scale(1.01); }
-        .telegram-icon { width: 45px; height: 45px; background: #24A1DE; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
-        .telegram-text h4 { font-size: 0.9rem; margin-bottom: 4px; color: #fff; }
-        .telegram-text p { font-size: 0.7rem; color: #a1a1aa; }
-        
-        /* History Section */
-        .history-section { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
-        .history-title { font-size: 0.85rem; color: #a1a1aa; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .history-list { display: flex; flex-direction: column; gap: 12px; max-height: 350px; overflow-y: auto; }
-        
-        .history-item { background: #161a2e; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid; }
-        .history-item.pending { border-left-color: #e5b842; }
-        .history-item.approved { border-left-color: #10b981; }
-        .history-item.rejected { border-left-color: #ef4444; }
-        .history-left { flex: 1; }
-        .history-gross { font-size: 0.7rem; color: #636b8f; text-decoration: line-through; display: inline-block; margin-right: 6px; }
-        .history-net { font-weight: 800; font-size: 1rem; color: #fff; }
-        .history-date { font-size: 0.65rem; color: #636b8f; margin-top: 4px; }
-        .history-tax-note { font-size: 0.6rem; color: #a1a1aa; margin-top: 2px; }
-        .history-status { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; min-width: 70px; text-align: center; }
-        .status-pending { background: rgba(229,184,66,0.15); color: #e5b842; }
-        .status-approved { background: rgba(16,185,129,0.15); color: #10b981; }
-        .status-rejected { background: rgba(239,68,68,0.15); color: #ef4444; }
-        
-        .error-toast { position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-120px); background: #1b203a; border-left: 4px solid #ef4444; padding: 16px; border-radius: 8px; z-index: 9999; transition: transform 0.3s; max-width: 90%; text-align: center; display: flex; align-items: center; gap: 10px; }
-        .error-toast.show { transform: translateX(-50%) translateY(0); }
-        
-        .spinner-small { width: 18px; height: 18px; border: 2px solid #111424; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        body.light-mode {
+            background-color: #f0f2f8 !important;
+            color: #1a1e2e;
+        }
+        body.light-mode .app-container {
+            background: #ffffff;
+        }
+        body.light-mode .hero-banner {
+            background: #ffffff;
+        }
+        body.light-mode .withdraw-card,
+        body.light-mode .bank-details-box,
+        body.light-mode .info-box,
+        body.light-mode .trust-bar {
+            background: #f0f2f8;
+            border-color: #e0e4ec;
+            color: #1a1e2e;
+        }
+        body.light-mode .input-row-container {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+        body.light-mode .input-row-container input {
+            color: #1a1e2e;
+        }
+        body.light-mode .input-row-container i {
+            color: #e5b842;
+        }
+        body.light-mode .subtitle,
+        body.light-mode .label-text,
+        body.light-mode .form-hint {
+            color: #4b5563;
+        }
+        body.light-mode .footer {
+            border-top-color: #e0e4ec;
+        }
+        body.light-mode .footer a {
+            color: #1a1e2e;
+        }
+        body.light-mode .trust-item strong {
+            color: #1a1e2e;
+        }
+        body.light-mode .warning-box {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        body.light-mode .vip-warning {
+            background: rgba(229, 184, 66, 0.08);
+            border-color: rgba(229, 184, 66, 0.2);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1b203a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5b842;
+            border-radius: 4px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: #111424;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            transition: background 0.3s ease;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ---- Top Bar ---- */
+        .top-bar {
+            width: 100%;
+            background: #161a2e;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(229, 184, 66, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-bar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .top-bar .brand i {
+            color: #e5b842;
+            font-size: 1.4rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        .top-bar .brand span {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .top-bar .actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .dark-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(229, 184, 66, 0.1);
+            border: 1px solid rgba(229, 184, 66, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #e5b842;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .dark-toggle:hover {
+            background: rgba(229, 184, 66, 0.25);
+            transform: scale(1.05);
+        }
+        .dash-link {
+            color: #e5b842;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .dash-link:hover {
+            gap: 8px;
+        }
+
+        /* ---- Hero Banner ---- */
+        .hero-banner {
+            width: 100%;
+            background: radial-gradient(circle at 60% 30%, #1b203a 0%, #0b0d17 100%);
+            padding: 28px 24px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(229, 184, 66, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: -20%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(229, 184, 66, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-banner .badge {
+            display: inline-block;
+            background: rgba(229, 184, 66, 0.12);
+            border: 1px solid rgba(229, 184, 66, 0.25);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            color: #e5b842;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .hero-banner h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+        .hero-banner h1 .gold {
+            background: linear-gradient(135deg, #f5d061, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-banner .subtitle {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        /* ---- Trust Bar ---- */
+        .trust-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .trust-item {
+            text-align: center;
+            padding: 4px 0;
+        }
+        .trust-item i {
+            color: #e5b842;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .trust-item span {
+            font-size: 0.6rem;
+            color: #9ca3af;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .trust-item strong {
+            font-size: 0.9rem;
+            color: #fff;
+            display: block;
+            font-weight: 800;
+        }
+
+        /* ---- Content ---- */
+        .content {
+            padding: 20px 20px 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ---- Withdraw Card ---- */
+        .withdraw-card {
+            background: #161a2e;
+            border-radius: 24px;
+            padding: 24px 20px;
+            border: 1px solid rgba(229, 184, 66, 0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .withdraw-card:hover {
+            border-color: rgba(229, 184, 66, 0.25);
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-label i {
+            color: #e5b842;
+        }
+
+        /* ---- Balance Display (inside card) ---- */
+        .balance-display {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin: 8px 0 16px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .balance-display .label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .balance-display .value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+        body.light-mode .balance-display {
+            background: #f0f2f8;
+            border-color: #d1d5db;
+        }
+        body.light-mode .balance-display .value {
+            color: #059669;
+        }
+
+        /* ---- Warning Boxes ---- */
+        .warning-box {
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0 12px 0;
+        }
+        .warning-box.active {
+            display: flex;
+        }
+        .warning-box i {
+            color: #ef4444;
+            font-size: 1rem;
+        }
+        .warning-box p {
+            font-size: 0.7rem;
+            color: #ef4444;
+            line-height: 1.3;
+        }
+
+        .vip-warning-box {
+            background: rgba(229, 184, 66, 0.06);
+            border: 1px solid rgba(229, 184, 66, 0.2);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0 12px 0;
+        }
+        .vip-warning-box.active {
+            display: flex;
+        }
+        .vip-warning-box i {
+            color: #e5b842;
+            font-size: 1rem;
+        }
+        .vip-warning-box p {
+            font-size: 0.7rem;
+            color: #e5b842;
+            line-height: 1.3;
+        }
+
+        /* ---- Bank Details (read-only) ---- */
+        .bank-details-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 8px 0 14px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .bank-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.75rem;
+        }
+        .bank-row .label {
+            color: #9ca3af;
+        }
+        .bank-row .value {
+            font-weight: 700;
+            color: #fff;
+        }
+        body.light-mode .bank-row .value {
+            color: #1a1e2e;
+        }
+        body.light-mode .bank-details-box {
+            background: #f0f2f8;
+            border-color: #d1d5db;
+        }
+
+        /* ---- Amount Input + Presets ---- */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 8px 0 12px 0;
+        }
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 8px 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .preset-btn:hover {
+            background: rgba(229, 184, 66, 0.12);
+            border-color: #e5b842;
+            color: #e5b842;
+            transform: translateY(-2px);
+        }
+        .preset-btn:active {
+            transform: scale(0.95);
+        }
+        .preset-btn.active-preset {
+            background: rgba(229, 184, 66, 0.2);
+            border-color: #e5b842;
+            color: #e5b842;
+        }
+        body.light-mode .preset-btn {
+            background: #f0f2f8;
+            border-color: #d1d5db;
+            color: #1a1e2e;
+        }
+        body.light-mode .preset-btn:hover {
+            background: rgba(229, 184, 66, 0.15);
+        }
+
+        /* ---- Input Row ---- */
+        .profile-input-wrapper {
+            margin-bottom: 14px;
+        }
+        .profile-input-wrapper label {
+            font-size: 0.65rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            letter-spacing: 0.3px;
+        }
+        .input-row-container {
+            width: 100%;
+            background: #0b0d17;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 50px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .input-row-container:focus-within {
+            border-color: #e5b842;
+            box-shadow: 0 0 0 3px rgba(229, 184, 66, 0.08);
+        }
+        .input-row-container i {
+            color: #e5b842;
+            width: 22px;
+            font-size: 0.9rem;
+        }
+        .input-row-container input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            padding: 0 10px;
+            height: 100%;
+        }
+        .input-row-container input::placeholder {
+            color: #4a5568;
+        }
+        .input-row-container input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ---- Tax Breakdown ---- */
+        .tax-breakdown {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 12px 0 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: none;
+        }
+        .tax-breakdown.active {
+            display: block;
+        }
+        .tax-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.75rem;
+            color: #a1a1aa;
+        }
+        .tax-row .amount {
+            font-weight: 700;
+        }
+        .tax-row .amount.gross {
+            color: #fff;
+        }
+        .tax-row .amount.tax {
+            color: #ef4444;
+        }
+        .tax-row .amount.net {
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+        .tax-row.total {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 8px;
+            margin-top: 4px;
+            font-weight: 700;
+            color: #fff;
+        }
+        body.light-mode .tax-row .amount.gross {
+            color: #1a1e2e;
+        }
+        body.light-mode .tax-row.total {
+            color: #1a1e2e;
+        }
+        body.light-mode .tax-breakdown {
+            background: #f0f2f8;
+            border-color: #d1d5db;
+        }
+
+        /* ---- Submit Button ---- */
+        .btn-submit {
+            width: 100%;
+            height: 52px;
+            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
+            border: none;
+            border-radius: 12px;
+            color: #111424;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            margin-top: 4px;
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(229, 184, 66, 0.35);
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner-small {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #111424;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        /* ---- Info Box (hours / support) ---- */
+        .info-box {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0;
+        }
+        .info-box i {
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+        .info-box p {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            line-height: 1.4;
+        }
+        .info-box p strong {
+            color: #e5b842;
+        }
+
+        /* ---- Mini History ---- */
+        .mini-history {
+            margin-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 14px;
+        }
+        .mini-history .mini-title {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .mini-history .mini-title i {
+            color: #e5b842;
+        }
+        .mini-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.7rem;
+        }
+        .mini-history-item:last-child {
+            border-bottom: none;
+        }
+        .mini-history-item .status {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .status-pending {
+            background: rgba(229, 184, 66, 0.15);
+            color: #e5b842;
+        }
+        .status-approved {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        /* ---- FAQ ---- */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .faq-item {
+            background: #161a2e;
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .faq-item:hover {
+            border-color: rgba(229, 184, 66, 0.2);
+        }
+        .faq-item .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .faq-item .faq-question i {
+            color: #e5b842;
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        .faq-item .faq-answer {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-top: 8px;
+            display: none;
+        }
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            padding: 24px 20px 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer .logo-small {
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: #e5b842;
+            letter-spacing: 1px;
+        }
+        .footer p {
+            font-size: 0.6rem;
+            color: #6b7280;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        .footer .links {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .footer .links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.65rem;
+            transition: color 0.2s;
+        }
+        .footer .links a:hover {
+            color: #e5b842;
+        }
+
+        /* ---- Toast ---- */
+        .toast-notification {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            width: calc(100% - 32px);
+            max-width: 400px;
+            background: #1b203a;
+            border-left: 4px solid #e5b842;
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast-notification i {
+            font-size: 1.2rem;
+        }
+        .toast-notification .toast-msg {
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex: 1;
+            color: #fff;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 420px) {
+            .hero-banner h1 {
+                font-size: 1.3rem;
+            }
+            .withdraw-card {
+                padding: 18px 14px;
+            }
+            .preset-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .bank-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+                padding: 6px 0;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Loading Animation -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="nexus-loader">
-            <div class="nexus-logo-animate"><i class="fa-solid fa-money-bill-transfer"></i></div>
-            <div class="loading-text">SECURE WITHDRAWAL</div>
-            <div class="loading-progress"><div class="loading-progress-bar"></div></div>
-            <div class="loading-dots"><span></span><span></span><span></span></div>
-            <p style="margin-top: 20px; color: #a1a1aa; font-size: 12px;" id="loadingStatus">Connecting to secure server...</p>
-        </div>
+    <!-- ============================================================
+    TOAST NOTIFICATION
+    ============================================================ -->
+    <div class="toast-notification" id="customToast">
+        <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+        <div class="toast-msg" id="toastMsg">Notification System Active.</div>
     </div>
 
+    <!-- ============================================================
+    APP CONTAINER
+    ============================================================ -->
     <div class="app-container">
-        <div class="error-toast" id="errorToast"><i class="fa-solid fa-circle-exclamation"></i><span id="errorMsg"></span></div>
 
-        <div class="page-header">
-            <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
-            <div class="header-title">WITHDRAW FUNDS</div>
-            <div></div>
+        <!-- ---- TOP BAR ---- -->
+        <header class="top-bar">
+            <a href="#" class="brand">
+                <i class="fa-solid fa-cubes"></i>
+                <span>NEXUS EARN</span>
+            </a>
+            <div class="actions">
+                <div class="dark-toggle" id="darkModeToggle" title="Toggle dark/light mode">
+                    <i class="fa-solid fa-moon"></i>
+                </div>
+                <a href="dashboard.html" class="dash-link">
+                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                </a>
+            </div>
+        </header>
+
+        <!-- ---- HERO ---- -->
+        <section class="hero-banner">
+            <div class="badge"><i class="fa-solid fa-shield-halved"></i> Secure Withdrawal</div>
+            <h1>Cash Out Your <span class="gold">Earnings</span></h1>
+            <p class="subtitle">Fast, secure, and admin‑verified transfers straight to your bank account.</p>
+        </section>
+
+        <!-- ---- TRUST BAR ---- -->
+        <div class="trust-bar">
+            <div class="trust-item">
+                <i class="fa-solid fa-naira-sign"></i>
+                <strong>₦500</strong>
+                <span>Minimum Withdrawal</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-percent"></i>
+                <strong>10%</strong>
+                <span>Processing Fee</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-clock"></i>
+                <strong>24‑48h</strong>
+                <span>Approval Time</span>
+            </div>
         </div>
 
-        <div class="content-panel">
-            <!-- Balance Display -->
-            <div class="balance-card">
-                <div class="balance-icon"><i class="fa-solid fa-wallet"></i></div>
-                <div class="balance-details">
-                    <p>AVAILABLE BALANCE</p>
-                    <h3 id="mainBalanceDisplay">₦0.00</h3>
-                    <small style="font-size: 0.6rem; color: #6b7280;">Your withdrawable balance from dashboard</small>
+        <!-- ---- CONTENT ---- -->
+        <main class="content">
+
+            <!-- ============================================================
+            WITHDRAWAL CARD
+            ============================================================ -->
+            <div class="withdraw-card" id="withdrawCard">
+
+                <!-- 1. Balance Display -->
+                <div class="section-label"><i class="fa-solid fa-wallet"></i> Available Balance</div>
+                <div class="balance-display">
+                    <span class="label">Your Withdrawable Funds</span>
+                    <span class="value" id="mainBalanceDisplay">₦0.00</span>
+                </div>
+
+                <!-- 2. Warnings: VIP, Pending, Bank Details -->
+                <div class="vip-warning-box" id="vipWarning">
+                    <i class="fa-solid fa-crown"></i>
+                    <p><strong>VIP 1+ MEMBERSHIP REQUIRED</strong> – You need an active VIP plan to withdraw funds. Purchase a plan from your dashboard.</p>
+                </div>
+
+                <div class="warning-box" id="lockoutBox">
+                    <i class="fa-solid fa-circle-lock"></i>
+                    <p><strong>WITHDRAWAL LOCKED</strong> – You have a pending withdrawal request. Please wait for admin approval before requesting another.</p>
+                </div>
+
+                <div class="warning-box" id="bankWarning">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <p><strong>BANK DETAILS MISSING</strong> – Please add your bank details in the Profile tab before requesting a withdrawal.</p>
+                </div>
+
+                <!-- 3. Bank Details (Read‑only) -->
+                <div class="section-label"><i class="fa-solid fa-building-columns"></i> Your Linked Bank Account</div>
+                <div class="bank-details-box">
+                    <div class="bank-row"><span class="label">Bank</span><span class="value" id="bankName">Not set</span></div>
+                    <div class="bank-row"><span class="label">Account Number</span><span class="value" id="accountNumber">Not set</span></div>
+                    <div class="bank-row"><span class="label">Account Name</span><span class="value" id="accountName">Not set</span></div>
+                </div>
+
+                <!-- 4. Amount Input + Presets -->
+                <div class="section-label"><i class="fa-solid fa-money-bill-wave"></i> Withdrawal Amount (₦)</div>
+                <div class="preset-grid" id="presetGrid">
+                    <button class="preset-btn" data-amt="500">₦500</button>
+                    <button class="preset-btn" data-amt="1500">₦1,500</button>
+                    <button class="preset-btn" data-amt="5000">₦5,000</button>
+                    <button class="preset-btn" data-amt="15000">₦15,000</button>
+                    <button class="preset-btn" data-amt="50000">₦50,000</button>
+                    <button class="preset-btn" data-amt="100000">₦100,000</button>
+                    <button class="preset-btn" data-amt="500000">₦500,000</button>
+                </div>
+
+                <div class="profile-input-wrapper">
+                    <label><i class="fa-regular fa-keyboard"></i> Or enter manually</label>
+                    <div class="input-row-container">
+                        <i class="fa-solid fa-naira-sign"></i>
+                        <input type="number" id="amountInput" placeholder="Enter amount (min ₦500)" min="500" step="100" />
+                    </div>
+                    <div class="form-hint" style="font-size:0.6rem;color:#6b7280;margin-top:4px;">
+                        <i class="fa-solid fa-info-circle"></i> Minimum ₦500 | Maximum ₦10,000,000 per request
+                    </div>
+                </div>
+
+                <!-- 5. Tax Breakdown (Live) -->
+                <div class="tax-breakdown" id="taxBreakdown">
+                    <div class="tax-row"><span>💰 Requested Amount</span><span class="amount gross" id="grossAmount">₦0.00</span></div>
+                    <div class="tax-row"><span>📉 Processing Fee (10%)</span><span class="amount tax" id="taxAmount">- ₦0.00</span></div>
+                    <div class="tax-row total"><span>🏦 You Will Receive</span><span class="amount net" id="netAmount">₦0.00</span></div>
+                </div>
+
+                <!-- 6. Withdraw Button -->
+                <button class="btn-submit" id="withdrawBtn">
+                    <i class="fa-solid fa-paper-plane"></i> Request Withdrawal
+                </button>
+
+                <!-- 7. Info Box (Hours) -->
+                <div class="info-box" style="margin-top:14px;">
+                    <i class="fa-solid fa-clock"></i>
+                    <p>
+                        <strong>⏰ Withdrawal Hours:</strong> Monday – Saturday, <strong>10:00 AM – 6:00 PM</strong> (WAT).<br />
+                        <strong>No withdrawals on Sundays.</strong> Requests outside hours are processed the next business day.
+                    </p>
+                </div>
+
+                <!-- 8. Mini History -->
+                <div class="mini-history">
+                    <div class="mini-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Withdrawal Requests</div>
+                    <div id="miniHistoryList">
+                        <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
+                            <i class="fa-solid fa-spinner fa-pulse"></i> Loading...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ============================================================
+            SECTION 2 – FAQ (Withdrawal Questions)
+            ============================================================ -->
+            <div>
+                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                    <i class="fa-solid fa-circle-question" style="color:#e5b842;"></i> Withdrawal FAQs
+                </h2>
+                <div class="faq-list">
+                    <div class="faq-item active">
+                        <div class="faq-question">
+                            <span>Why is there a 10% processing fee?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            The 10% fee covers transaction costs, bank processing, and administrative verification. It ensures that all withdrawals are handled securely and efficiently. You receive <strong>90%</strong> of your requested amount.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How long does a withdrawal take?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Withdrawals are processed <strong>manually</strong> by admin for security. Please allow <strong>24‑48 hours</strong> for approval. You'll see the status update in your History page. Requests made outside working hours (Mon–Sat, 10‑6 WAT) are processed the next business day.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Why can't I withdraw if I have a pending request?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            To prevent double‑processing and ensure security, we allow only <strong>one pending withdrawal request at a time</strong>. Once your current request is approved or rejected, you can submit a new one – even on the same day.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>My withdrawal was rejected. What now?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            If your withdrawal is rejected, a reason will be provided in the History page. Common reasons: incorrect bank details, insufficient balance, or narration mismatch. Update your bank details in the Profile tab and try again.
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Info Note -->
-            <div class="info-note">
-                <i class="fa-solid fa-circle-info"></i>
-                <div style="flex:1">
-                    <p><strong>💰 Withdrawal Information</strong><br>
-                    10% processing fee applies. Minimum withdrawal: ₦1,500.<br>
-                    Withdrawals are processed Monday–Saturday, 9:00 AM – 9:00 PM (WAT).<br>
-                    VIP 1+ membership required. You can only have one pending request at a time.</p>
+            <!-- ============================================================
+            SECTION 3 – SUPPORT / TELEGRAM
+            ============================================================ -->
+            <a href="https://t.me/Nexusearncustomerservice" target="_blank" style="text-decoration:none;">
+                <div class="info-box" style="border-color:rgba(36,161,222,0.3);cursor:pointer;transition:all 0.3s;">
+                    <i class="fa-brands fa-telegram" style="color:#24A1DE;font-size:1.4rem;"></i>
+                    <p>
+                        <strong>📞 Need help with your withdrawal?</strong><br />
+                        Chat with our support team on Telegram. We're here to help 24/7.
+                    </p>
+                    <i class="fa-solid fa-arrow-right" style="color:#24A1DE;margin-left:auto;"></i>
                 </div>
-            </div>
-
-            <!-- VIP Warning -->
-            <div class="vip-warning" id="vipWarning">
-                <i class="fa-solid fa-crown"></i>
-                <div><strong>VIP 1+ MEMBERSHIP REQUIRED</strong><br><small>You need an active VIP plan to withdraw funds. Purchase a plan from the dashboard.</small></div>
-            </div>
-
-            <!-- Pending Withdrawal Lock -->
-            <div class="lockout-box" id="lockoutBox">
-                <i class="fa-solid fa-circle-lock"></i>
-                <div><strong>WITHDRAWAL LOCKED</strong><br><small>You have a pending withdrawal request. Please wait for admin approval.</small></div>
-            </div>
-
-            <!-- Bank Warning -->
-            <div class="bank-warning" id="bankWarning">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <p><strong>⚠️ BANK DETAILS MISSING</strong><br>Please add your bank details in the Profile tab before requesting withdrawal.</p>
-            </div>
-
-            <!-- Withdrawal Amount Input -->
-            <div class="input-box">
-                <label>🏦 AMOUNT TO WITHDRAW (Min ₦1,500)</label>
-                <div class="input-row">
-                    <span class="currency-symbol">₦</span>
-                    <input type="number" id="amountInput" placeholder="0.00" min="1500" step="100">
-                </div>
-            </div>
-
-            <!-- Bank Details Display -->
-            <div class="input-box">
-                <label>🏛️ BANK NAME</label>
-                <div class="input-row static-display"><span class="static-text" id="bankName">Loading...</span></div>
-            </div>
-            <div class="input-box">
-                <label>🔢 ACCOUNT NUMBER</label>
-                <div class="input-row static-display"><span class="static-text" id="accountNumber">Loading...</span></div>
-            </div>
-            <div class="input-box">
-                <label>👤 ACCOUNT NAME</label>
-                <div class="input-row static-display"><span class="static-text" id="accountName">Loading...</span></div>
-            </div>
-
-            <!-- Tax Breakdown Card -->
-            <div class="tax-card" id="taxCard" style="display: none;">
-                <div class="tax-row"><span>💰 Requested Amount:</span><span id="grossAmount">₦0.00</span></div>
-                <div class="tax-row"><span>📉 Processing Fee (10%):</span><span id="taxAmount" class="tax-highlight">- ₦0.00</span></div>
-                <div class="tax-row total"><span>🏦 You Will Receive:</span><span id="netAmount" class="receive-highlight">₦0.00</span></div>
-            </div>
-
-            <!-- Withdraw Button -->
-            <button class="withdraw-btn" id="withdrawBtn">
-                <i class="fa-solid fa-paper-plane"></i> REQUEST WITHDRAWAL
-            </button>
-
-            <!-- Time Restrictions Note -->
-            <div class="info-note" style="background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2);">
-                <i class="fa-solid fa-clock" style="color: #f59e0b;"></i>
-                <div style="flex:1">
-                    <p><strong>⏰ WITHDRAWAL HOURS:</strong> Monday - Saturday, 9:00 AM - 9:00 PM (WAT)<br>
-                    <strong>No withdrawals on Sundays.</strong> Requests outside hours are processed the next business day.</p>
-                </div>
-            </div>
-
-            <!-- Telegram Support -->
-            <a href="https://t.me/Nexusearncustomerservice" target="_blank" class="telegram-support">
-                <div class="telegram-icon"><i class="fa-brands fa-telegram"></i></div>
-                <div class="telegram-text">
-                    <h4>📞 CONTACT SUPPORT</h4>
-                    <p>Chat about pending or rejected withdrawals instantly</p>
-                </div>
-                <i class="fa-solid fa-arrow-right" style="color: #24A1DE; margin-left: auto;"></i>
             </a>
 
-            <!-- Recent Withdrawals History -->
-            <div class="history-section">
-                <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> RECENT WITHDRAWAL REQUESTS</div>
-                <div class="history-list" id="historyList">
-                    <div style="text-align:center;padding:20px;color:#636b8f;"><i class="fa-solid fa-spinner fa-pulse"></i> Loading withdrawal history...</div>
-                </div>
+        </main>
+
+        <!-- ---- FOOTER ---- -->
+        <footer class="footer">
+            <div class="logo-small">NEXUS EARN</div>
+            <p>© 2026 NEXUS EARN. All rights reserved.<br />Licensed by the CBN &bull; NDIC insured &bull; Pass‑through deposits via PalmPay.</p>
+            <div class="links">
+                <a href="https://t.me/Nexusearnofficial" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram</a>
+                <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                <a href="#" onclick="alert('Coming soon!')">Privacy Policy</a>
+                <a href="#" onclick="alert('Coming soon!')">Terms</a>
             </div>
-        </div>
+        </footer>
+
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, doc, runTransaction, collection, addDoc, serverTimestamp, onSnapshot, query, where, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
+    <!-- ============================================================
+    JAVASCRIPT – All withdrawal logic: VIP check, pending, tax, submit
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG
+        // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
             authDomain: "nexus-earn-1.firebaseapp.com",
@@ -269,27 +1102,53 @@
             messagingSenderId: "779765076952",
             appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
         };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null, userData = null;
-        let hasPending = false, isProcessing = false;
-        let bank = "", accNum = "", accName = "";
-        let loadingHidden = false;
+        // ============================================================
+        // GLOBALS
+        // ============================================================
+        let currentUser = null;
+        let userData = null;
         let mainBalance = 0;
+        let hasPending = false;
+        let isSubmitting = false;
+        let unsubscribeUser = null;
+        let unsubscribePending = null;
 
-        function hideLoading() {
-            if (loadingHidden) return;
-            loadingHidden = true;
-            const loader = document.getElementById('loadingOverlay');
-            if (loader) { loader.classList.add('hide'); setTimeout(() => loader.style.display = 'none', 500); }
-        }
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const balanceDisplay = document.getElementById('mainBalanceDisplay');
+        const vipWarning = document.getElementById('vipWarning');
+        const lockoutBox = document.getElementById('lockoutBox');
+        const bankWarning = document.getElementById('bankWarning');
+        const bankName = document.getElementById('bankName');
+        const accountNumber = document.getElementById('accountNumber');
+        const accountName = document.getElementById('accountName');
+        const amountInput = document.getElementById('amountInput');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        const taxBreakdown = document.getElementById('taxBreakdown');
+        const grossAmount = document.getElementById('grossAmount');
+        const taxAmount = document.getElementById('taxAmount');
+        const netAmount = document.getElementById('netAmount');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const miniHistoryList = document.getElementById('miniHistoryList');
 
-        function updateLoadingStatus(msg) {
-            const status = document.getElementById('loadingStatus');
-            if (status) status.innerHTML = msg;
+        // ============================================================
+        // TOAST & SWEETALERT
+        // ============================================================
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('customToast');
+            const icon = toast.querySelector('i');
+            const text = document.getElementById('toastMsg');
+            text.innerText = msg;
+            icon.className = isError ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-circle-check";
+            icon.style.color = isError ? "#ef4444" : "#10b981";
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
         async function showSweetAlert(title, message, icon, timer = 4000) {
@@ -306,274 +1165,435 @@
             });
         }
 
-        function showErrorToast(msg) {
-            const toast = document.getElementById('errorToast');
-            document.getElementById('errorMsg').innerHTML = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 4000);
+        // ============================================================
+        // DARK MODE
+        // ============================================================
+        (function() {
+            const toggle = document.getElementById('darkModeToggle');
+            const saved = localStorage.getItem('nexusTheme');
+            const body = document.body;
+            if (saved === 'light') {
+                body.classList.add('light-mode');
+                toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                body.classList.remove('light-mode');
+                toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+            toggle.addEventListener('click', function() {
+                const isLight = body.classList.toggle('light-mode');
+                if (isLight) {
+                    toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                    localStorage.setItem('nexusTheme', 'light');
+                } else {
+                    toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                    localStorage.setItem('nexusTheme', 'dark');
+                }
+            });
+        })();
+
+        // ============================================================
+        // FAQ ACCORDION
+        // ============================================================
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // ============================================================
+        // PRESET BUTTONS
+        // ============================================================
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const amt = parseInt(this.getAttribute('data-amt'));
+                amountInput.value = amt;
+                // Remove active class from all, add to this
+                presetBtns.forEach(b => b.classList.remove('active-preset'));
+                this.classList.add('active-preset');
+                // Trigger input event to update tax
+                amountInput.dispatchEvent(new Event('input'));
+            });
+        });
+
+        // ============================================================
+        // TAX CALCULATION (live)
+        // ============================================================
+        function updateTaxBreakdown() {
+            let val = parseFloat(amountInput.value) || 0;
+            const maxBalance = mainBalance;
+
+            // Clamp to max balance if needed
+            if (val > maxBalance && maxBalance > 0) {
+                amountInput.value = maxBalance;
+                val = maxBalance;
+                // Remove active preset class if any
+                presetBtns.forEach(b => b.classList.remove('active-preset'));
+            }
+
+            // Minimum check
+            if (val < 500 && val > 0) {
+                // Show tax but warn
+            }
+
+            if (val >= 500 && val <= maxBalance) {
+                const tax = val * 0.10;
+                const net = val - tax;
+                taxBreakdown.classList.add('active');
+                grossAmount.textContent = `₦${val.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+                taxAmount.textContent = `- ₦${tax.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+                netAmount.textContent = `₦${net.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+            } else if (val > 0 && val < 500) {
+                const tax = val * 0.10;
+                const net = val - tax;
+                taxBreakdown.classList.add('active');
+                grossAmount.textContent = `₦${val.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+                taxAmount.textContent = `- ₦${tax.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+                netAmount.textContent = `₦${net.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+            } else {
+                taxBreakdown.classList.remove('active');
+            }
+
+            // If balance is less than amount, show a subtle warning via toast? We'll handle on submit.
         }
 
-        // Load withdrawal history with client-side sorting
-        async function loadHistory(uid) {
-            const container = document.getElementById('historyList');
-            try {
-                const q = query(collection(db, "withdrawals"), where("uid", "==", uid));
-                const snap = await getDocs(q);
-                
-                if (snap.empty) { 
-                    container.innerHTML = '<div style="text-align:center;padding:20px;color:#636b8f;"><i class="fa-regular fa-folder-open"></i> No withdrawal requests yet</div>'; 
-                    return; 
+        amountInput.addEventListener('input', function() {
+            updateTaxBreakdown();
+            // Remove preset active style if user manually types
+            presetBtns.forEach(b => b.classList.remove('active-preset'));
+            // If value matches a preset, highlight it
+            const val = parseFloat(this.value);
+            presetBtns.forEach(b => {
+                if (parseInt(b.getAttribute('data-amt')) === val) {
+                    b.classList.add('active-preset');
                 }
-                
-                let items = [];
-                snap.forEach(doc => {
-                    items.push({ id: doc.id, ...doc.data() });
-                });
-                items.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-                
+            });
+        });
+
+        // ============================================================
+        // LOAD MINI HISTORY (withdrawals)
+        // ============================================================
+        async function loadMiniHistory(uid) {
+            try {
+                const q = await db.collection('withdrawals')
+                    .where('uid', '==', uid)
+                    .orderBy('timestamp', 'desc')
+                    .limit(5)
+                    .get();
+                if (q.empty) {
+                    miniHistoryList.innerHTML = `
+                        <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
+                            <i class="fa-regular fa-folder-open"></i> No withdrawal requests yet.
+                        </div>
+                    `;
+                    return;
+                }
                 let html = '';
-                items.forEach(item => {
-                    let gross = item.grossAmount || 0;
-                    let net = item.netAmount || (gross * 0.9);
-                    let tax = item.taxWithheld || (gross * 0.10);
-                    let status = item.status || 'pending';
-                    let statusClass = status === 'pending' ? 'pending' : (status === 'approved' ? 'approved' : 'rejected');
-                    let statusText = status === 'pending' ? 'Pending' : (status === 'approved' ? 'Approved' : 'Rejected');
-                    let date = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleDateString('en-GB') : 'Unknown';
-                    let time = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
-                    
+                q.forEach(doc => {
+                    const data = doc.data();
+                    const gross = data.grossAmount || 0;
+                    const net = data.netAmount || (gross * 0.9);
+                    const status = data.status || 'pending';
+                    const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                    const statusClass = `status-${status}`;
+                    const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString() : 'Unknown';
                     html += `
-                        <div class="history-item ${statusClass}">
-                            <div class="history-left">
-                                <div>
-                                    <span class="history-gross">₦${gross.toLocaleString()}</span>
-                                    <span class="history-net">₦${net.toLocaleString()}</span>
-                                </div>
-                                <div class="history-tax-note">10% fee: -₦${tax.toLocaleString()}</div>
-                                <div class="history-date">${date} at ${time}</div>
-                            </div>
-                            <div class="history-status status-${status}">${statusText}</div>
+                        <div class="mini-history-item">
+                            <span>₦${net.toLocaleString()} <span style="color:#6b7280;font-size:0.6rem;">${date}</span></span>
+                            <span class="status ${statusClass}">${statusText}</span>
                         </div>
                     `;
                 });
-                container.innerHTML = html;
-            } catch(e) { 
-                console.error("History error:", e); 
-                container.innerHTML = '<div style="text-align:center;padding:20px;color:#ef4444;"><i class="fa-solid fa-circle-exclamation"></i> Error loading history</div>'; 
+                miniHistoryList.innerHTML = html;
+            } catch (e) {
+                console.error('Mini history error:', e);
+                miniHistoryList.innerHTML = `
+                    <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#ef4444;">
+                        <i class="fa-solid fa-circle-exclamation"></i> Error loading history.
+                    </div>
+                `;
             }
         }
 
-        // Update tax breakdown in real-time and enforce max = mainBalance
-        document.getElementById('amountInput').addEventListener('input', function() {
-            let val = parseFloat(this.value) || 0;
-            let tax = val * 0.10;
-            let net = val - tax;
-            const taxCard = document.getElementById('taxCard');
-            const maxBalance = mainBalance;
-            
-            if (val > maxBalance && maxBalance > 0) {
-                this.value = maxBalance;
-                val = maxBalance;
-                tax = val * 0.10;
-                net = val - tax;
+        // ============================================================
+        // AUTH + REAL‑TIME USER DATA + PENDING CHECK
+        // ============================================================
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                await showSweetAlert('Session Expired', 'Please login to withdraw funds.', 'warning', 2000);
+                window.location.href = 'login.html';
+                return;
             }
-            
-            if (val >= 1500 && val <= maxBalance) {
-                taxCard.style.display = 'flex';
-                document.getElementById('grossAmount').innerHTML = '₦' + val.toLocaleString(undefined, {minimumFractionDigits:2});
-                document.getElementById('taxAmount').innerHTML = '- ₦' + tax.toLocaleString(undefined, {minimumFractionDigits:2});
-                document.getElementById('netAmount').innerHTML = '₦' + net.toLocaleString(undefined, {minimumFractionDigits:2});
-            } else if (val > 0 && val < 1500) {
-                taxCard.style.display = 'flex';
-                document.getElementById('grossAmount').innerHTML = '₦' + val.toLocaleString(undefined, {minimumFractionDigits:2});
-                document.getElementById('taxAmount').innerHTML = '- ₦' + tax.toLocaleString(undefined, {minimumFractionDigits:2});
-                document.getElementById('netAmount').innerHTML = '₦' + net.toLocaleString(undefined, {minimumFractionDigits:2});
-            } else {
-                taxCard.style.display = 'none';
-            }
-            
-            if (val > maxBalance && maxBalance > 0) {
-                showErrorToast(`⚠️ You can only withdraw up to ₦${maxBalance.toLocaleString()} (your available balance).`);
-            }
-        });
-
-        // Main auth and data loading
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) { hideLoading(); window.location.href = "login.html"; return; }
             currentUser = user;
-            updateLoadingStatus("Authenticating user...");
-            
-            const userDocRef = doc(db, "users", user.uid);
-            const unsub = onSnapshot(userDocRef, async (snap) => {
-                if (snap.exists()) {
-                    userData = snap.data();
-                    const userTier = userData.tierCode || 'NONE';
-                    updateLoadingStatus("Loading account data...");
-                    
-                    // Show/hide VIP warning
-                    const vipWarning = document.getElementById('vipWarning');
-                    const withdrawBtn = document.getElementById('withdrawBtn');
-                    if (userTier === 'NONE') {
-                        vipWarning.classList.add('active');
-                        withdrawBtn.disabled = true;
-                    } else {
-                        vipWarning.classList.remove('active');
+
+            // Unsubscribe previous listeners
+            if (unsubscribeUser) unsubscribeUser();
+            if (unsubscribePending) unsubscribePending();
+
+            // Listen to user data (balance, tier, bank details)
+            const userRef = db.collection('users').doc(user.uid);
+            unsubscribeUser = userRef.onSnapshot((snap) => {
+                if (!snap.exists) {
+                    showToast('User data not found. Please contact support.', true);
+                    return;
+                }
+                userData = snap.data();
+                mainBalance = userData.balance || 0;
+                balanceDisplay.textContent = `₦${mainBalance.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+
+                // VIP check
+                const tier = userData.tierCode || 'NONE';
+                if (tier === 'NONE') {
+                    vipWarning.classList.add('active');
+                    withdrawBtn.disabled = true;
+                } else {
+                    vipWarning.classList.remove('active');
+                    // Re-evaluate pending & bank before enabling
+                    if (!hasPending && userData.bankName && userData.accountNumber) {
                         withdrawBtn.disabled = false;
                     }
-                    
-                    // Load bank details
-                    bank = userData.bankName || "Not set";
-                    accNum = userData.accountNumber || "Not set";
-                    accName = userData.accountName || "Not set";
-                    document.getElementById('bankName').innerText = bank;
-                    document.getElementById('accountNumber').innerText = accNum;
-                    document.getElementById('accountName').innerText = accName;
-                    
-                    // Show bank warning if missing
-                    const bankWarning = document.getElementById('bankWarning');
-                    if (bank === "Not set" || accNum === "Not set") {
-                        bankWarning.style.display = 'flex';
-                    } else {
-                        bankWarning.style.display = 'none';
-                    }
-                    
-                    // Main balance from Firebase 'balance' field
-                    mainBalance = userData.balance || 0;
-                    document.getElementById('mainBalanceDisplay').innerHTML = "₦" + mainBalance.toLocaleString(undefined, {minimumFractionDigits:2});
-                    
-                    hideLoading();
-                } else { 
-                    hideLoading(); 
-                    window.location.href = "dashboard.html"; 
                 }
-            });
-            
-            await loadHistory(user.uid);
-            
-            // Monitor pending withdrawals
-            const pendingQ = query(collection(db, "withdrawals"), where("uid", "==", user.uid), where("status", "==", "pending"));
-            onSnapshot(pendingQ, (snap) => {
-                hasPending = !snap.empty;
-                const box = document.getElementById('lockoutBox');
-                const btn = document.getElementById('withdrawBtn');
-                const input = document.getElementById('amountInput');
-                if (hasPending) {
-                    box.classList.add('active');
-                    btn.disabled = true;
-                    input.disabled = true;
+
+                // Bank details
+                const bank = userData.bankName || 'Not set';
+                const accNum = userData.accountNumber || 'Not set';
+                const accName = userData.accountName || 'Not set';
+                bankName.textContent = bank;
+                accountNumber.textContent = accNum;
+                accountName.textContent = accName;
+
+                if (bank === 'Not set' || accNum === 'Not set') {
+                    bankWarning.classList.add('active');
+                    withdrawBtn.disabled = true;
                 } else {
-                    box.classList.remove('active');
-                    if (userData?.tierCode !== 'NONE') btn.disabled = false;
-                    input.disabled = false;
+                    bankWarning.classList.remove('active');
+                    if (tier !== 'NONE' && !hasPending) {
+                        withdrawBtn.disabled = false;
+                    }
                 }
+
+                // Update tax breakdown if needed
+                updateTaxBreakdown();
+            }, (error) => {
+                console.error('User snapshot error:', error);
+                showToast('Error loading user data.', true);
             });
-            
-            onSnapshot(query(collection(db, "withdrawals"), where("uid", "==", user.uid)), () => loadHistory(user.uid));
+
+            // Listen to pending withdrawals (only ONE pending at a time)
+            const pendingQuery = db.collection('withdrawals')
+                .where('uid', '==', user.uid)
+                .where('status', '==', 'pending');
+            unsubscribePending = pendingQuery.onSnapshot((snap) => {
+                hasPending = !snap.empty;
+                if (hasPending) {
+                    lockoutBox.classList.add('active');
+                    withdrawBtn.disabled = true;
+                } else {
+                    lockoutBox.classList.remove('active');
+                    // Re-enable if VIP and bank details set
+                    if (userData && userData.tierCode !== 'NONE' && userData.bankName && userData.accountNumber) {
+                        withdrawBtn.disabled = false;
+                    }
+                }
+            }, (error) => {
+                console.error('Pending query error:', error);
+            });
+
+            // Load mini history
+            loadMiniHistory(user.uid);
+
+            // Listen for real‑time updates on history
+            const historyQuery = db.collection('withdrawals')
+                .where('uid', '==', user.uid)
+                .orderBy('timestamp', 'desc')
+                .limit(5);
+            db.collection('withdrawals')
+                .where('uid', '==', user.uid)
+                .onSnapshot(() => {
+                    loadMiniHistory(user.uid);
+                });
         });
 
-        // Withdrawal request handler - DEDUCTS FROM 'balance' FIELD
-        document.getElementById('withdrawBtn').addEventListener('click', async () => {
-            if (!currentUser || !userData) { showErrorToast("System not ready. Please refresh."); return; }
-            if (hasPending) { showErrorToast("❌ You have a pending withdrawal request. Please wait for admin approval."); return; }
-            if (userData.tierCode === 'NONE') { showErrorToast("❌ VIP 1+ membership required to withdraw funds!"); return; }
-            
-            let amount = parseFloat(document.getElementById('amountInput').value);
-            if (isNaN(amount) || amount < 1500) { showErrorToast("❌ Minimum withdrawal amount is ₦1,500"); return; }
-            if (mainBalance < amount) { 
-                showErrorToast(`❌ Insufficient balance! You have ₦${mainBalance.toLocaleString()}.`); 
+        // ============================================================
+        // WITHDRAW SUBMIT
+        // ============================================================
+        withdrawBtn.addEventListener('click', async function() {
+            if (!currentUser || !userData) {
+                showToast('Please wait, loading user data...', true);
                 return;
             }
-            if (bank === "Not set" || accNum === "Not set" || bank === "" || accNum === "") { 
-                showErrorToast("❌ Please complete your bank details in the Profile tab first"); 
+
+            // Check VIP
+            if (userData.tierCode === 'NONE') {
+                showToast('VIP 1+ membership required to withdraw.', true);
                 return;
             }
-            
-            // Time restrictions
-            let now = new Date();
-            let hour = now.getHours();
-            let day = now.getDay();
-            
-            if (day === 0) { 
-                showErrorToast("❌ Withdrawals are not processed on Sundays. Please try again on Monday (9AM - 9PM)."); 
-                return; 
+
+            // Check pending
+            if (hasPending) {
+                showToast('You have a pending withdrawal request. Please wait for approval.', true);
+                return;
             }
-            if (hour < 9 || hour >= 21) { 
-                showErrorToast(`❌ Withdrawals are only available between 9:00 AM and 9:00 PM (WAT).`); 
-                return; 
+
+            // Check bank details
+            if (!userData.bankName || !userData.accountNumber || userData.bankName === 'Not set') {
+                showToast('Please add your bank details in the Profile tab first.', true);
+                return;
             }
-            
-            isProcessing = true;
-            let btn = document.getElementById('withdrawBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner-small"></div> PROCESSING REQUEST...';
-            
-            let tax = amount * 0.10;
-            let net = amount - tax;
-            
+
+            // Time restrictions (Mon-Sat, 10-18 WAT)
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay();
+            // Day 0 = Sunday
+            if (day === 0) {
+                await showSweetAlert(
+                    '⛔ Withdrawals Unavailable on Sundays',
+                    'Withdrawals are not processed on Sundays. Please try again on Monday between <strong>10:00 AM – 6:00 PM</strong> (WAT).',
+                    'info',
+                    4000
+                );
+                return;
+            }
+            if (hour < 10 || hour >= 18) {
+                await showSweetAlert(
+                    '⏰ Outside Withdrawal Hours',
+                    'Withdrawals are processed Monday – Saturday, <strong>10:00 AM – 6:00 PM</strong> (WAT).<br /><br />Please try again during these hours.',
+                    'info',
+                    4000
+                );
+                return;
+            }
+
+            // Amount validation
+            let amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount < 500) {
+                showToast('Minimum withdrawal amount is ₦500.', true);
+                return;
+            }
+            if (amount > 10000000) {
+                showToast('Maximum withdrawal amount is ₦10,000,000 per request.', true);
+                return;
+            }
+            if (amount > mainBalance) {
+                showToast(`Insufficient balance! You have ₦${mainBalance.toLocaleString()}.`, true);
+                return;
+            }
+
+            // Calculate tax
+            const tax = amount * 0.10;
+            const net = amount - tax;
+
+            // Confirm
+            const confirmResult = await Swal.fire({
+                title: 'Confirm Withdrawal',
+                html: `
+                    <div style="text-align:left;">
+                        <p><strong>Requested:</strong> ₦${amount.toLocaleString()}</p>
+                        <p style="color:#ef4444;"><strong>Processing Fee (10%):</strong> -₦${tax.toLocaleString()}</p>
+                        <p style="color:#10b981;font-size:1.1rem;"><strong>You Receive:</strong> ₦${net.toLocaleString()}</p>
+                        <p style="margin-top:10px;font-size:0.75rem;color:#a1a1aa;">
+                            <i class="fa-solid fa-building-columns"></i> To: ${userData.bankName} – ${userData.accountNumber}
+                        </p>
+                        <p style="font-size:0.7rem;color:#e5b842;margin-top:8px;">
+                            <i class="fa-solid fa-clock"></i> Processing time: 24‑48 hours (Mon‑Sat, 10‑6 WAT)
+                        </p>
+                    </div>
+                `,
+                icon: 'question',
+                background: '#111424',
+                color: '#fff',
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#ef4444',
+                showCancelButton: true,
+                confirmButtonText: '✅ Confirm Withdrawal',
+                cancelButtonText: 'Cancel'
+            });
+
+            if (!confirmResult.isConfirmed) return;
+
+            // Disable button
+            isSubmitting = true;
+            withdrawBtn.disabled = true;
+            withdrawBtn.innerHTML = '<div class="spinner-small"></div> Processing...';
+
             try {
-                // DEDUCT FROM 'balance' FIELD
-                await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", currentUser.uid);
+                // Deduct from balance (in a transaction)
+                await db.runTransaction(async (transaction) => {
+                    const userRef = db.collection('users').doc(currentUser.uid);
                     const snap = await transaction.get(userRef);
-                    let currentBalance = snap.data().balance || 0;
-                    if (currentBalance < amount) throw new Error("Insufficient balance");
-                    transaction.update(userRef, { balance: currentBalance - amount });
+                    const currentBalance = snap.data().balance || 0;
+                    if (currentBalance < amount) throw new Error('Insufficient balance');
+                    transaction.update(userRef, {
+                        balance: currentBalance - amount
+                    });
                 });
-                
+
                 // Create withdrawal request
-                await addDoc(collection(db, "withdrawals"), {
+                await db.collection('withdrawals').add({
                     uid: currentUser.uid,
-                    username: userData.username || "User",
+                    username: userData.username || 'User',
                     email: currentUser.email,
                     grossAmount: amount,
                     taxWithheld: tax,
                     netAmount: net,
-                    bankName: bank,
-                    accountNumber: accNum,
-                    accountName: accName,
-                    status: "pending",
-                    timestamp: serverTimestamp(),
+                    bankName: userData.bankName,
+                    accountNumber: userData.accountNumber,
+                    accountName: userData.accountName,
+                    status: 'pending',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     requestedAt: new Date().toISOString()
                 });
-                
-                document.getElementById('amountInput').value = "";
-                document.getElementById('taxCard').style.display = "none";
-                
+
+                // Success
                 await showSweetAlert(
-                    '✅ WITHDRAWAL REQUEST SUBMITTED!',
-                    `<div style="text-align:left;">
-                        <div style="background:#1b203a; border-radius:10px; padding:12px; margin-bottom:10px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>💰 Requested:</span><span><strong>₦${amount.toLocaleString()}</strong></span></div>
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px; color:#ef4444;"><span>📉 10% Processing Fee:</span><span><strong>-₦${tax.toLocaleString()}</strong></span></div>
-                            <div style="border-top:1px solid #2a3942; padding-top:8px; display:flex; justify-content:space-between; font-weight:bold;"><span>🏦 You Will Receive:</span><span style="color:#10b981; font-size:1.1rem;"><strong>₦${net.toLocaleString()}</strong></span></div>
+                    '✅ Withdrawal Request Submitted!',
+                    `
+                        <div style="text-align:left;">
+                            <p><strong>Requested:</strong> ₦${amount.toLocaleString()}</p>
+                            <p style="color:#ef4444;"><strong>Fee (10%):</strong> -₦${tax.toLocaleString()}</p>
+                            <p style="color:#10b981;font-size:1.1rem;"><strong>Net Receivable:</strong> ₦${net.toLocaleString()}</p>
+                            <div style="background:rgba(229,184,66,0.1);padding:12px;border-radius:8px;margin-top:12px;">
+                                <p style="color:#e5b842;font-weight:700;">⏳ Status: PENDING</p>
+                                <p style="font-size:0.7rem;color:#a1a1aa;">Admin will verify and process within 24‑48 hours.</p>
+                                <p style="font-size:0.7rem;color:#a1a1aa;">Check your History page for real‑time updates.</p>
+                            </div>
                         </div>
-                        <div style="background:rgba(229,184,66,0.1); padding:10px; border-radius:8px; text-align:center;">
-                            <i class="fa-solid fa-clock"></i> <strong style="color:#e5b842;">STATUS: PENDING</strong><br>
-                            <small>⏰ Admin will process your request within 24 hours</small>
-                        </div>
-                        <div style="margin-top:10px; background:rgba(16,185,129,0.1); padding:8px; border-radius:8px; text-align:center;">
-                            <i class="fa-solid fa-chart-line"></i> <strong>Remaining Balance: ₦${(mainBalance - amount).toLocaleString()}</strong>
-                        </div>
-                    </div>`,
+                    `,
                     'success',
-                    6000
+                    5000
                 );
-                
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-clock"></i> REQUEST PENDING - WAIT FOR APPROVAL';
-                
-                // Refresh after 2 seconds
-                setTimeout(() => { window.location.reload(); }, 2500);
-                
-            } catch(e) {
-                showErrorToast(e.message || "❌ Error processing withdrawal");
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> REQUEST WITHDRAWAL';
+
+                // Reset form
+                amountInput.value = '';
+                taxBreakdown.classList.remove('active');
+                presetBtns.forEach(b => b.classList.remove('active-preset'));
+                // Reload mini history
+                loadMiniHistory(currentUser.uid);
+                // Disable button until pending is resolved (listener will handle)
+                withdrawBtn.disabled = true;
+                withdrawBtn.innerHTML = '<i class="fa-solid fa-clock"></i> Request Pending...';
+
+            } catch (error) {
+                console.error('Withdrawal error:', error);
+                if (error.message === 'Insufficient balance') {
+                    showToast('Insufficient balance. Please try again.', true);
+                } else {
+                    showToast('Error processing withdrawal. Please try again.', true);
+                }
+                // Re-enable if conditions allow
+                if (userData.tierCode !== 'NONE' && !hasPending && userData.bankName && userData.accountNumber) {
+                    withdrawBtn.disabled = false;
+                }
+                withdrawBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Request Withdrawal';
+            } finally {
+                isSubmitting = false;
             }
-            isProcessing = false;
         });
-        
-        setTimeout(hideLoading, 8000);
+
+        // ============================================================
+        // INITIAL SETUP: ensure tax breakdown is hidden if no amount
+        // ============================================================
+        taxBreakdown.classList.remove('active');
     </script>
 </body>
 </html>

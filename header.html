@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+    <!-- ============================================================
+    🔥 NEXUS EARN – MASTER HEADER (include this in all pages)
+    ============================================================ -->
+
+    <!-- ---- Primary Meta Tags ---- -->
+    <title>NEXUS EARN – Premium Investment Platform | Earn Daily</title>
+    <meta name="description" content="NEXUS EARN – Invest in VIP plans (1‑year contracts) and earn daily returns up to ₦2,048,000. Secure bank deposits, instant approvals, 10% referral bonus." />
+    <meta name="keywords" content="NEXUS EARN, investment, daily earnings, VIP plans, Nigeria, earn money, referral, bank transfer" />
+    <meta name="author" content="NEXUS EARN" />
+    <meta name="theme-color" content="#e5b842" />
+
+    <!-- ---- Open Graph (WhatsApp, Facebook, Telegram) ---- -->
+    <meta property="og:title" content="NEXUS EARN – Earn Daily Returns for 1 Year" />
+    <meta property="og:description" content="VIP 1–13 plans with daily payouts from ₦500 to ₦2,048,000. 365‑day contracts. Secure bank deposit via PalmPay. Start with ₦15,500." />
+    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://nexus-earn.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NEXUS EARN" />
+
+    <!-- ---- Twitter Card ---- -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEXUS EARN – 1‑Year Investment Plans" />
+    <meta name="twitter:description" content="Earn daily from ₦500 to ₦2,048,000. Secure bank deposits, 10% referral commission, instant approvals." />
+    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
+
+    <!-- ---- Google AdSense (place your publisher ID below) ---- -->
+    <!-- ============================================================
+         🔴 REPLACE 'ca-pub-XXXXXXXXXXXXXXXX' WITH YOUR OWN ID
+         ============================================================ -->
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <!-- If AdSense is not yet active, the script simply won't load – no blank spaces. -->
+
+    <!-- ---- Fonts & Icons ---- -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- ---- SweetAlert2 (for all pages) ---- -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- ---- Firebase (compat) – loaded globally for all pages ---- -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+    <!-- ---- Global Firebase Config (centralised) ---- -->
+    <script>
+        // ============================================================
+        //  FIREBASE CONFIG – SAME FOR ALL PAGES
+        //  DO NOT DUPLICATE – USE THIS SINGLE SOURCE
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
+            authDomain: "nexus-earn-1.firebaseapp.com",
+            projectId: "nexus-earn-1",
+            storageBucket: "nexus-earn-1.firebasestorage.app",
+            messagingSenderId: "779765076952",
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+        };
+        // Initialize only once (guard against multiple inclusions)
+        if (!window._firebaseInitialized) {
+            firebase.initializeApp(firebaseConfig);
+            window._firebaseInitialized = true;
+            console.log("🔥 Firebase initialised from master header.");
+        }
+    </script>
+
+    <!-- ---- Base CSS (shared across all pages) ---- -->
+    <style>
+        /* ============================================================
+           GLOBAL RESET & BASE STYLES (shared by all NEXUS pages)
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0b0d17;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: background-color 0.3s ease, color 0.2s ease;
+        }
+
+        /* ---- Light mode overrides (will be extended by each page) ---- */
+        body.light-mode {
+            background-color: #f0f2f8 !important;
+            color: #1a1e2e;
+        }
+
+        /* ---- Scrollbar (dark theme) ---- */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1b203a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5b842;
+            border-radius: 4px;
+        }
+
+        /* ---- Minimal header preview (visible only if file opened directly) ---- */
+        .header-preview-placeholder {
+            display: none;
+        }
+        /* When this file is opened alone, show a nice splash */
+        body:not(.loaded) .header-preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #111424, #0b0d17);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .header-preview-placeholder h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f5d061, #e5b842);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .header-preview-placeholder p {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+        .header-preview-placeholder .badge {
+            background: rgba(229,184,66,0.15);
+            border: 1px solid rgba(229,184,66,0.3);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #e5b842;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================================
+         PREVIEW MESSAGE – only shown when header.html is opened directly
+         ============================================================ -->
+    <div class="header-preview-placeholder">
+        <h1>NEXUS EARN</h1>
+        <p>Master header file – contains all meta tags, AdSense, fonts, Firebase config, and global styles.</p>
+        <p style="font-size:0.8rem;color:#6b7280;margin-top:8px;">
+            <i class="fa-solid fa-code"></i> Include this file in every page's <code>&lt;head&gt;</code> section.
+        </p>
+        <div class="badge"><i class="fa-regular fa-circle-check"></i> Ready for production</div>
+    </div>
+
+    <!-- ============================================================
+         SCRIPT TO REMOVE THE PLACEHOLDER WHEN INCLUDED IN ANOTHER PAGE
+         ============================================================ -->
+    <script>
+        // If this file is included inside another document, the placeholder
+        // will be hidden because the body will not have the class 'loaded'
+        // – we add 'loaded' to show that we are in a proper page context.
+        (function() {
+            // Check if we are inside a full page (not an iframe or standalone)
+            if (window.parent === window) {
+                // Only if the document has no other content (standalone)
+                if (document.body.children.length === 1) {
+                    document.body.classList.add('loaded');
+                } else {
+                    // We are included – hide the placeholder
+                    const placeholder = document.querySelector('.header-preview-placeholder');
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

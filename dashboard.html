@@ -1,1310 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta property="og:title" content="NEXUS EARN - Earn ₦850 to ₦2,025,250 Daily">
-    <meta property="og:description" content="Join NEXUS EARN and earn massive daily returns! VIP1-VIP13 tiers available. 40-day contracts.">
-    <meta property="og:image" content="https://nexus-earn.com/nexus-logo.png">
-    <meta property="og:url" content="https://nexus-earn.com">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="description" content="NEXUS EARN - Premium investment platform with 13 VIP tiers.">
-    <meta name="theme-color" content="#e5b842">
-    <title>NEXUS EARN - Premium Investment Platform | VIP 1-13</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+    <!-- ============================================================
+    SECTION 1: MASTER META TAGS (WhatsApp, Facebook, Telegram, Twitter)
+    ============================================================ -->
+    <meta property="og:title" content="NEXUS EARN – Your Investment Dashboard" />
+    <meta property="og:description" content="Manage your VIP plans, claim daily earnings, track referrals, and withdraw funds securely. 1‑year contracts, daily payouts up to ₦2,048,000." />
+    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://nexus-earn.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NEXUS EARN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEXUS EARN – Dashboard" />
+    <meta name="twitter:description" content="Your investment hub: VIP plans, daily earnings, referrals, and withdrawals." />
+    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <title>NEXUS EARN – Dashboard | Manage Your Investments</title>
+    <meta name="description" content="NEXUS EARN dashboard – VIP 1‑13 plans, daily earnings, referrals, withdrawals, and more." />
+    <meta name="theme-color" content="#e5b842" />
+
+    <!-- ============================================================
+    SECTION 2: EXTERNAL RESOURCES (Fonts, Icons, Firebase, SweetAlert)
+    ============================================================ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Firebase (compat) – loaded here for all pages -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <!-- ============================================================
+    SECTION 3: MASTER STYLES (dashboard.css)
+    ============================================================ -->
+    <link rel="stylesheet" href="dashboard.css" />
+
+    <!-- ============================================================
+    SECTION 4: INLINE STYLES (Critical path – loaded before CSS)
+    ============================================================ -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #0b0d17 !important;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-bottom: 90px;
-            transition: background-color 0.3s ease, color 0.2s ease;
-        }
-
-        body.light-mode {
-            background-color: #f0f2f8 !important;
-            color: #1a1e2e;
-        }
-
-        body.light-mode .app-container {
-            background: #ffffff;
-        }
-
-        body.light-mode .glass-header,
-        body.light-mode .wallet-hub-card,
-        body.light-mode .package-card,
-        body.light-mode .task-container,
-        body.light-mode .link-copy-card,
-        body.light-mode .profile-hero,
-        body.light-mode .profile-management-group,
-        body.light-mode .team-list-card,
-        body.light-mode .milestone-rewards-card,
-        body.light-mode .stat-card,
-        body.light-mode .column-card {
-            background: #ffffff;
-            border-color: #e0e4ec;
-            color: #1a1e2e;
-        }
-
-        body.light-mode .info-row,
-        body.light-mode .link-field,
-        body.light-mode .profile-field,
-        body.light-mode .vip-btn,
-        body.light-mode .pending-item,
-        body.light-mode .sent-item,
-        body.light-mode .stat-box,
-        body.light-mode .milestone-item {
-            background: #f0f2f8;
-            color: #1a1e2e;
-        }
-
-        body.light-mode .balance-amount,
-        body.light-mode .stat-card .number,
-        body.light-mode .package-title-text,
-        body.light-mode .user-display-name,
-        body.light-mode .user-financial-contribution {
-            color: #1a1e2e;
-        }
-
-        body.light-mode .info-value,
-        body.light-mode .pending-phone span {
-            color: #1a1e2e;
-        }
-
-        body.light-mode .bottom-nav {
-            background: #ffffff;
-            border-top-color: #e0e4ec;
-        }
-
-        body.light-mode .nav-tab {
-            color: #8a94b0;
-        }
-
-        body.light-mode .nav-tab.active-tab {
-            color: #e5b842;
-        }
-
-        body.light-mode .stat-mini-card,
-        body.light-mode .premium-days-badge-container {
-            background: #f0f2f8;
-        }
-
-        body.light-mode .profile-field {
-            background: #ffffff;
-            border-color: #d1d5db;
-            color: #1a1e2e;
-        }
-
-        body.light-mode .portal-modal-card {
-            background: #ffffff;
-            border-color: #e0e4ec;
-        }
-
-        body.light-mode .support-channel-row {
-            background: #f0f2f8;
-            color: #1a1e2e;
-        }
-
-        body.light-mode .action-tile {
-            background: #f0f2f8;
-            border-color: #e0e4ec;
-        }
-
-        body.light-mode .action-tile span {
-            color: #1a1e2e;
-        }
-
-        body.light-mode .detail-item {
-            color: #4b5563;
-        }
-
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1b203a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #e5b842;
-            border-radius: 4px;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            background: #111424;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            transition: background 0.3s ease;
-        }
-
-        @keyframes borderGlow {
-            0% { border-color: rgba(229, 184, 66, 0.3); box-shadow: 0 0 5px rgba(229, 184, 66, 0.1); }
-            50% { border-color: rgba(229, 184, 66, 0.8); box-shadow: 0 0 15px rgba(229, 184, 66, 0.3); }
-            100% { border-color: rgba(229, 184, 66, 0.3); box-shadow: 0 0 5px rgba(229, 184, 66, 0.1); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .toast-notification {
-            position: fixed;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            width: calc(100% - 32px);
-            max-width: 400px;
-            background: #1b203a;
-            border-left: 4px solid #e5b842;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            z-index: 50000;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .toast-notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast-text {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .floating-action-panel {
-            position: fixed;
-            bottom: 85px;
-            right: calc(50% - 225px);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 10000;
-        }
-
-        @media (max-width: 480px) {
-            .floating-action-panel {
-                right: 16px;
-            }
-        }
-
-        .action-float-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
-            color: #111424;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-            border: 2px solid #111424;
-            transition: transform 0.2s ease;
-            position: relative;
-            animation: borderGlow 2s infinite;
-        }
-
-        .action-float-btn:active {
-            transform: scale(0.9);
-        }
-
-        .float-btn-label {
-            position: absolute;
-            right: 52px;
-            background: #1b203a;
-            color: #fff;
-            font-size: 0.65rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid #e5b842;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            white-space: nowrap;
-        }
-
-        .action-float-btn:hover .float-btn-label {
-            opacity: 1;
-        }
-
-        .dark-mode-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(229, 184, 66, 0.15);
-            border: 1px solid #e5b842;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .dark-mode-toggle:hover {
-            transform: scale(1.05);
-            background: rgba(229, 184, 66, 0.3);
-        }
-
-        .portal-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(7, 9, 19, 0.92);
-            backdrop-filter: blur(10px);
-            z-index: 20000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .portal-modal-card {
-            background: #111424;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 380px;
-            padding: 35px 24px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-        }
-
-        .portal-modal-close {
-            position: absolute;
-            top: 16px;
-            right: 20px;
-            font-size: 1.4rem;
-            color: #9ca3af;
-            cursor: pointer;
-        }
-
-        .support-channel-row {
-            background: #161a2e;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 14px;
-            border-radius: 10px;
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            text-decoration: none;
-            color: #fff;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .support-channel-row:hover {
-            background: rgba(229, 184, 66, 0.08);
-            border-color: #e5b842;
-        }
-
-        .logout-btn {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #ef4444;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.25);
-            transform: scale(1.02);
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
-        }
-
-        .app-header {
-            width: 100%;
-            background: #1b203a;
-            padding: 20px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(229, 184, 66, 0.1);
-        }
-
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-brand i {
-            color: #e5b842;
-            font-size: 1.5rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .header-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #fff, #e5b842);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .user-status-node {
-            font-size: 0.7rem;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid #10b981;
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: #10b981;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .app-workspace {
-            flex-grow: 1;
-            padding: 24px;
-        }
-
-        .app-view {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .app-view.active-view {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .wallet-hub-card {
-            width: 100%;
-            background: linear-gradient(135deg, #1b203a 0%, #13172c 100%);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(229, 184, 66, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .wallet-hub-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(229, 184, 66, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .balance-label {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .balance-amount {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #ffffff;
-            margin-top: 6px;
-        }
-
-        .balance-sub-row {
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 14px;
-            margin-top: 16px;
-        }
-
-        .sub-balance-title {
-            font-size: 0.65rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-        }
-
-        .sub-balance-val {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #10b981;
-            margin-top: 2px;
-        }
-
-        .hub-actions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 16px;
-        }
-
-        .action-tile {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            gap: 10px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .action-tile:hover {
-            background: rgba(229, 184, 66, 0.1);
-            border-color: #e5b842;
-            transform: translateY(-2px);
-        }
-
-        .action-tile i {
-            font-size: 1.1rem;
-            color: #e5b842;
-        }
-
-        .action-tile span {
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #fff;
-        }
-
-        .section-headline {
-            font-size: 1.1rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #e5b842;
-        }
-
-        .section-subline {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .package-card {
-            width: 100%;
-            background: linear-gradient(135deg, #1b203a 0%, #161a2e 100%);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            animation: fadeSlideUp 0.4s ease-out;
-        }
-
-        .package-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(229, 184, 66, 0.3);
-        }
-
-        .package-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 12px;
-            margin-bottom: 14px;
-        }
-
-        .package-title-text {
-            font-size: 1rem;
-            font-weight: 800;
-            color: #ffffff;
-        }
-
-        .package-price {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #e5b842;
-        }
-
-        .package-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: #d1d5db;
-        }
-
-        .detail-item i {
-            color: #e5b842;
-            font-size: 0.8rem;
-            width: 14px;
-        }
-
-        .btn-buy-package {
-            width: 100%;
-            height: 44px;
-            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
-            color: #111424;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-buy-package:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(229, 184, 66, 0.3);
-        }
-
-        .btn-buy-package:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
-        }
-
-        .discount-tag {
-            position: absolute;
-            top: -10px;
-            left: 16px;
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: #fff;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-        }
-
-        .task-container {
-            background: linear-gradient(135deg, #1b203a 0%, #161a2e 100%);
-            border-radius: 20px;
-            padding: 28px 24px;
-            text-align: center;
-            border: 1px solid rgba(229, 184, 66, 0.15);
-        }
-
-        .task-status-banner {
-            font-size: 0.8rem;
-            color: #e5b842;
-            background: rgba(229, 184, 66, 0.1);
-            padding: 10px 15px;
-            border-radius: 30px;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-
-        .premium-days-badge-container {
-            background: #0b0d17;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .days-title-text {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .days-value-counter {
-            font-size: 1rem;
-            color: #e5b842;
-            font-weight: 800;
-        }
-
-        .claim-box {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            margin: 20px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .claim-box.claim-available {
-            border: 3px solid #e5b842;
-            background: rgba(229, 184, 66, 0.1);
-        }
-
-        .claim-box.claim-available i {
-            color: #e5b842;
-        }
-
-        .claim-box.claim-disabled {
-            border: 3px solid #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .claim-box.claim-disabled i {
-            color: #ef4444;
-        }
-
-        .claim-box.claim-maintenance {
-            border: 3px solid #f97316;
-            background: rgba(249, 115, 22, 0.1);
-            cursor: not-allowed;
-        }
-
-        .claim-box.claim-maintenance i {
-            color: #f97316;
-        }
-
-        .claim-box.claim-completed {
-            border: 3px solid #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            cursor: default;
-        }
-
-        .claim-box.claim-completed i {
-            color: #10b981;
-        }
-
-        .claim-box.claim-loading {
-            border: 3px solid #636b8f;
-            background: rgba(99, 107, 143, 0.1);
-            cursor: wait;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .claim-box i {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-        }
-
-        .claim-box span {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .claim-status-message {
-            font-size: 0.7rem;
-            margin-top: 12px;
-            padding: 8px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .claim-status-message.success {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-        }
-
-        .claim-status-message.error {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-        }
-
-        .claim-status-message.warning {
-            background: rgba(249, 115, 22, 0.15);
-            color: #f97316;
-        }
-
-        .claim-status-message.info {
-            background: rgba(229, 184, 66, 0.15);
-            color: #e5b842;
-        }
-
-        .task-expiry-note {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            font-weight: 600;
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .link-copy-card {
-            background: #1b203a;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px dashed rgba(229, 184, 66, 0.3);
-        }
-
-        .link-field {
-            background: #0b0d17;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            color: #9ca3af;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-        }
-
-        .btn-copy {
-            background: rgba(229, 184, 66, 0.15);
-            border: none;
-            color: #e5b842;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .btn-copy:hover {
-            background: rgba(229, 184, 66, 0.3);
-        }
-
-        .stats-row-expanded {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .stat-box {
-            background: linear-gradient(135deg, #151a30 0%, #111424 100%);
-            padding: 14px;
-            border-radius: 12px;
-            border-left: 3px solid #e5b842;
-            transition: all 0.3s ease;
-        }
-
-        .stat-box:hover {
-            transform: translateX(3px);
-        }
-
-        .stat-box h4 {
-            font-size: 0.65rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-        }
-
-        .stat-box p {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-
-        .team-list-card {
-            background: #1b203a;
-            border-radius: 14px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .user-breakdown-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .user-breakdown-row:last-child {
-            border-bottom: none;
-        }
-
-        .user-meta-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .user-display-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .badge-holder {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .status-badge {
-            font-size: 0.6rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .status-badge.registered {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-        }
-
-        .user-financial-contribution {
-            text-align: right;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .user-financial-contribution span {
-            font-size: 0.6rem;
-            color: #9ca3af;
-            display: block;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .profile-hero {
-            background: linear-gradient(135deg, #1b203a 0%, #161a2e 100%);
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            border: 1px solid rgba(229, 184, 66, 0.15);
-            margin-bottom: 20px;
-        }
-
-        .avatar-circle {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(229, 184, 66, 0.1), rgba(229, 184, 66, 0.05));
-            border: 2px solid #e5b842;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px auto;
-            font-size: 1.8rem;
-            color: #e5b842;
-        }
-
-        .profile-meta-line {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            margin-top: 4px;
-        }
-
-        .profile-management-group {
-            background: #1b203a;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            margin-bottom: 16px;
-        }
-
-        .group-title {
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #e5b842;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .profile-input-wrapper {
-            margin-bottom: 14px;
-            text-align: left;
-        }
-
-        .profile-input-wrapper label {
-            font-size: 0.65rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .profile-field {
-            width: 100%;
-            height: 44px;
-            background: #0b0d17;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            color: #fff;
-            padding: 0 14px;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .profile-field:focus {
-            border-color: #e5b842;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(229, 184, 66, 0.1);
-        }
-
-        .shrunk-bank-badge {
-            display: none;
-            background: linear-gradient(135deg, #111424, #0b0d17);
-            border: 1px solid #10b981;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: left;
-        }
-
-        .shrunk-bank-badge h4 {
-            color: #10b981;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .shrunk-item {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .shrunk-item span {
-            color: #9ca3af;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-
-        .modification-notice-box {
-            font-size: 0.7rem;
-            color: #f87171;
-            background: rgba(239, 68, 68, 0.05);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 12px;
-            border: 1px solid rgba(239, 68, 68, 0.1);
-            font-weight: 600;
-            display: none;
-            line-height: 1.4;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 480px;
-            height: 70px;
-            background: rgba(17, 20, 36, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .nav-tab {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #71717a;
-            text-decoration: none;
-            cursor: pointer;
-            height: 100%;
-            gap: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-tab:hover {
-            color: #e5b842;
-            transform: translateY(-2px);
-        }
-
-        .nav-tab i {
-            font-size: 1.2rem;
-        }
-
-        .nav-label {
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .nav-tab.active-tab {
-            color: #e5b842;
-        }
-
-        .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .stat-mini-card {
-            background: #161a2e;
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.3s ease;
-        }
-
-        .stat-mini-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(229, 184, 66, 0.3);
-        }
-
-        .stat-mini-card i {
-            font-size: 1.2rem;
-            color: #e5b842;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .stat-mini-card span {
-            font-size: 0.6rem;
-            color: #9ca3af;
-            display: block;
-        }
-
-        .stat-mini-card strong {
-            font-size: 0.9rem;
-            color: #fff;
-            display: block;
-            margin-top: 4px;
-        }
-
-        .milestone-rewards-card {
-            background: linear-gradient(135deg, #1b203a, #161a2e);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 20px;
-            border: 1px solid rgba(229, 184, 66, 0.2);
-        }
-
-        .milestone-rewards-title {
-            color: #e5b842;
-            font-size: 0.8rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .milestone-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .milestone-item {
-            background: #0b0d17;
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .milestone-info {
-            flex: 1;
-        }
-
-        .milestone-target {
-            font-size: 0.7rem;
-            color: #9ca3af;
-        }
-
-        .milestone-reward {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: #e5b842;
-        }
-
-        .milestone-status {
-            font-size: 0.65rem;
-            padding: 4px 8px;
-            border-radius: 20px;
-        }
-
-        .status-available {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-        }
-
-        .status-claimed {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-        }
-
-        .status-locked {
-            background: rgba(255, 255, 255, 0.05);
-            color: #636b8f;
-        }
-
-        .claim-milestone-btn {
-            background: linear-gradient(135deg, #f5d061, #e5b842);
-            border: none;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .claim-milestone-btn:hover:not(:disabled) {
-            transform: scale(1.02);
-        }
-
-        .claim-milestone-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .voucher-history-section {
-            margin-top: 20px;
-            background: #1b203a;
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: none;
-        }
-
-        .voucher-history-title {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #e5b842;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .voucher-history-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .voucher-history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.7rem;
-        }
-
-        .voucher-history-item:last-child {
-            border-bottom: none;
-        }
-
-        .voucher-history-code {
-            font-family: monospace;
-            color: #e5b842;
-            font-weight: 700;
-        }
-
-        .voucher-history-amount {
-            color: #10b981;
-            font-weight: 700;
-        }
-
-        .voucher-history-date {
-            font-size: 0.6rem;
-            color: #6b7280;
-        }
-
-        .voucher-name {
-            font-size: 0.65rem;
-            color: #e5b842;
-            margin-left: 8px;
-        }
-
-        .package-card[data-tier="VIP8"] { border-left: 3px solid #e5b842; }
-        .package-card[data-tier="VIP9"] { border-left: 3px solid #3b82f6; }
-        .package-card[data-tier="VIP10"] { border-left: 3px solid #a855f7; }
-        .package-card[data-tier="VIP11"] { border-left: 3px solid #ec4899; }
-        .package-card[data-tier="VIP12"] { border-left: 3px solid #06b6d4; }
-        .package-card[data-tier="VIP13"] { border-left: 3px solid #f97316; }
-
+        /* Minimal critical styles to prevent FOUC */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -1319,13 +62,11 @@
             justify-content: center;
             transition: opacity 0.5s ease;
         }
-
         .loading-overlay.hide {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-
         .loader-spinner {
             width: 60px;
             height: 60px;
@@ -1333,1140 +74,669 @@
             border-top: 4px solid #e5b842;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
-
-        .apk-download-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #1b203a;
-            border: 1px solid #e5b842;
-            border-radius: 50px;
-            padding: 10px 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
             color: #e5b842;
-            cursor: pointer;
-            z-index: 9999;
-            transition: all 0.2s;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
         }
-
-        .apk-download-btn:hover {
-            background: rgba(229, 184, 66, 0.15);
-            transform: scale(1.02);
+        .loader-sub {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            margin-top: 6px;
         }
-
-        .apk-download-btn i {
-            font-size: 1rem;
-        }
+        .app-view { display: none; }
+        .app-view.active-view { display: block; }
     </style>
 </head>
 <body>
 
+    <!-- ============================================================
+    SECTION 5: LOADING OVERLAY
+    ============================================================ -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loader-spinner"></div>
-        <div class="loader-text" style="color: #e5b842; font-weight: 800; margin-top: 12px;">NEXUS EARN</div>
-        <p style="margin-top: 8px; color: #9ca3af; font-size: 11px;">Loading secure vault...</p>
+        <div class="loader-text">NEXUS EARN</div>
+        <p class="loader-sub">Loading your secure vault...</p>
     </div>
 
+    <!-- ============================================================
+    SECTION 6: APK DOWNLOAD BUTTON (floating)
+    ============================================================ -->
     <div class="apk-download-btn" id="apkDownloadBtn" style="display: none;">
         <i class="fa-solid fa-download"></i>
         <span>Download App</span>
-        <span id="apkVersionBadge" style="font-size: 0.6rem; background: #e5b84220; padding: 2px 6px; border-radius: 20px;"></span>
+        <span id="apkVersionBadge"></span>
     </div>
 
+    <!-- ============================================================
+    SECTION 7: TOAST NOTIFICATION
+    ============================================================ -->
     <div class="toast-notification" id="customToast">
         <i class="fa-solid fa-circle-check" id="toastIcon" style="color: #10b981;"></i>
         <div class="toast-text" id="toastMsg">Notification System Active.</div>
     </div>
 
+    <!-- ============================================================
+    SECTION 8: MODAL OVERLAYS
+    ============================================================ -->
+
+    <!-- 8.1: COMING SOON POPUP -->
     <div id="comingSoonPopup" class="portal-modal-overlay">
         <div class="portal-modal-card" style="border-color: #e5b842;">
             <i class="fa-solid fa-clock-rotate-left" style="font-size: 2.2rem; color: #e5b842; margin-bottom: 12px;"></i>
-            <h3 style="margin-bottom: 8px;">Coming Soon</h3>
-            <p style="font-size: 0.85rem; color: #d1d5db; line-height: 1.5; margin-bottom: 16px;">Higher VIP tiers are being prepared. Stay tuned for exclusive benefits!</p>
+            <h3 style="margin-bottom: 6px;">Coming Soon</h3>
+            <p style="font-size: 0.8rem; color: #d1d5db; line-height: 1.5; margin-bottom: 16px;">
+                Higher VIP tiers are being prepared. Stay tuned for exclusive benefits!
+            </p>
             <button class="btn-buy-package" onclick="closePortalModal('comingSoonPopup')">Got it</button>
         </div>
     </div>
 
-    <div class="floating-action-panel">
-        <div class="action-float-btn" onclick="openPortalModal('supportModalPopup')"><i class="fa-solid fa-headset"></i><span class="float-btn-label">Support</span></div>
-        <div class="action-float-btn" onclick="openPortalModal('couponModalPopup')"><i class="fa-solid fa-gift"></i><span class="float-btn-label">Voucher</span></div>
-        <div class="action-float-btn" onclick="executeProfileAttendanceCheckIn()"><i class="fa-solid fa-calendar-check"></i><span class="float-btn-label">Check-In (+₦50)</span></div>
-    </div>
-
+    <!-- 8.2: BANK LOCK RULES POPUP -->
     <div id="bankLockRulesPopup" class="portal-modal-overlay" style="z-index: 21000;">
         <div class="portal-modal-card" style="border-color: #ef4444;">
             <i class="fa-solid fa-shield-halved" style="font-size: 2.2rem; color: #ef4444; margin-bottom: 12px;"></i>
-            <h3 style="margin-bottom: 8px; color: #ef4444;">Confirm Account Details</h3>
-            <p style="font-size: 0.8rem; color: #d1d5db; line-height: 1.5; text-align: left; margin-bottom: 16px;">1. Your banking profile will be securely tied to your information page.<br>2. Details must be correct to guarantee successful automated wallet withdraws.<br>3. Once saved, account modifications are locked for your security.</p>
-            <div style="display: flex; gap: 10px;"><button class="btn-buy-package" style="background: #374151; color: #fff;" onclick="closePortalModal('bankLockRulesPopup')">Abort</button><button class="btn-buy-package" style="background: #10b981; color: #fff;" id="saveBankBtn">Accept & Save</button></div>
+            <h3 style="margin-bottom: 6px; color: #ef4444;">Confirm Account Details</h3>
+            <p style="font-size: 0.75rem; color: #d1d5db; line-height: 1.5; text-align: left; margin-bottom: 16px;">
+                1. Your banking profile will be securely tied to your information page.<br />
+                2. Details must be correct to guarantee successful automated wallet withdrawals.<br />
+                3. Once saved, account modifications are locked for your security.
+            </p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-buy-package" style="background: #374151; color: #fff;" onclick="closePortalModal('bankLockRulesPopup')">Abort</button>
+                <button class="btn-buy-package" style="background: #10b981; color: #fff;" id="saveBankBtn">Accept &amp; Save</button>
+            </div>
         </div>
     </div>
 
+    <!-- 8.3: SUPPORT MODAL POPUP -->
     <div id="supportModalPopup" class="portal-modal-overlay">
         <div class="portal-modal-card">
             <i class="fa-solid fa-xmark portal-modal-close" onclick="closePortalModal('supportModalPopup')"></i>
             <i class="fa-solid fa-headset" style="font-size: 2rem; color: #e5b842; margin-bottom: 12px;"></i>
             <h3>Customer Care Network</h3>
-            <p style="font-size: 0.78rem; color: #9ca3af; margin-bottom: 14px;">Reach an official care representative instantly:</p>
-            <a href="https://t.me/Nexusearnofficial" target="_blank" class="support-channel-row"><span><i class="fa-brands fa-telegram" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Official Channel</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="https://t.me/+VZUHZ5DjewIxYjU0" target="_blank" class="support-channel-row"><span><i class="fa-solid fa-comments" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Discussion Group</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="http://t.me/Nexusearncustomerservice" target="_blank" class="support-channel-row"><span><i class="fa-solid fa-headset" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Customer Service Portal</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <!-- Swapped WhatsApp links with new ones and corrected names -->
-            <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4?mode=gi_t" target="_blank" class="support-channel-row"><span><i class="fa-brands fa-whatsapp" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Group</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="https://whatsapp.com/channel/0029Vb83LRd2kNFmjLxe9a1S" target="_blank" class="support-channel-row"><span><i class="fa-solid fa-broadcast-tower" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Channel</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
+            <p style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 14px;">Reach an official care representative instantly:</p>
+
+            <a href="https://t.me/Nexusearnofficial" target="_blank" class="support-channel-row">
+                <span><i class="fa-brands fa-telegram" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Official Channel</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="https://t.me/+VZUHZ5DjewIxYjU0" target="_blank" class="support-channel-row">
+                <span><i class="fa-solid fa-comments" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Discussion Group</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="http://t.me/Nexusearncustomerservice" target="_blank" class="support-channel-row">
+                <span><i class="fa-solid fa-headset" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Customer Service</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4?mode=gi_t" target="_blank" class="support-channel-row">
+                <span><i class="fa-brands fa-whatsapp" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Group</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb83LRd2kNFmjLxe9a1S" target="_blank" class="support-channel-row">
+                <span><i class="fa-solid fa-broadcast-tower" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Channel</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
         </div>
     </div>
 
-    <!-- Reminder Modal that appears on Home dashboard -->
+    <!-- 8.4: REMINDER MODAL -->
     <div id="reminderModal" class="portal-modal-overlay">
         <div class="portal-modal-card">
             <i class="fa-solid fa-xmark portal-modal-close" onclick="closePortalModal('reminderModal')"></i>
             <i class="fa-solid fa-bell" style="font-size: 2rem; color: #e5b842; margin-bottom: 12px;"></i>
             <h3>📢 Stay Connected!</h3>
-            <p style="font-size: 0.78rem; color: #9ca3af; margin-bottom: 14px;">Join our official channels for updates, support and community news:</p>
-            <!-- Exactly the same five links as in support modal -->
-            <a href="https://t.me/Nexusearnofficial" target="_blank" class="support-channel-row"><span><i class="fa-brands fa-telegram" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Official Channel</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="https://t.me/+VZUHZ5DjewIxYjU0" target="_blank" class="support-channel-row"><span><i class="fa-solid fa-comments" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Discussion Group</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="http://t.me/Nexusearncustomerservice" target="_blank" class="support-channel-row"><span><i class="fa-solid fa-headset" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Customer Service Portal</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4?mode=gi_t" target="_blank" class="support-channel-row"><span><i class="fa-brands fa-whatsapp" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Group</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <a href="https://whatsapp.com/channel/0029Vb83LRd2kNFmjLxe9a1S" target="_blank" class="support-channel-row"><span><i class="fa-solid fa-broadcast-tower" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Channel</span><i class="fa-solid fa-angle-right" style="color: #6b7280;"></i></a>
-            <div style="margin-top: 20px;">
+            <p style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 14px;">Join our official channels for updates, support and community news:</p>
+
+            <a href="https://t.me/Nexusearnofficial" target="_blank" class="support-channel-row">
+                <span><i class="fa-brands fa-telegram" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Official Channel</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="https://t.me/+VZUHZ5DjewIxYjU0" target="_blank" class="support-channel-row">
+                <span><i class="fa-solid fa-comments" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Discussion Group</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="http://t.me/Nexusearncustomerservice" target="_blank" class="support-channel-row">
+                <span><i class="fa-solid fa-headset" style="color: #24A1DE; margin-right: 6px;"></i> Telegram Customer Service</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4?mode=gi_t" target="_blank" class="support-channel-row">
+                <span><i class="fa-brands fa-whatsapp" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Group</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb83LRd2kNFmjLxe9a1S" target="_blank" class="support-channel-row">
+                <span><i class="fa-solid fa-broadcast-tower" style="color: #25D366; margin-right: 6px;"></i> WhatsApp Channel</span>
+                <i class="fa-solid fa-angle-right" style="color: #6b7280;"></i>
+            </a>
+            <div style="margin-top: 18px;">
                 <button class="btn-buy-package" onclick="closePortalModal('reminderModal')" style="background: rgba(229,184,66,0.2); color:#e5b842;">Dismiss</button>
             </div>
         </div>
     </div>
 
+    <!-- 8.5: COUPON / GIFT CARD MODAL -->
     <div id="couponModalPopup" class="portal-modal-overlay">
         <div class="portal-modal-card">
             <i class="fa-solid fa-xmark portal-modal-close" onclick="closePortalModal('couponModalPopup')"></i>
             <i class="fa-solid fa-gift" style="font-size: 2rem; color: #e5b842; margin-bottom: 12px;"></i>
             <h3>Gift Card / Voucher Redemption</h3>
             <p style="font-size: 0.7rem; color: #9ca3af; margin-bottom: 14px;">Enter your gift card code to claim bonus amount</p>
-            <input type="text" id="voucherCodeField" placeholder="Enter voucher code" maxlength="12" style="width: 100%; height: 42px; background: #0b0d17; border: 1px solid rgba(229,184,66,0.3); border-radius: 6px; color: #fff; text-align: center; font-weight: 700; margin-bottom: 14px; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;">
-            <button class="btn-buy-package" id="claimVoucherBtn">Verify & Claim</button>
-            
-            <div class="apk-icon-section" id="apkIconWrapper" style="margin-top: 16px;">
-                <div class="apk-icon-btn" id="oneTimeApkButton" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #e5b842; border-radius: 60px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; font-weight: 700; color: #e5b842;">
+
+            <div class="gift-card-section">
+                <input type="text" id="voucherCodeField" placeholder="Enter voucher code" maxlength="12" />
+                <button class="btn-buy-package" id="claimVoucherBtn">Verify &amp; Claim</button>
+            </div>
+
+            <div class="apk-icon-section" id="apkIconWrapper" style="margin-top: 14px;">
+                <div id="oneTimeApkButton" style="display: none; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #e5b842; border-radius: 60px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; font-weight: 700; color: #e5b842;">
                     <i class="fa-solid fa-download"></i>
                     <span>📲 Get Nexus App</span>
                 </div>
             </div>
-            
-            <div style="margin-top: 12px; font-size: 0.6rem; color: #6b7280;"><i class="fa-solid fa-circle-info"></i> VIP 1+ required | One claim per voucher per user</div>
+
+            <div style="margin-top: 10px; font-size: 0.6rem; color: #6b7280;">
+                <i class="fa-solid fa-circle-info"></i> VIP 1+ required | One claim per voucher per user
+            </div>
         </div>
     </div>
 
+    <!-- ============================================================
+    SECTION 9: APP CONTAINER
+    ============================================================ -->
     <div class="app-container">
+
+        <!-- ============================================================
+        SECTION 9.1: APP HEADER
+        ============================================================ -->
         <header class="app-header">
-            <div class="header-brand"><i class="fa-solid fa-cubes"></i><h1 class="header-title">NEXUS EARN</h1></div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div class="dark-mode-toggle" id="darkModeToggle"><i class="fa-solid fa-moon"></i></div>
-                <div class="user-status-node" id="topSystemClock"><i class="fa-regular fa-clock"></i> SYNCED</div>
-                <div class="logout-btn" id="logoutBtn"><i class="fa-solid fa-sign-out-alt"></i> Exit</div>
+            <div class="header-brand">
+                <i class="fa-solid fa-cubes"></i>
+                <h1 class="header-title">NEXUS EARN</h1>
+            </div>
+            <div class="header-right">
+                <div class="dark-mode-toggle" id="darkModeToggle" title="Toggle dark/light mode">
+                    <i class="fa-solid fa-moon"></i>
+                </div>
+                <div class="user-status-node" id="topSystemClock">
+                    <i class="fa-regular fa-clock"></i> SYNCED
+                </div>
+                <div class="logout-btn" id="logoutBtn">
+                    <i class="fa-solid fa-sign-out-alt"></i> Exit
+                </div>
             </div>
         </header>
 
+        <!-- ============================================================
+        SECTION 9.2: APP WORKSPACE
+        ============================================================ -->
         <main class="app-workspace">
+
+            <!-- ============================================================
+            VIEW 1: HOME
+            ============================================================ -->
             <div id="viewHome" class="app-view active-view">
+
+                <!-- Wallet Hub -->
                 <div class="wallet-hub-card">
-                    <div class="balance-block"><div class="balance-label"><i class="fa-solid fa-wallet"></i> Available Balance</div><div class="balance-amount" id="displayUserBalance">₦0.00</div></div>
-                    <div class="balance-sub-row"><div><div class="sub-balance-title">Total Earned</div><div class="sub-balance-val" id="displayTotalEarnings">₦0.00</div></div><div style="text-align: right;"><div class="sub-balance-title">VIP Level</div><div class="sub-balance-val" id="displayActiveRank" style="color: #e5b842;">STANDARD</div></div></div>
-                    <div class="hub-actions-grid"><a href="recharge.html" class="action-tile"><i class="fa-solid fa-circle-plus"></i><span>Deposit</span></a><div class="action-tile" onclick="window.location.href='withdraw.html'"><i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span></div></div>
+                    <div class="balance-block">
+                        <div class="balance-label"><i class="fa-solid fa-wallet"></i> Available Balance</div>
+                        <div class="balance-amount" id="displayUserBalance">₦0.00</div>
+                    </div>
+                    <div class="balance-sub-row">
+                        <div>
+                            <div class="sub-balance-title">Total Earned</div>
+                            <div class="sub-balance-val" id="displayTotalEarnings">₦0.00</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="sub-balance-title">VIP Level</div>
+                            <div class="sub-balance-val" id="displayActiveRank" style="color: #e5b842;">STANDARD</div>
+                        </div>
+                    </div>
+                    <div class="hub-actions-grid">
+                        <a href="deposit.html" class="action-tile">
+                            <i class="fa-solid fa-circle-plus"></i><span>Deposit</span>
+                        </a>
+                        <div class="action-tile" onclick="window.location.href='withdraw.html'">
+                            <i class="fa-solid fa-money-bill-transfer"></i><span>Withdraw</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="quick-stats"><div class="stat-mini-card"><i class="fa-solid fa-chart-line"></i><span>Daily ROI</span><strong>Up to 30%</strong></div><div class="stat-mini-card"><i class="fa-solid fa-calendar-week"></i><span>Contract Days</span><strong>40 Days</strong></div><div class="stat-mini-card"><i class="fa-solid fa-users"></i><span>Active Investors</span><strong>10K+</strong></div></div>
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-mini-card">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span>Daily ROI</span>
+                        <strong>Up to 3.2%</strong>
+                    </div>
+                    <div class="stat-mini-card">
+                        <i class="fa-solid fa-calendar-week"></i>
+                        <span>Contract Days</span>
+                        <strong>365 Days</strong>
+                    </div>
+                    <div class="stat-mini-card">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Active Investors</span>
+                        <strong id="investorCount">10K+</strong>
+                    </div>
+                </div>
 
-                <h2 class="section-headline"><i class="fa-solid fa-crown"></i> Investment Plans</h2>
-                <p class="section-subline">Choose your plan and start earning daily returns for 40 days (₦100 permanent deduction applied)</p>
-                
-                <div class="package-card" data-tier="VIP1"><div class="package-header"><span class="package-title-text"><i class="fa-solid fa-star"></i> VIP 1: STARTER</span><span class="package-price">₦7,000</span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦850</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦34,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP1" data-name="VIP 1: STARTER" data-cost="7000" data-yield="850">Activate Plan</button></div>
-                
-                <div class="package-card" data-tier="VIP2"><div class="discount-tag">₦1,000 DISCOUNT</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text"><i class="fa-solid fa-medal"></i> VIP 2: BRONZE</span><span class="package-price">₦11,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦12,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦1,500</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦60,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP2" data-name="VIP 2: BRONZE" data-cost="11000" data-yield="1500">Activate Plan</button></div>
-                
-                <div class="package-card" data-tier="VIP3"><div class="discount-tag">₦1,000 DISCOUNT</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text"><i class="fa-solid fa-gem"></i> VIP 3: SILVER</span><span class="package-price">₦19,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦20,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦2,800</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦112,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP3" data-name="VIP 3: SILVER" data-cost="19000" data-yield="2800">Activate Plan</button></div>
-                
-                <div class="package-card" data-tier="VIP4"><div class="package-header"><span class="package-title-text"><i class="fa-solid fa-crown"></i> VIP 4: GOLD</span><span class="package-price">₦37,000</span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦5,550</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦222,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP4" data-name="VIP 4: GOLD" data-cost="37000" data-yield="5550">Activate Plan</button></div>
-                
-                <div class="package-card" data-tier="VIP5"><div class="package-header"><span class="package-title-text"><i class="fa-solid fa-trophy"></i> VIP 5: PLATINUM</span><span class="package-price">₦71,000</span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦11,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦450,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP5" data-name="VIP 5: PLATINUM" data-cost="71000" data-yield="11250">Activate Plan</button></div>
-                
-                <div class="package-card" data-tier="VIP6"><div class="discount-tag">₦1,000 DISCOUNT</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text"><i class="fa-solid fa-gem"></i> VIP 6: DIAMOND</span><span class="package-price">₦138,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦139,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦23,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦930,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP6" data-name="VIP 6: DIAMOND" data-cost="138000" data-yield="23250">Activate Plan</button></div>
-                
-                <div class="package-card" data-tier="VIP7"><div class="discount-tag">₦10,000 DISCOUNT</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text"><i class="fa-solid fa-rocket"></i> VIP 7: APEX</span><span class="package-price">₦263,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦273,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦48,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦1,930,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP7" data-name="VIP 7: APEX" data-cost="263000" data-yield="48250">Activate Plan</button></div>
+                <!-- VIP Plans Section -->
+                <h2 class="section-headline"><i class="fa-solid fa-crown"></i> Investment Plans (1‑Year)</h2>
+                <p class="section-subline">Choose your plan and start earning daily returns for 365 days.</p>
 
-                <div class="package-card" data-tier="VIP8"><div class="discount-tag">₦20,000 SPECIAL DISCOUNT</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text" style="color:#e5b842;"><i class="fa-solid fa-infinity"></i> VIP 8: INFINITY</span><span class="package-price">₦503,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦523,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦105,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦4,210,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP8" data-name="VIP 8: INFINITY" data-cost="503000" data-yield="105250">Activate Plan</button></div>
+                <!-- VIP 1 -->
+                <div class="package-card" data-tier="VIP1">
+                    <div class="package-header">
+                        <span class="package-title-text"><i class="fa-solid fa-star"></i> VIP 1: STARTER</span>
+                        <span class="package-price">₦15,500</span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦500</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦182,500</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP1" data-name="VIP 1: STARTER" data-cost="15500" data-yield="500">Activate Plan</button>
+                </div>
 
-                <div class="package-card" data-tier="VIP9"><div class="discount-tag" style="background:#3b82f6;">₦30,000 MILESTONE BONUS</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text" style="color:#3b82f6;"><i class="fa-solid fa-chart-simple"></i> VIP 9: OMEGA</span><span class="package-price">₦850,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦880,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦195,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦7,810,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP9" data-name="VIP 9: OMEGA" data-cost="850000" data-yield="195250">Activate Plan</button></div>
+                <!-- VIP 2 -->
+                <div class="package-card" data-tier="VIP2">
+                    <div class="discount-tag">₦1,000 OFF</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text"><i class="fa-solid fa-medal"></i> VIP 2: BRONZE</span>
+                        <span class="package-price">₦30,500 <del>₦31,500</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦1,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦365,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP2" data-name="VIP 2: BRONZE" data-cost="30500" data-yield="1000">Activate Plan</button>
+                </div>
 
-                <div class="package-card" data-tier="VIP10"><div class="discount-tag" style="background:#a855f7;">₦50,000 INCOME BONUS</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text" style="color:#a855f7;"><i class="fa-solid fa-atom"></i> VIP 10: QUANTUM</span><span class="package-price">₦1,450,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦1,500,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦360,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦14,410,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP10" data-name="VIP 10: QUANTUM" data-cost="1450000" data-yield="360250">Activate Plan</button></div>
+                <!-- VIP 3 -->
+                <div class="package-card" data-tier="VIP3">
+                    <div class="discount-tag gold">₦2,000 OFF</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text"><i class="fa-solid fa-gem"></i> VIP 3: SILVER</span>
+                        <span class="package-price">₦60,000 <del>₦62,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦2,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦730,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP3" data-name="VIP 3: SILVER" data-cost="60000" data-yield="2000">Activate Plan</button>
+                </div>
 
-                <div class="package-card" data-tier="VIP11"><div class="discount-tag" style="background:#ec4899;">₦100,000 CROWN DISCOUNT</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text" style="color:#ec4899;"><i class="fa-solid fa-king"></i> VIP 11: NEXUS KING</span><span class="package-price">₦2,900,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦3,000,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦780,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦31,210,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP11" data-name="VIP 11: NEXUS KING" data-cost="2900000" data-yield="780250">Activate Plan</button></div>
+                <!-- VIP 4 -->
+                <div class="package-card" data-tier="VIP4">
+                    <div class="discount-tag gold">₦5,000 OFF</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text"><i class="fa-solid fa-crown"></i> VIP 4: GOLD</span>
+                        <span class="package-price">₦120,000 <del>₦125,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦4,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦1,460,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP4" data-name="VIP 4: GOLD" data-cost="120000" data-yield="4000">Activate Plan</button>
+                </div>
 
-                <div class="package-card" data-tier="VIP12"><div class="discount-tag" style="background:#06b6d4;">₦150,000 ELITE BONUS</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text" style="color:#06b6d4;"><i class="fa-solid fa-globe"></i> VIP 12: COSMIC</span><span class="package-price">₦4,350,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦4,500,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦1,220,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦48,810,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP12" data-name="VIP 12: COSMIC" data-cost="4350000" data-yield="1220250">Activate Plan</button></div>
+                <!-- VIP 5 -->
+                <div class="package-card" data-tier="VIP5">
+                    <div class="discount-tag gold">₦10,000 OFF</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text"><i class="fa-solid fa-trophy"></i> VIP 5: PLATINUM</span>
+                        <span class="package-price">₦240,000 <del>₦250,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦8,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦2,920,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP5" data-name="VIP 5: PLATINUM" data-cost="240000" data-yield="8000">Activate Plan</button>
+                </div>
 
-                <div class="package-card" data-tier="VIP13"><div class="discount-tag" style="background:#f97316;">₦250,000 MAXIMUM BONUS</div><div class="package-header" style="margin-top: 8px;"><span class="package-title-text" style="color:#f97316;"><i class="fa-solid fa-meteor"></i> VIP 13: SINGULARITY</span><span class="package-price">₦6,750,000 <del style="font-size:0.75rem; color:#9ca3af; margin-left:4px;">₦7,000,000</del></span></div><div class="package-details"><div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Project Plan: 40 Days</div><div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦2,025,250</div><div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦81,010,000</div></div><button class="btn-buy-package upgrade-btn" data-tier="VIP13" data-name="VIP 13: SINGULARITY" data-cost="6750000" data-yield="2025250">Activate Plan</button></div>
-            </div>
+                <!-- VIP 6 -->
+                <div class="package-card" data-tier="VIP6">
+                    <div class="discount-tag cyan">₦20,000 BONUS</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text"><i class="fa-solid fa-gem"></i> VIP 6: DIAMOND</span>
+                        <span class="package-price">₦480,000 <del>₦500,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦16,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦5,840,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP6" data-name="VIP 6: DIAMOND" data-cost="480000" data-yield="16000">Activate Plan</button>
+                </div>
 
+                <!-- VIP 7 -->
+                <div class="package-card" data-tier="VIP7">
+                    <div class="discount-tag orange">₦40,000 DISCOUNT</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text"><i class="fa-solid fa-rocket"></i> VIP 7: APEX</span>
+                        <span class="package-price">₦960,000 <del>₦1,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦32,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦11,680,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP7" data-name="VIP 7: APEX" data-cost="960000" data-yield="32000">Activate Plan</button>
+                </div>
+
+                <!-- VIP 8 -->
+                <div class="package-card" data-tier="VIP8">
+                    <div class="discount-tag gold">₦80,000 SPECIAL</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text" style="color:#e5b842;"><i class="fa-solid fa-infinity"></i> VIP 8: INFINITY</span>
+                        <span class="package-price">₦1,920,000 <del>₦2,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦64,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦23,360,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP8" data-name="VIP 8: INFINITY" data-cost="1920000" data-yield="64000">Activate Plan</button>
+                </div>
+
+                <!-- VIP 9 -->
+                <div class="package-card" data-tier="VIP9">
+                    <div class="discount-tag blue">₦160,000 BONUS</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text" style="color:#3b82f6;"><i class="fa-solid fa-chart-simple"></i> VIP 9: OMEGA</span>
+                        <span class="package-price">₦3,840,000 <del>₦4,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦128,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦46,720,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP9" data-name="VIP 9: OMEGA" data-cost="3840000" data-yield="128000">Activate Plan</button>
+                </div>
+
+                <!-- VIP 10 -->
+                <div class="package-card" data-tier="VIP10">
+                    <div class="discount-tag purple">₦320,000 INCOME</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text" style="color:#a855f7;"><i class="fa-solid fa-atom"></i> VIP 10: QUANTUM</span>
+                        <span class="package-price">₦7,680,000 <del>₦8,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦256,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦93,440,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP10" data-name="VIP 10: QUANTUM" data-cost="7680000" data-yield="256000">Activate Plan</button>
+                </div>
+
+                <!-- VIP 11 -->
+                <div class="package-card" data-tier="VIP11">
+                    <div class="discount-tag pink">₦640,000 CROWN</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text" style="color:#ec4899;"><i class="fa-solid fa-king"></i> VIP 11: NEXUS KING</span>
+                        <span class="package-price">₦15,360,000 <del>₦16,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦512,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦186,880,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP11" data-name="VIP 11: NEXUS KING" data-cost="15360000" data-yield="512000">Activate Plan</button>
+                </div>
+
+                <!-- VIP 12 -->
+                <div class="package-card" data-tier="VIP12">
+                    <div class="discount-tag cyan">₦1,280,000 ELITE</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text" style="color:#06b6d4;"><i class="fa-solid fa-globe"></i> VIP 12: COSMIC</span>
+                        <span class="package-price">₦30,720,000 <del>₦32,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦1,024,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦373,760,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP12" data-name="VIP 12: COSMIC" data-cost="30720000" data-yield="1024000">Activate Plan</button>
+                </div>
+
+                <!-- VIP 13 -->
+                <div class="package-card" data-tier="VIP13">
+                    <div class="discount-tag orange">₦2,560,000 MAX</div>
+                    <div class="package-header" style="margin-top: 8px;">
+                        <span class="package-title-text" style="color:#f97316;"><i class="fa-solid fa-meteor"></i> VIP 13: SINGULARITY</span>
+                        <span class="package-price">₦61,440,000 <del>₦64,000,000</del></span>
+                    </div>
+                    <div class="package-details">
+                        <div class="detail-item"><i class="fa-solid fa-calendar-days"></i> Contract: 365 Days</div>
+                        <div class="detail-item"><i class="fa-solid fa-money-bill-wave"></i> Daily Earnings: ₦2,048,000</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> Total Income: ₦747,520,000</div>
+                    </div>
+                    <button class="btn-buy-package upgrade-btn" data-tier="VIP13" data-name="VIP 13: SINGULARITY" data-cost="61440000" data-yield="2048000">Activate Plan</button>
+                </div>
+
+            </div> <!-- End VIEW: HOME -->
+
+            <!-- ============================================================
+            VIEW 2: TASK (Daily Claim)
+            ============================================================ -->
             <div id="viewTask" class="app-view">
                 <h2 class="section-headline"><i class="fa-solid fa-hand-holding-usd"></i> Daily Income Settlement</h2>
                 <p class="section-subline">Active earnings can be collected once every calendar day. The loop fully resets at 12:00 AM midnight (Nigeria time).</p>
+
                 <div class="task-container">
-                    <div class="task-status-banner"><i class="fa-solid fa-chart-line"></i> Active Level: <span id="taskPackageLabel">NONE (STANDARD)</span></div>
-                    <div class="premium-days-badge-container" id="premiumDaysTrackerRow"><span class="days-title-text"><i class="fa-solid fa-hourglass-half"></i> Active Contract Duration Remaining:</span><span class="days-value-counter" id="premiumDaysRemainingText">0 Days</span></div>
-                    <p style="font-size: 0.9rem; color: #d1d5db;">Yield Value: <b style="color: #10b981; font-size: 1.2rem;" id="taskRewardLabel">₦0.00</b></p>
-                    
+                    <div class="task-status-banner">
+                        <i class="fa-solid fa-chart-line"></i> Active Level: <span id="taskPackageLabel">NONE (STANDARD)</span>
+                    </div>
+
+                    <div class="premium-days-badge-container" id="premiumDaysTrackerRow">
+                        <span class="days-title-text"><i class="fa-solid fa-hourglass-half"></i> Active Contract Duration Remaining:</span>
+                        <span class="days-value-counter" id="premiumDaysRemainingText">0 Days</span>
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: #d1d5db;">
+                        Yield Value: <b style="color: #10b981; font-size: 1.2rem;" id="taskRewardLabel">₦0.00</b>
+                    </p>
+
                     <div class="claim-box" id="universalTaskBox">
                         <i class="fa-solid fa-fingerprint" id="taskIcon"></i>
                         <span id="taskStatusText">Collect Income</span>
                     </div>
                     <div id="claimStatusMessage" class="claim-status-message" style="display: none;"></div>
-                    
-                    <div class="task-expiry-note"><i class="fa-solid fa-clock" style="color: #e5b842;"></i> Midnight Reset: <b id="countdownDisplay" style="color: #fff;">--:--:--</b></div>
-                </div>
-            </div>
 
+                    <div class="task-expiry-note">
+                        <i class="fa-solid fa-clock" style="color: #e5b842;"></i> Midnight Reset: <b id="countdownDisplay" style="color: #fff;">--:--:--</b>
+                    </div>
+                </div>
+            </div> <!-- End VIEW: TASK -->
+
+            <!-- ============================================================
+            VIEW 3: TEAM
+            ============================================================ -->
             <div id="viewTeam" class="app-view">
                 <h2 class="section-headline"><i class="fa-solid fa-users-between"></i> Affiliate Hub</h2>
                 <p class="section-subline">Earn 10% commission from direct referrals plus milestone bonuses!</p>
-                <div class="link-copy-card"><h4 style="font-size: 0.75rem; color: #e5b842; text-transform: uppercase;"><i class="fa-solid fa-link"></i> Tracking Referral Link</h4><div class="link-field"><span id="inviteLinkText">https://nexus-earn.com/?ref=loading...</span><button class="btn-copy" id="copyLinkBtn"><i class="fa-regular fa-copy"></i> COPY</button></div></div>
-                <div class="stats-row-expanded"><div class="stat-box"><h4><i class="fa-solid fa-user-plus"></i> Direct (Lvl 1)</h4><p id="teamSizeText">0 Users</p></div><div class="stat-box"><h4><i class="fa-solid fa-user-friends"></i> Sub-Tier (Lvl 2)</h4><p id="teamLvl2SizeText">0 Users</p></div></div>
-                <div class="stats-row-expanded" style="margin-bottom: 20px;"><div class="stat-box" style="border-left-color: #3b82f6;"><h4><i class="fa-solid fa-coins"></i> Bonus Pay Total</h4><p style="color: #10b981;" id="teamRebateText">₦0.00</p></div><div class="stat-box" style="border-left-color: #10b981;"><h4><i class="fa-solid fa-chart-pie"></i> Team Node Capital</h4><p style="color: #e5b842;" id="teamCapitalVolumeText">₦0.00</p></div></div>
-                
+
+                <div class="link-copy-card">
+                    <h4 style="font-size: 0.75rem; color: #e5b842; text-transform: uppercase;">
+                        <i class="fa-solid fa-link"></i> Tracking Referral Link
+                    </h4>
+                    <div class="link-field">
+                        <span id="inviteLinkText">https://nexus-earn.com/?ref=loading...</span>
+                        <button class="btn-copy" id="copyLinkBtn"><i class="fa-regular fa-copy"></i> COPY</button>
+                    </div>
+                </div>
+
+                <div class="stats-row-expanded">
+                    <div class="stat-box">
+                        <h4><i class="fa-solid fa-user-plus"></i> Direct (Lvl 1)</h4>
+                        <p id="teamSizeText">0 Users</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4><i class="fa-solid fa-user-friends"></i> Sub-Tier (Lvl 2)</h4>
+                        <p id="teamLvl2SizeText">0 Users</p>
+                    </div>
+                </div>
+
+                <div class="stats-row-expanded" style="margin-bottom: 16px;">
+                    <div class="stat-box" style="border-left-color: #3b82f6;">
+                        <h4><i class="fa-solid fa-coins"></i> Bonus Pay Total</h4>
+                        <p style="color: #10b981;" id="teamRebateText">₦0.00</p>
+                    </div>
+                    <div class="stat-box" style="border-left-color: #10b981;">
+                        <h4><i class="fa-solid fa-chart-pie"></i> Team Node Capital</h4>
+                        <p style="color: #e5b842;" id="teamCapitalVolumeText">₦0.00</p>
+                    </div>
+                </div>
+
+                <!-- Milestone Rewards -->
                 <div class="milestone-rewards-card" id="milestoneRewardsCard">
                     <div class="milestone-rewards-title"><i class="fa-solid fa-gift"></i> Referral Milestone Bonuses</div>
                     <div class="milestone-list" id="milestoneList"></div>
                 </div>
-                
-                <h3 class="section-headline" style="font-size: 0.95rem; margin-top: 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-users-viewfinder" style="color: #e5b842;"></i> Team Breakdown</h3>
-                <div class="team-list-card" id="teamBreakdownContainer"><p style="font-size: 0.75rem; color: #9ca3af; text-align: center; padding: 10px;">No downline network links registered under this connection node.</p></div>
-            </div>
 
-            <div id="viewProfile" class="app-view">
-                <div class="profile-hero"><div class="avatar-circle"><i class="fa-solid fa-user-astronaut"></i></div><h3 id="profileUsernameDisplay">loading...</h3><div class="profile-meta-line" id="profileRegDateDisplay">Profile Registered: --</div><p style="color: #e5b842; font-size: 0.75rem; font-weight: 700; margin-top: 8px;" id="profileRankLabel">STANDARD MEMBER</p></div>
-                <div class="profile-management-group" id="bankBindingBlock"><div class="group-title" id="bankBlockTitle"><i class="fa-solid fa-building-columns"></i> Link Payout Account</div>
-                    <div id="bankFormFields"><div class="profile-input-wrapper"><label>Destination Financial Bank</label><select class="profile-field" id="inputBankName" style="padding: 0 10px;"><option value="" disabled selected>-- Select Your Bank --</option><option value="OPay">OPay</option><option value="Kuda Bank">Kuda Bank</option><option value="PalmPay">PalmPay</option><option value="Moniepoint">Moniepoint MFB</option><option value="Access Bank">Access Bank</option><option value="Zenith Bank">Zenith Bank</option><option value="GTBank">Guaranty Trust Bank</option><option value="UBA">United Bank for Africa</option><option value="First Bank">First Bank of Nigeria</option><option value="Fidelity Bank">Fidelity Bank</option><option value="Union Bank">Union Bank</option></select></div>
-                    <div class="profile-input-wrapper"><label>Account Holder Name</label><input type="text" class="profile-field" id="inputBankHolderName" placeholder="Must match bank documents exactly"></div>
-                    <div class="profile-input-wrapper"><label>10-Digit Account Number</label><input type="number" class="profile-field" id="inputBankNumber" placeholder="0123456789"></div>
-                    <button class="btn-buy-package" style="width: 100%; height: 42px; background: rgba(229,184,66,0.1); border: 1px solid #e5b842; color: #e5b842; font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer;" onclick="openPortalModal('bankLockRulesPopup')">Verify & Secure Details</button></div>
-                    <div class="shrunk-bank-badge" id="shrunkBankDisplay"><h4><i class="fa-solid fa-circle-check"></i> Settlement Channel Secured</h4><div class="shrunk-item"><span>Bank:</span> <b id="shrunkLabelBank">-</b></div><div class="shrunk-item"><span>Account Name:</span> <b id="shrunkLabelHolder">-</b></div><div class="shrunk-item"><span>Account Number:</span> <b id="shrunkLabelNumber">-</b></div></div>
-                    <div class="modification-notice-box" id="bankEditWarningNote"><i class="fa-solid fa-triangle-exclamation"></i> NOTE: Bank routing is securely encrypted. To modify your linked bank profile, please submit an identity verification request to Customer Support.</div>
+                <!-- Team Breakdown -->
+                <h3 class="section-headline" style="font-size: 0.95rem; margin-top: 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-users-viewfinder" style="color: #e5b842;"></i> Team Breakdown
+                </h3>
+                <div class="team-list-card" id="teamBreakdownContainer">
+                    <p style="font-size: 0.75rem; color: #9ca3af; text-align: center; padding: 10px;">
+                        No downline network links registered under this connection node.
+                    </p>
                 </div>
-                <div class="profile-management-group"><div class="group-title"><i class="fa-solid fa-receipt"></i> Account History</div><p style="font-size: 0.78rem; color: #9ca3af; margin-bottom: 14px;">Review your historical mining records and transaction ledger logs.</p><a href="history.html" class="btn-buy-package" style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(229,184,66,0.1); border: 1px solid #e5b842; color: #e5b842;"><i class="fa-solid fa-clock-rotate-left" style="margin-right: 8px;"></i> View History Log</a></div>
-                <div class="voucher-history-section" id="voucherHistorySection"><div class="voucher-history-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Voucher Redemptions</div><div class="voucher-history-list" id="voucherHistoryList"></div></div>
-            </div>
+            </div> <!-- End VIEW: TEAM -->
+
+            <!-- ============================================================
+            VIEW 4: PROFILE
+            ============================================================ -->
+            <div id="viewProfile" class="app-view">
+                <div class="profile-hero">
+                    <div class="avatar-circle"><i class="fa-solid fa-user-astronaut"></i></div>
+                    <h3 id="profileUsernameDisplay">loading...</h3>
+                    <div class="profile-meta-line" id="profileRegDateDisplay">Profile Registered: --</div>
+                    <p style="color: #e5b842; font-size: 0.75rem; font-weight: 700; margin-top: 8px;" id="profileRankLabel">STANDARD MEMBER</p>
+                </div>
+
+                <!-- Bank Details Management -->
+                <div class="profile-management-group" id="bankBindingBlock">
+                    <div class="group-title" id="bankBlockTitle"><i class="fa-solid fa-building-columns"></i> Link Payout Account</div>
+
+                    <div id="bankFormFields">
+                        <div class="profile-input-wrapper">
+                            <label>Destination Financial Bank</label>
+                            <select class="profile-field" id="inputBankName" style="padding: 0 10px;">
+                                <option value="" disabled selected>-- Select Your Bank --</option>
+                                <option value="OPay">OPay</option>
+                                <option value="Kuda Bank">Kuda Bank</option>
+                                <option value="PalmPay">PalmPay</option>
+                                <option value="Moniepoint">Moniepoint MFB</option>
+                                <option value="Access Bank">Access Bank</option>
+                                <option value="Zenith Bank">Zenith Bank</option>
+                                <option value="GTBank">Guaranty Trust Bank</option>
+                                <option value="UBA">United Bank for Africa</option>
+                                <option value="First Bank">First Bank of Nigeria</option>
+                                <option value="Fidelity Bank">Fidelity Bank</option>
+                                <option value="Union Bank">Union Bank</option>
+                            </select>
+                        </div>
+                        <div class="profile-input-wrapper">
+                            <label>Account Holder Name</label>
+                            <input type="text" class="profile-field" id="inputBankHolderName" placeholder="Must match bank documents exactly" />
+                        </div>
+                        <div class="profile-input-wrapper">
+                            <label>10-Digit Account Number</label>
+                            <input type="number" class="profile-field" id="inputBankNumber" placeholder="0123456789" />
+                        </div>
+                        <button class="btn-buy-package" style="width: 100%; height: 42px; background: rgba(229,184,66,0.1); border: 1px solid #e5b842; color: #e5b842; font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer;" onclick="openPortalModal('bankLockRulesPopup')">Verify &amp; Secure Details</button>
+                    </div>
+
+                    <div class="shrunk-bank-badge" id="shrunkBankDisplay">
+                        <h4><i class="fa-solid fa-circle-check"></i> Settlement Channel Secured</h4>
+                        <div class="shrunk-item"><span>Bank:</span> <b id="shrunkLabelBank">-</b></div>
+                        <div class="shrunk-item"><span>Account Name:</span> <b id="shrunkLabelHolder">-</b></div>
+                        <div class="shrunk-item"><span>Account Number:</span> <b id="shrunkLabelNumber">-</b></div>
+                    </div>
+                    <div class="modification-notice-box" id="bankEditWarningNote">
+                        <i class="fa-solid fa-triangle-exclamation"></i> NOTE: Bank routing is securely encrypted. To modify your linked bank profile, please submit an identity verification request to Customer Support.
+                    </div>
+                </div>
+
+                <!-- Account History -->
+                <div class="profile-management-group">
+                    <div class="group-title"><i class="fa-solid fa-receipt"></i> Account History</div>
+                    <p style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 12px;">
+                        Review your historical mining records and transaction ledger logs.
+                    </p>
+                    <a href="history.html" class="btn-buy-package" style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(229,184,66,0.1); border: 1px solid #e5b842; color: #e5b842;">
+                        <i class="fa-solid fa-clock-rotate-left" style="margin-right: 8px;"></i> View History Log
+                    </a>
+                </div>
+
+                <!-- Voucher History -->
+                <div class="voucher-history-section" id="voucherHistorySection">
+                    <div class="voucher-history-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Voucher Redemptions</div>
+                    <div class="voucher-history-list" id="voucherHistoryList"></div>
+                </div>
+            </div> <!-- End VIEW: PROFILE -->
+
         </main>
 
-        <nav class="bottom-nav"><div class="nav-tab active-tab" id="tabHome" onclick="switchPortalTab('Home')"><i class="fa-solid fa-house-chimney"></i><span class="nav-label">Home</span></div><div class="nav-tab" id="tabTask" onclick="switchPortalTab('Task')"><i class="fa-solid fa-list-check"></i><span class="nav-label">Mining</span></div><div class="nav-tab" id="tabTeam" onclick="switchPortalTab('Team')"><i class="fa-solid fa-users"></i><span class="nav-label">Team</span></div><div class="nav-tab" id="tabProfile" onclick="switchPortalTab('Profile')"><i class="fa-solid fa-circle-user"></i><span class="nav-label">Account</span></div></nav>
+        <!-- ============================================================
+        SECTION 9.3: BOTTOM NAVIGATION
+        ============================================================ -->
+        <nav class="bottom-nav">
+            <div class="nav-tab active-tab" id="tabHome" onclick="switchPortalTab('Home')">
+                <i class="fa-solid fa-house-chimney"></i>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-tab" id="tabTask" onclick="switchPortalTab('Task')">
+                <i class="fa-solid fa-list-check"></i>
+                <span class="nav-label">Mining</span>
+            </div>
+            <div class="nav-tab" id="tabTeam" onclick="switchPortalTab('Team')">
+                <i class="fa-solid fa-users"></i>
+                <span class="nav-label">Team</span>
+            </div>
+            <div class="nav-tab" id="tabProfile" onclick="switchPortalTab('Profile')">
+                <i class="fa-solid fa-circle-user"></i>
+                <span class="nav-label">Account</span>
+            </div>
+        </nav>
+
+    </div> <!-- End APP CONTAINER -->
+
+    <!-- ============================================================
+    SECTION 10: FLOATING ACTION PANEL (Support, Voucher, Check-In)
+    ============================================================ -->
+    <div class="floating-action-panel">
+        <div class="action-float-btn" onclick="openPortalModal('supportModalPopup')">
+            <i class="fa-solid fa-headset"></i>
+            <span class="float-btn-label">Support</span>
+        </div>
+        <div class="action-float-btn" onclick="openPortalModal('couponModalPopup')">
+            <i class="fa-solid fa-gift"></i>
+            <span class="float-btn-label">Voucher</span>
+        </div>
+        <div class="action-float-btn" onclick="executeProfileAttendanceCheckIn()">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span class="float-btn-label">Check-In (+₦50)</span>
+        </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, runTransaction, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit, updateDoc, arrayUnion, getDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    <!-- ============================================================
+    SECTION 11: MASTER JAVASCRIPT (dashboard.js)
+    ============================================================ -->
+    <script src="dashboard.js"></script>
 
-        const firebaseConfig = { apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4", authDomain: "nexus-earn-1.firebaseapp.com", projectId: "nexus-earn-1", storageBucket: "nexus-earn-1.firebasestorage.app", messagingSenderId: "779765076952", appId: "1:779765076952:web:fa5fac51bef82e74b598ad" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let activeUserSession = null, localUserRecord = null, dbSnapshotUnsubscriber = null, settingsUnsubscriber = null;
-        let isClaiming = false;
-        let adminSettings = { maintenanceMode: false, disabledVIPs: [], apkDownloadUrl: "", apkVersion: "1.0.0", referralCommissionRate: 10 };
-      
-        const MILESTONES = [
-            { target: 100000, reward: 5000, label: "100K" },
-            { target: 200000, reward: 10000, label: "200K" },
-            { target: 300000, reward: 15000, label: "300K" },
-            { target: 400000, reward: 20000, label: "400K" },
-            { target: 500000, reward: 25000, label: "500K" },
-            { target: 600000, reward: 30000, label: "600K" },
-            { target: 700000, reward: 35000, label: "700K" },
-            { target: 800000, reward: 40000, label: "800K" },
-            { target: 900000, reward: 45000, label: "900K" },
-            { target: 1000000, reward: 50000, label: "1M" }
-        ];
-
-        function getNigeriaDate() {
-            const now = new Date();
-            const nigeriaTime = new Date(now.getTime() + (3600000));
-            return nigeriaTime.toISOString().split('T')[0];
-        }
-
-        function hideLoadingAndShow() {
-            const loader = document.getElementById('loadingOverlay');
-            if (loader) {
-                loader.classList.add('hide');
-                setTimeout(() => { loader.style.display = 'none'; }, 400);
-            }
-        }
-
-        window.logout = async function() {
-            const result = await Swal.fire({ title: '⚠️ Confirm Logout', text: 'Are you sure you want to logout?', icon: 'question', background: '#111424', color: '#fff', confirmButtonColor: '#ef4444', cancelButtonColor: '#e5b842', confirmButtonText: 'Yes, Logout', cancelButtonText: 'Cancel', showCancelButton: true });
-            if (result.isConfirmed) { 
-                await signOut(auth); 
-                Swal.fire({ title: '✅ Logged Out', text: 'Successfully logged out.', icon: 'success', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 }).then(() => { window.location.href = "login.html"; }); 
-            }
-        };
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-
-        window.showToast = function(message, isSuccess = true) { 
-            const toast = document.getElementById('customToast'), icon = document.getElementById('toastIcon'), text = document.getElementById('toastMsg'); 
-            text.innerText = message; 
-            icon.className = isSuccess ? "fa-solid fa-circle-check" : "fa-solid fa-triangle-exclamation"; 
-            icon.style.color = isSuccess ? "#10b981" : "#ef4444"; 
-            toast.classList.add('show'); 
-            setTimeout(() => toast.classList.remove('show'), 3000); 
-        };
-        
-        window.openPortalModal = function(id) { document.getElementById(id).style.display = 'flex'; };
-        window.closePortalModal = function(id) { document.getElementById(id).style.display = 'none'; };
-
-        async function loadAdminSettings() {
-            try {
-                const settingsDoc = doc(db, "admin_settings", "platform_config");
-                const docSnap = await getDoc(settingsDoc);
-                if (docSnap.exists()) {
-                    adminSettings = docSnap.data();
-                    if (adminSettings.firstReferralBonus) {
-                        await updateDoc(settingsDoc, { firstReferralBonus: deleteField() });
-                        adminSettings.firstReferralBonus = undefined;
-                    }
-                } else {
-                    await setDoc(settingsDoc, { maintenanceMode: false, disabledVIPs: [], apkDownloadUrl: "", apkVersion: "1.0.0", dailyDeduction: 100, defaultContractDays: 40, referralCommissionRate: 10, checkinBonus: 50 });
-                    adminSettings = { maintenanceMode: false, disabledVIPs: [], apkDownloadUrl: "", apkVersion: "1.0.0", referralCommissionRate: 10 };
-                }
-                
-                const apkBtn = document.getElementById('apkDownloadBtn');
-                if (adminSettings.apkDownloadUrl && adminSettings.apkDownloadUrl !== "") {
-                    apkBtn.style.display = 'flex';
-                    document.getElementById('apkVersionBadge').innerText = adminSettings.apkVersion || "1.0.0";
-                    apkBtn.onclick = () => { window.open(adminSettings.apkDownloadUrl, '_blank'); };
-                } else {
-                    apkBtn.style.display = 'none';
-                }
-                
-                document.querySelectorAll('.upgrade-btn').forEach(btn => {
-                    const tier = btn.getAttribute('data-tier');
-                    if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tier)) {
-                        btn.disabled = true;
-                        btn.title = "This plan is currently disabled by admin";
-                        btn.style.opacity = "0.5";
-                    } else {
-                        btn.disabled = false;
-                        btn.title = "";
-                        btn.style.opacity = "1";
-                    }
-                });
-                
-                updateClaimButtonState();
-                
-            } catch (err) {
-                console.error("Error loading admin settings:", err);
-            }
-        }
-        
-        function listenToAdminSettings() {
-            const settingsDoc = doc(db, "admin_settings", "platform_config");
-            settingsUnsubscriber = onSnapshot(settingsDoc, (snapshot) => {
-                if (snapshot.exists()) {
-                    adminSettings = snapshot.data();
-                    if (adminSettings.firstReferralBonus) {
-                        updateDoc(settingsDoc, { firstReferralBonus: deleteField() });
-                        adminSettings.firstReferralBonus = undefined;
-                    }
-                    const apkBtn = document.getElementById('apkDownloadBtn');
-                    if (adminSettings.apkDownloadUrl && adminSettings.apkDownloadUrl !== "") {
-                        apkBtn.style.display = 'flex';
-                        document.getElementById('apkVersionBadge').innerText = adminSettings.apkVersion || "1.0.0";
-                        apkBtn.onclick = () => { window.open(adminSettings.apkDownloadUrl, '_blank'); };
-                    } else {
-                        apkBtn.style.display = 'none';
-                    }
-                    document.querySelectorAll('.upgrade-btn').forEach(btn => {
-                        const tier = btn.getAttribute('data-tier');
-                        if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tier)) {
-                            btn.disabled = true;
-                            btn.title = "This plan is currently disabled by admin";
-                            btn.style.opacity = "0.5";
-                        } else {
-                            btn.disabled = false;
-                            btn.title = "";
-                            btn.style.opacity = "1";
-                        }
-                    });
-                    updateClaimButtonState();
-                }
-            });
-        }
-
-        function updateClaimButtonState() {
-            const claimBox = document.getElementById('universalTaskBox');
-            const statusMsgDiv = document.getElementById('claimStatusMessage');
-            if (!localUserRecord) return;
-            const userTier = localUserRecord.tierCode || 'NONE';
-            const todayStr = getNigeriaDate();
-            const alreadyClaimed = localUserRecord.lastMiningClaimDate === todayStr;
-            const daysRemaining = parseInt(localUserRecord.contractDaysRemaining || 0);
-            
-            claimBox.classList.remove('claim-available', 'claim-disabled', 'claim-maintenance', 'claim-completed', 'claim-loading');
-            
-            if (adminSettings.maintenanceMode) {
-                claimBox.classList.add('claim-maintenance');
-                claimBox.style.cursor = 'not-allowed';
-                document.getElementById('taskIcon').className = 'fa-solid fa-tools';
-                document.getElementById('taskStatusText').innerText = 'Maintenance';
-                statusMsgDiv.style.display = 'block';
-                statusMsgDiv.className = 'claim-status-message warning';
-                statusMsgDiv.innerHTML = '<i class="fa-solid fa-shield-halved"></i> System maintenance in progress. Please try again later.';
-                return;
-            }
-            
-            if (userTier === 'NONE') {
-                claimBox.classList.add('claim-disabled');
-                claimBox.style.cursor = 'not-allowed';
-                document.getElementById('taskIcon').className = 'fa-solid fa-lock';
-                document.getElementById('taskStatusText').innerText = 'No Active Plan';
-                statusMsgDiv.style.display = 'block';
-                statusMsgDiv.className = 'claim-status-message error';
-                statusMsgDiv.innerHTML = '<i class="fa-solid fa-crown"></i> Purchase a VIP plan to start earning daily!';
-                return;
-            }
-            
-            if (daysRemaining <= 0) {
-                claimBox.classList.add('claim-disabled');
-                claimBox.style.cursor = 'not-allowed';
-                document.getElementById('taskIcon').className = 'fa-solid fa-calendar-times';
-                document.getElementById('taskStatusText').innerText = 'Expired';
-                statusMsgDiv.style.display = 'block';
-                statusMsgDiv.className = 'claim-status-message error';
-                statusMsgDiv.innerHTML = '<i class="fa-solid fa-hourglass-end"></i> Your 40-day contract has expired. Purchase a new plan to continue earning.';
-                return;
-            }
-            
-            if (alreadyClaimed) {
-                claimBox.classList.add('claim-completed');
-                claimBox.style.cursor = 'default';
-                document.getElementById('taskIcon').className = 'fa-solid fa-check-circle';
-                document.getElementById('taskStatusText').innerText = 'Already Collected';
-                statusMsgDiv.style.display = 'block';
-                statusMsgDiv.className = 'claim-status-message success';
-                statusMsgDiv.innerHTML = '<i class="fa-solid fa-check-double"></i> You\'ve already collected today\'s earnings. Come back tomorrow at midnight reset!';
-                return;
-            }
-            
-            claimBox.classList.add('claim-available');
-            claimBox.style.cursor = 'pointer';
-            document.getElementById('taskIcon').className = 'fa-solid fa-hand-holding-usd';
-            document.getElementById('taskStatusText').innerText = 'Collect Income';
-            statusMsgDiv.style.display = 'none';
-        }
-
-        onAuthStateChanged(auth, (user) => { 
-            if (user) { 
-                activeUserSession = user; 
-                if (dbSnapshotUnsubscriber) dbSnapshotUnsubscriber(); 
-                dbSnapshotUnsubscriber = onSnapshot(doc(db, "users", user.uid), async (snapshot) => { 
-                    if (snapshot.exists()) { 
-                        localUserRecord = snapshot.data(); 
-                        if (localUserRecord.firstReferralBonusPaid !== undefined) {
-                            await updateDoc(doc(db, "users", user.uid), { firstReferralBonusPaid: deleteField() });
-                        }
-                        if (localUserRecord.extraReferral300 !== undefined) {
-                            await updateDoc(doc(db, "users", user.uid), { extraReferral300: deleteField() });
-                        }
-                        renderTerminalMetrics(localUserRecord); 
-                        loadTeamBreakdownNetwork(user.uid); 
-                        loadVoucherHistory(); 
-                        renderMilestones(); 
-                        updateClaimButtonState();
-                        hideLoadingAndShow();
-                        // Show reminder modal after user data is loaded, but only if home view is active
-                        setTimeout(() => {
-                            if (document.getElementById('viewHome').classList.contains('active-view')) {
-                                showReminderModalOnce();
-                            }
-                        }, 500);
-                    } else { 
-                        window.location.href = "login.html"; 
-                    } 
-                }); 
-                loadAdminSettings();
-                listenToAdminSettings();
-            } else { 
-                window.location.href = "login.html"; 
-            } 
-        });
-
-        // Reminder modal control: show only once per session (or each time home is activated)
-        let reminderShownThisSession = false;
-        function showReminderModalOnce() {
-            if (!reminderShownThisSession) {
-                reminderShownThisSession = true;
-                openPortalModal('reminderModal');
-            }
-        }
-        
-        // Override switchPortalTab to show reminder when switching to Home
-        const originalSwitchPortalTab = window.switchPortalTab;
-        window.switchPortalTab = function(view) {
-            if (originalSwitchPortalTab) originalSwitchPortalTab(view);
-            if (view === 'Home') {
-                setTimeout(() => {
-                    if (document.getElementById('viewHome').classList.contains('active-view')) {
-                        showReminderModalOnce();
-                    }
-                }, 200);
-            }
-        };
-
-        function getTierValue(tierCode) {
-            const tiers = { VIP1:1, VIP2:2, VIP3:3, VIP4:4, VIP5:5, VIP6:6, VIP7:7, VIP8:8, VIP9:9, VIP10:10, VIP11:11, VIP12:12, VIP13:13 };
-            return tiers[tierCode] || 0;
-        }
-
-        function getDailyYieldByTier(tierCode) {
-            const yields = { VIP1:850, VIP2:1500, VIP3:2800, VIP4:5550, VIP5:11250, VIP6:23250, VIP7:48250, VIP8:105250, VIP9:195250, VIP10:360250, VIP11:780250, VIP12:1220250, VIP13:2025250 };
-            return yields[tierCode] || 0;
-        }
-
-        function renderTerminalMetrics(data) {
-            const currentBal = parseFloat(data.balance || 0);
-            const userTier = data.tierCode || 'NONE';
-            document.getElementById('displayUserBalance').innerText = "₦" + currentBal.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('displayTotalEarnings').innerText = "₦" + currentBal.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('displayActiveRank').innerText = userTier === 'NONE' ? 'STANDARD MEMBER' : userTier;
-            document.getElementById('profileUsernameDisplay').innerText = data.username || "Investor";
-            document.getElementById('profileRankLabel').innerText = userTier === 'NONE' ? 'STANDARD MEMBER' : 'VIP TIER: ' + userTier;
-            document.getElementById('taskPackageLabel').innerText = userTier === 'NONE' ? 'NONE (STANDARD)' : 'VIP TIER: ' + userTier;
-            
-            let displayYield = getDailyYieldByTier(localUserRecord.tierCode);
-            const finalEarning = Math.max(0, displayYield);
-            document.getElementById('taskRewardLabel').innerHTML = "₦" + finalEarning.toLocaleString();
-
-            if(userTier !== 'NONE') {
-                document.getElementById('premiumDaysTrackerRow').style.display = 'flex';
-                const daysLeft = data.contractDaysRemaining !== undefined ? data.contractDaysRemaining : 40;
-                document.getElementById('premiumDaysRemainingText').innerText = daysLeft + " Days";
-            } else {
-                document.getElementById('premiumDaysTrackerRow').style.display = 'none';
-            }
-
-            const refCode = data.referralCode || data.username || "nx79402";
-            document.getElementById('inviteLinkText').innerText = "https://nexus-earn.com/?ref=" + refCode;
-            document.getElementById('teamRebateText').innerText = "₦" + (data.referralBonusEarned || 0).toLocaleString();
-            document.getElementById('teamCapitalVolumeText').innerText = "₦" + (data.teamCapitalVolume || 0).toLocaleString();
-
-            if (data.bankName && data.accountNumber && data.accountName) {
-                document.getElementById('shrunkLabelBank').innerText = data.bankName;
-                document.getElementById('shrunkLabelHolder').innerText = data.accountName;
-                document.getElementById('shrunkLabelNumber').innerText = data.accountNumber;
-                document.getElementById('bankFormFields').style.display = 'none';
-                document.getElementById('bankBlockTitle').style.display = 'none';
-                document.getElementById('shrunkBankDisplay').style.display = 'block';
-                document.getElementById('bankEditWarningNote').style.display = 'block';
-                document.getElementById('bankBindingBlock').style.borderColor = '#10b981';
-            }
-        }
-
-        async function loadTeamBreakdownNetwork(userUID) {
-            const targetContainer = document.getElementById('teamBreakdownContainer');
-            const teamQuery = query(collection(db, "users"), where("referredBy", "==", userUID));
-            const snapshot = await getDocs(teamQuery);
-            const referredUsers = [];
-            snapshot.forEach(doc => { referredUsers.push({ uid: doc.id, ...doc.data() }); });
-            
-            document.getElementById('teamSizeText').innerText = referredUsers.length + " Users";
-            let level2Count = 0;
-            for (const ref of referredUsers) {
-                const subQuery = query(collection(db, "users"), where("referredBy", "==", ref.uid));
-                const subSnap = await getDocs(subQuery);
-                level2Count += subSnap.size;
-            }
-            document.getElementById('teamLvl2SizeText').innerText = level2Count + " Users";
-            
-            if (referredUsers.length === 0) {
-                targetContainer.innerHTML = `<p style="font-size: 0.75rem; color: #9ca3af; text-align: center; padding: 10px;">No downline network links registered under this connection node.</p>`;
-                return;
-            }
-            targetContainer.innerHTML = "";
-            for (const member of referredUsers) {
-                const row = document.createElement('div'); row.className = "user-breakdown-row";
-                const displayName = member.username || "Anonymous Invitee";
-                const activeTier = member.tierCode && member.tierCode !== 'NONE' ? member.tierCode : null;
-                const depositValue = parseFloat(member.totalDepositedAmount || 0);
-                let badgeLayoutHtml = member.username ? `<span class="status-badge registered">Registered</span>` : `<span class="status-badge unregistered">Unregistered</span>`;
-                if (activeTier) badgeLayoutHtml += `<span class="status-badge vip-tag">${activeTier}</span>`;
-                else badgeLayoutHtml += `<span class="status-badge not-activated">Not Activated</span>`;
-                row.innerHTML = `<div class="user-meta-info"><div class="user-display-name">${displayName}</div><div class="badge-holder">${badgeLayoutHtml}</div></div><div class="user-financial-contribution"><span>Deposited</span>₦${depositValue.toLocaleString()}</div>`;
-                targetContainer.appendChild(row);
-            }
-        }
-
-        function renderMilestones() {
-            if (!localUserRecord) return;
-            const teamDepositTotal = parseFloat(localUserRecord.teamDepositTotal || 0);
-            const claimedMilestones = localUserRecord.claimedMilestones || [];
-            const container = document.getElementById('milestoneList');
-            if (!container) return;
-            
-            let html = '';
-            for (let m of MILESTONES) {
-                const reached = teamDepositTotal >= m.target;
-                const alreadyClaimed = claimedMilestones.includes(m.target);
-                let statusText = '', statusClass = '', buttonDisabled = true, buttonText = '';
-                if (alreadyClaimed) {
-                    statusText = 'Claimed ✓';
-                    statusClass = 'status-claimed';
-                    buttonDisabled = true;
-                    buttonText = 'Claimed';
-                } else if (reached) {
-                    statusText = 'Available!';
-                    statusClass = 'status-available';
-                    buttonDisabled = false;
-                    buttonText = `Claim ₦${m.reward.toLocaleString()}`;
-                } else {
-                    statusText = 'Locked';
-                    statusClass = 'status-locked';
-                    buttonDisabled = true;
-                    buttonText = 'Locked';
-                }
-                html += `
-                    <div class="milestone-item">
-                        <div class="milestone-info">
-                            <div class="milestone-target">🎯 Total Referral Deposits: ₦${m.target.toLocaleString()}</div>
-                            <div class="milestone-reward">🏆 Reward: ₦${m.reward.toLocaleString()}</div>
-                        </div>
-                        <div class="milestone-status ${statusClass}">${statusText}</div>
-                        <button class="claim-milestone-btn" data-target="${m.target}" data-reward="${m.reward}" ${buttonDisabled ? 'disabled' : ''}>${buttonText}</button>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-            
-            document.querySelectorAll('.claim-milestone-btn').forEach(btn => {
-                if (!btn.disabled) {
-                    btn.addEventListener('click', async (e) => {
-                        const target = parseInt(btn.dataset.target);
-                        const reward = parseInt(btn.dataset.reward);
-                        await claimMilestoneReward(target, reward);
-                    });
-                }
-            });
-        }
-        
-        async function claimMilestoneReward(target, reward) {
-            if (!activeUserSession || !localUserRecord) return;
-            const claimedMilestones = localUserRecord.claimedMilestones || [];
-            if (claimedMilestones.includes(target)) {
-                showToast('You have already claimed this milestone.', false);
-                return;
-            }
-            const teamDepositTotal = parseFloat(localUserRecord.teamDepositTotal || 0);
-            if (teamDepositTotal < target) {
-                showToast(`You need total referral deposits of ₦${target.toLocaleString()} to claim this reward.`, false);
-                return;
-            }
-            
-            try {
-                await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", activeUserSession.uid);
-                    const snap = await transaction.get(userRef);
-                    const currentBalance = snap.data().balance || 0;
-                    const currentClaimed = snap.data().claimedMilestones || [];
-                    if (currentClaimed.includes(target)) throw new Error("Already claimed");
-                    transaction.update(userRef, {
-                        balance: currentBalance + reward,
-                        claimedMilestones: arrayUnion(target)
-                    });
-                });
-                await addDoc(collection(db, "ledger"), {
-                    uid: activeUserSession.uid,
-                    title: `🎯 Milestone Reward: ₦${target.toLocaleString()} Team Deposits`,
-                    amount: reward,
-                    type: "credit",
-                    timestamp: serverTimestamp()
-                });
-                showToast(`🎉 You claimed ₦${reward.toLocaleString()} milestone reward!`);
-                const userDoc = await getDoc(doc(db, "users", activeUserSession.uid));
-                if (userDoc.exists()) {
-                    localUserRecord = userDoc.data();
-                    renderTerminalMetrics(localUserRecord);
-                    renderMilestones();
-                }
-            } catch (err) {
-                console.error(err);
-                showToast("Failed to claim reward. Please try again.", false);
-            }
-        }
-
-        async function runProductActivationCycle(packageName, packageCost, dailyYield, tierCode) {
-            if (!activeUserSession || !localUserRecord) return;
-            if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tierCode)) {
-                showToast("This VIP plan is currently disabled by admin. Please try another plan.", false);
-                return;
-            }
-            const userDocRef = doc(db, "users", activeUserSession.uid);
-            const currentTier = localUserRecord.tierCode || 'NONE';
-            const currentTierValue = getTierValue(currentTier);
-            const newTierValue = getTierValue(tierCode);
-            if (currentTier !== 'NONE' && newTierValue <= currentTierValue) {
-                showToast("You cannot downgrade your VIP level. Upgrade only.", false);
-                return;
-            }
-            const currentBalance = parseFloat(localUserRecord.balance || 0);
-            if (currentBalance < packageCost) {
-                showToast(`Insufficient balance! You need ₦${packageCost.toLocaleString()}.`, false);
-                return;
-            }
-            try {
-                await runTransaction(db, async (transaction) => {
-                    const userSnapshot = await transaction.get(userDocRef);
-                    let walletBalance = parseFloat(userSnapshot.data().balance || 0);
-                    if (walletBalance < packageCost) throw new Error("INSUFFICIENT_FUNDS");
-                    transaction.update(userDocRef, {
-                        balance: walletBalance - packageCost,
-                        tierCode: tierCode,
-                        contractDaysRemaining: 40,
-                        activeDailyYield: dailyYield,
-                        lastMiningClaimDate: ""
-                    });
-                });
-                await addDoc(collection(db, "ledger"), { uid: activeUserSession.uid, title: "🚀 Activated " + packageName, amount: packageCost, type: "debit", timestamp: serverTimestamp() });
-                showToast(packageName + " Plan Successfully Activated!");
-                if (localUserRecord.referredBy) {
-                    triggerNetworkReferralReward(localUserRecord.referredBy, packageCost);
-                }
-            } catch (err) {
-                if (err.message === "INSUFFICIENT_FUNDS") showToast("Insufficient balance to activate this investment plan.", false);
-                else showToast("Network error. Please try again.", false);
-            }
-        }
-
-        document.querySelectorAll('.upgrade-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const name = this.getAttribute('data-name');
-                const cost = parseFloat(this.getAttribute('data-cost'));
-                const yields = parseFloat(this.getAttribute('data-yield'));
-                const tier = this.getAttribute('data-tier');
-                runProductActivationCycle(name, cost, yields, tier);
-            });
-        });
-
-        window.executeProfileAttendanceCheckIn = async function() { 
-            if (!activeUserSession || !localUserRecord) return; 
-            if (adminSettings.maintenanceMode) {
-                showToast("System maintenance in progress. Check-in unavailable.", false);
-                return;
-            }
-            if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { 
-                showToast("Daily attendance rewards require an active plan level.", false); 
-                return; 
-            } 
-            const todayStr = getNigeriaDate(); 
-            if (localUserRecord.lastAttendanceClaimDate === todayStr) { 
-                showToast("Attendance bonus already processed for today.", false); 
-                return; 
-            } 
-            const userDocRef = doc(db, "users", activeUserSession.uid); 
-            try { 
-                await runTransaction(db, async (transaction) => { 
-                    const snap = await transaction.get(userDocRef); 
-                    let currentBalance = parseFloat(snap.data().balance || 0); 
-                    transaction.update(userDocRef, { 
-                        balance: currentBalance + (adminSettings.checkinBonus || 50), 
-                        lastAttendanceClaimDate: todayStr 
-                    }); 
-                }); 
-                await addDoc(collection(db, "ledger"), { 
-                    uid: activeUserSession.uid, 
-                    title: "📅 Daily Attendance Check-In (+₦" + (adminSettings.checkinBonus || 50) + ")", 
-                    amount: (adminSettings.checkinBonus || 50), 
-                    type: "credit", 
-                    timestamp: serverTimestamp() 
-                }); 
-                showToast("✅ Verified! ₦" + (adminSettings.checkinBonus || 50) + " credited to your balance."); 
-            } catch (ex) { 
-                showToast("Processing fault. Try reloading.", false); 
-            } 
-        };
-
-        window.executeDailyMiningCycle = async function() {
-            if (isClaiming) {
-                showToast("Please wait, processing your previous claim...", false);
-                return;
-            }
-            if (!activeUserSession || !localUserRecord) return;
-            if (adminSettings.maintenanceMode) {
-                showToast("System maintenance in progress. Please try again later.", false);
-                return;
-            }
-            if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { 
-                showToast("No active investment plan detected. Please purchase a VIP plan first.", false); 
-                return; 
-            }
-            const todayStr = getNigeriaDate();
-            if (localUserRecord.lastMiningClaimDate === todayStr) { 
-                showToast("Today's earnings already collected. Come back tomorrow at midnight reset.", false); 
-                return; 
-            }
-            let daysRemaining = parseInt(localUserRecord.contractDaysRemaining || 0);
-            if (daysRemaining <= 0) { 
-                await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", activeUserSession.uid);
-                    transaction.update(userRef, { tierCode: "NONE", contractDaysRemaining: 0, activeDailyYield: 0 });
-                });
-                showToast("Your 40-day investment contract has expired. Please purchase a new plan.", false);
-                updateClaimButtonState();
-                return; 
-            }
-            let displayYield = getDailyYieldByTier(localUserRecord.tierCode);
-            const finalEarning = Math.max(0, displayYield);
-            isClaiming = true;
-            const claimBox = document.getElementById('universalTaskBox');
-            claimBox.classList.remove('claim-available');
-            claimBox.classList.add('claim-loading');
-            document.getElementById('taskIcon').className = 'fa-solid fa-spinner fa-pulse';
-            document.getElementById('taskStatusText').innerText = 'Processing...';
-            const userDocRef = doc(db, "users", activeUserSession.uid);
-            try {
-                await runTransaction(db, async (transaction) => {
-                    const snap = await transaction.get(userDocRef);
-                    let currentBalance = parseFloat(snap.data().balance || 0);
-                    let remaining = parseInt(snap.data().contractDaysRemaining || 0);
-                    let newRemaining = remaining - 1;
-                    if (newRemaining < 0) newRemaining = 0;
-                    transaction.update(userDocRef, { 
-                        balance: currentBalance + finalEarning, 
-                        lastMiningClaimDate: todayStr, 
-                        contractDaysRemaining: newRemaining
-                    });
-                });
-                await addDoc(collection(db, "ledger"), { uid: activeUserSession.uid, title: "💰 Daily Plan Returns", amount: finalEarning, type: "credit", timestamp: serverTimestamp() });
-                showToast("✅ Success! ₦" + finalEarning.toLocaleString() + " added to your balance.");
-                const updatedDoc = await getDoc(userDocRef);
-                if (updatedDoc.exists()) {
-                    localUserRecord = updatedDoc.data();
-                    renderTerminalMetrics(localUserRecord);
-                    updateClaimButtonState();
-                }
-            } catch (ex) { 
-                showToast("Database error. Please try again.", false); 
-                claimBox.classList.remove('claim-loading');
-                claimBox.classList.add('claim-available');
-                document.getElementById('taskIcon').className = 'fa-solid fa-hand-holding-usd';
-                document.getElementById('taskStatusText').innerText = 'Collect Income';
-            } finally {
-                isClaiming = false;
-                if (document.getElementById('taskIcon').className === 'fa-solid fa-spinner fa-pulse') {
-                    claimBox.classList.remove('claim-loading');
-                    updateClaimButtonState();
-                }
-            }
-        };
-        
-        document.getElementById('universalTaskBox').addEventListener('click', function(e) {
-            if (isClaiming) return;
-            if (this.classList.contains('claim-available')) {
-                executeDailyMiningCycle();
-            } else if (!this.classList.contains('claim-loading')) {
-                if (adminSettings.maintenanceMode) {
-                    showToast("System maintenance in progress. Please try again later.", false);
-                } else if (localUserRecord && (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE')) {
-                    showToast("No active investment plan. Purchase a VIP plan to start earning.", false);
-                } else if (localUserRecord && localUserRecord.lastMiningClaimDate === getNigeriaDate()) {
-                    showToast("You've already collected today's earnings. Come back tomorrow!", false);
-                }
-            }
-        });
-
-        async function triggerNetworkReferralReward(referrerUID, purchasedPlanCost) { 
-            if (!referrerUID) return; 
-            const referrerDocRef = doc(db, "users", referrerUID); 
-            try { 
-                await runTransaction(db, async (transaction) => { 
-                    const referrerSnap = await transaction.get(referrerDocRef); 
-                    if (!referrerSnap.exists()) return; 
-                    let currentBalance = parseFloat(referrerSnap.data().balance || 0); 
-                    let currentBonusEarned = parseFloat(referrerSnap.data().referralBonusEarned || 0); 
-                    let directInvitesCount = parseInt(referrerSnap.data().directInvitesCount || 0); 
-                    let oldTeamDepositTotal = parseFloat(referrerSnap.data().teamDepositTotal || 0); 
-                    let teamCapitalVolume = parseFloat(referrerSnap.data().teamCapitalVolume || 0); 
-                    let newTeamDepositTotal = oldTeamDepositTotal + purchasedPlanCost; 
-                    let calculatedCommission = purchasedPlanCost * (adminSettings.referralCommissionRate || 10) / 100; 
-                    let finalPayoutSum = calculatedCommission; 
-                    let trackingMessage = `🤝 ${adminSettings.referralCommissionRate || 10}% Direct Plan Referral Commission`; 
-                    
-                    transaction.update(referrerDocRef, { 
-                        balance: currentBalance + finalPayoutSum, 
-                        referralBonusEarned: currentBonusEarned + finalPayoutSum, 
-                        directInvitesCount: directInvitesCount + 1, 
-                        teamDepositTotal: newTeamDepositTotal, 
-                        teamCapitalVolume: teamCapitalVolume + purchasedPlanCost 
-                    }); 
-                    addDoc(collection(db, "ledger"), { 
-                        uid: referrerUID, 
-                        title: trackingMessage, 
-                        amount: finalPayoutSum, 
-                        type: "credit", 
-                        timestamp: serverTimestamp() 
-                    }); 
-                }); 
-            } catch (err) { 
-                console.error("Referral error:", err); 
-            } 
-        }
-
-        document.getElementById('saveBankBtn').addEventListener('click', async () => { 
-            if (!activeUserSession) return; 
-            const bank = document.getElementById('inputBankName').value; 
-            const holder = document.getElementById('inputBankHolderName').value.trim(); 
-            const num = document.getElementById('inputBankNumber').value.trim(); 
-            if (!bank || holder === "" || num.length !== 10) { 
-                closePortalModal('bankLockRulesPopup'); 
-                showToast("Please provide an accurate 10-digit account number configuration.", false); 
-                return; 
-            } 
-            closePortalModal('bankLockRulesPopup'); 
-            try { 
-                const userDocRef = doc(db, "users", activeUserSession.uid); 
-                await runTransaction(db, async (transaction) => { 
-                    transaction.update(userDocRef, { bankName: bank, accountName: holder, accountNumber: num }); 
-                }); 
-                showToast("✅ Payout profile successfully linked and saved."); 
-            } catch (ex) { 
-                showToast("An error occurred while locking your details. Please try again.", false); 
-            } 
-        });
-
-        async function loadVoucherHistory() {
-            if (!activeUserSession) return;
-            try {
-                const historyQuery = query(collection(db, "voucherRedemptions"), where("userId", "==", activeUserSession.uid));
-                const snapshot = await getDocs(historyQuery);
-                const historySection = document.getElementById('voucherHistorySection');
-                const historyList = document.getElementById('voucherHistoryList');
-                if (!historySection) return;
-                if (snapshot.empty) { 
-                    historySection.style.display = 'none'; 
-                    return; 
-                }
-                let items = [];
-                snapshot.forEach(docSnap => {
-                    const redemption = docSnap.data();
-                    const timestamp = redemption.timestamp?.toDate() || new Date(0);
-                    items.push({ redemption, timestamp });
-                });
-                items.sort((a, b) => b.timestamp - a.timestamp);
-                items = items.slice(0, 5);
-                historySection.style.display = 'block';
-                historyList.innerHTML = '';
-                for (let item of items) {
-                    const redemption = item.redemption;
-                    const date = item.timestamp;
-                    const div = document.createElement('div');
-                    div.className = 'voucher-history-item';
-                    const voucherNameHtml = redemption.voucherName ? `<span class="voucher-name">(${redemption.voucherName})</span>` : '';
-                    div.innerHTML = `<div><div class="voucher-history-code">${redemption.voucherCode}${voucherNameHtml}</div><div class="voucher-history-date">${date.toLocaleDateString()}</div></div><div class="voucher-history-amount">+₦${(redemption.amountClaimed || 0).toLocaleString()}</div>`;
-                    historyList.appendChild(div);
-                }
-            } catch (e) { 
-                console.log("History load error:", e); 
-            }
-        }
-
-        async function claimProgressiveVoucher(code) {
-            if (!activeUserSession || !localUserRecord) { showToast("Please login first", false); return; }
-            if (adminSettings.maintenanceMode) { showToast("System maintenance in progress. Voucher claims unavailable.", false); return; }
-            if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { showToast("VIP 1+ membership required to claim vouchers!", false); return; }
-            const claimBtn = document.getElementById('claimVoucherBtn');
-            const originalText = claimBtn.innerHTML;
-            claimBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
-            claimBtn.disabled = true;
-            try {
-                const voucherQuery = query(collection(db, "progressiveVouchers"), where("code", "==", code));
-                const voucherSnapshot = await getDocs(voucherQuery);
-                if (voucherSnapshot.empty) { showToast("❌ Invalid voucher code.", false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-                const voucherDoc = voucherSnapshot.docs[0];
-                const voucher = voucherDoc.data();
-                if (!voucher.isActive || voucher.isFullyClaimed) { showToast("❌ This voucher has been fully claimed!", false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-                if (voucher.expiry && voucher.expiry.toDate() < new Date()) { showToast("❌ This voucher has expired!", false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-                if (voucher.claimedBy && voucher.claimedBy.includes(activeUserSession.uid)) { showToast("❌ You have already claimed this voucher!", false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-                const currentIndex = voucher.currentClaimIndex || 0;
-                const claimAmount = voucher.splitAmounts[currentIndex];
-                if (!claimAmount || claimAmount <= 0) { showToast("❌ Voucher error - no remaining value", false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-                const userRef = doc(db, "users", activeUserSession.uid);
-                await runTransaction(db, async (transaction) => {
-                    const freshVoucher = await transaction.get(voucherDoc.ref);
-                    const freshData = freshVoucher.data();
-                    if (freshData.isFullyClaimed || freshData.remainingClaims <= 0) throw new Error("Voucher fully claimed");
-                    const userSnap = await transaction.get(userRef);
-                    let currentBalance = parseFloat(userSnap.data().balance || 0);
-                    transaction.update(userRef, { balance: currentBalance + claimAmount });
-                    const newRemainingClaims = freshData.remainingClaims - 1;
-                    const newRemainingAmount = freshData.remainingAmount - claimAmount;
-                    const newClaimIndex = freshData.currentClaimIndex + 1;
-                    const newClaimedBy = [...(freshData.claimedBy || []), activeUserSession.uid];
-                    const newClaimedAmounts = [...(freshData.claimedAmounts || []), claimAmount];
-                    transaction.update(voucherDoc.ref, { 
-                        remainingClaims: newRemainingClaims, 
-                        remainingAmount: newRemainingAmount, 
-                        currentClaimIndex: newClaimIndex, 
-                        claimedBy: newClaimedBy, 
-                        claimedAmounts: newClaimedAmounts, 
-                        isFullyClaimed: newRemainingClaims === 0 
-                    });
-                });
-                await addDoc(collection(db, "voucherRedemptions"), { 
-                    voucherCode: code, 
-                    voucherName: voucher.name || "Gift Card",
-                    userId: activeUserSession.uid, 
-                    username: localUserRecord.username || "User", 
-                    userTier: localUserRecord.tierCode, 
-                    amountClaimed: claimAmount, 
-                    claimNumber: voucher.currentClaimIndex + 1, 
-                    totalClaims: voucher.totalPeople, 
-                    timestamp: serverTimestamp() 
-                });
-                await addDoc(collection(db, "ledger"), { 
-                    uid: activeUserSession.uid, 
-                    title: `🎫 Voucher Claim: ${code} - ${voucher.name || 'Gift Card'}`, 
-                    amount: claimAmount, 
-                    type: "credit", 
-                    timestamp: serverTimestamp() 
-                });
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-                Swal.fire({ 
-                    title: '🎉 Voucher Claimed!', 
-                    html: `<div><div style="font-size:2rem;color:#10b981;">+₦${claimAmount.toLocaleString()}</div><div style="font-size:0.8rem;color:#e5b842;">${voucher.name || 'Gift Card'} - Claimant #${voucher.currentClaimIndex + 1} of ${voucher.totalPeople}</div></div>`, 
-                    icon: 'success', 
-                    background: '#111424', 
-                    color: '#fff', 
-                    confirmButtonColor: '#e5b842', 
-                    timer: 4000 
-                });
-                document.getElementById('voucherCodeField').value = '';
-                closePortalModal('couponModalPopup');
-                await loadVoucherHistory();
-            } catch (error) {
-                console.error("Voucher claim error:", error);
-                showToast(error.message || "Error processing voucher.", false);
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-            }
-        }
-
-        document.getElementById('claimVoucherBtn').addEventListener('click', async () => {
-            if (!activeUserSession || !localUserRecord) { showToast("Please login first", false); return; }
-            const codeInput = document.getElementById('voucherCodeField');
-            const code = codeInput.value.trim().toUpperCase();
-            if (!code) { showToast("Please enter a voucher code", false); codeInput.focus(); return; }
-            await claimProgressiveVoucher(code);
-        });
-
-        document.getElementById('copyLinkBtn').addEventListener('click', () => { 
-            const textToCopy = document.getElementById('inviteLinkText').innerText; 
-            navigator.clipboard.writeText(textToCopy).then(() => { showToast("📋 Referral tracking URL copied to clipboard!"); }); 
-        });
-        
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        let isDarkMode = true;
-        darkModeToggle.addEventListener('click', () => {
-            isDarkMode = !isDarkMode;
-            if (isDarkMode) {
-                document.body.classList.remove('light-mode');
-                document.body.classList.add('dark-mode');
-                darkModeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-                localStorage.setItem('nexusTheme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.body.classList.add('light-mode');
-                darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                localStorage.setItem('nexusTheme', 'light');
-            }
-        });
-        const savedTheme = localStorage.getItem('nexusTheme');
-        if (savedTheme === 'light') {
-            isDarkMode = false;
-            document.body.classList.add('light-mode');
-            darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        } else {
-            document.body.classList.add('dark-mode');
-        }
-        
-        setTimeout(() => {
-            if (document.getElementById('loadingOverlay')) hideLoadingAndShow();
-        }, 1000);
-
-        function initOneTimeApkButton() {
-            const apkBtn = document.getElementById('oneTimeApkButton');
-            if (!apkBtn) return;
-            const alreadyInstalled = localStorage.getItem('nexus_apk_installed') === 'true';
-            if (alreadyInstalled) {
-                apkBtn.style.display = 'none';
-                return;
-            }
-            apkBtn.style.display = 'flex';
-            apkBtn.onclick = function(e) {
-                e.stopPropagation();
-                const link = document.createElement('a');
-                link.href = 'nexus-earn.apk';
-                link.download = 'nexus-earn.apk';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                localStorage.setItem('nexus_apk_installed', 'true');
-                apkBtn.style.display = 'none';
-                showToast('✅ Download started. Your app will be saved.', true);
-            };
-        }
-
-        const originalOpenPortalModal = window.openPortalModal;
-        window.openPortalModal = function(id) {
-            originalOpenPortalModal(id);
-            if (id === 'couponModalPopup') {
-                initOneTimeApkButton();
-            }
-        };
-    </script>
-
-    <script>
-        function startMidnightCountdownTracker() { 
-            setInterval(() => { 
-                const now = new Date(); 
-                let midnightTarget = new Date(); 
-                midnightTarget.setHours(24, 0, 0, 0); 
-                let diff = midnightTarget - now; 
-                let h = Math.floor(diff / (1000*60*60)); 
-                let m = Math.floor((diff % (1000*60*60)) / (1000*60)); 
-                let s = Math.floor((diff % (1000*60)) / 1000); 
-                h = h < 10 ? "0"+h : h; 
-                m = m < 10 ? "0"+m : m; 
-                s = s < 10 ? "0"+s : s; 
-                const countdownEl = document.getElementById('countdownDisplay');
-                if (countdownEl) countdownEl.innerText = h+":"+m+":"+s; 
-                const clockEl = document.getElementById('topSystemClock');
-                if (clockEl) clockEl.innerHTML = '<i class="fa-regular fa-clock"></i> '+now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }); 
-            }, 1000); 
-        }
-        
-        function switchPortalTab(view) { 
-            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view')); 
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active-tab')); 
-            const viewEl = document.getElementById('view'+view);
-            const tabEl = document.getElementById('tab'+view);
-            if (viewEl) viewEl.classList.add('active-view');
-            if (tabEl) tabEl.classList.add('active-tab');
-        }
-        
-        window.onload = function() { 
-            startMidnightCountdownTracker(); 
-        };
-    </script>
 </body>
 </html>
