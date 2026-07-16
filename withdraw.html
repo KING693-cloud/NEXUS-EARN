@@ -31,10 +31,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Firebase (compat) -->
+    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         /* ============================================================
@@ -136,37 +136,19 @@
 
         /* ---- Animations ---- */
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.6;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         /* ---- Top Bar ---- */
@@ -1088,11 +1070,11 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT – All withdrawal logic: VIP check, pending, tax, submit
+    JAVASCRIPT – All withdrawal logic: VIP check, pending, tax, submit (RTDB)
     ============================================================ -->
     <script>
         // ============================================================
-        // FIREBASE CONFIG
+        // FIREBASE CONFIG – CORRECT REGION URL
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -1100,11 +1082,12 @@
             projectId: "nexus-earn-1",
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const rtdb = firebase.database();
 
         // ============================================================
         // GLOBALS
@@ -1207,10 +1190,8 @@
             btn.addEventListener('click', function() {
                 const amt = parseInt(this.getAttribute('data-amt'));
                 amountInput.value = amt;
-                // Remove active class from all, add to this
                 presetBtns.forEach(b => b.classList.remove('active-preset'));
                 this.classList.add('active-preset');
-                // Trigger input event to update tax
                 amountInput.dispatchEvent(new Event('input'));
             });
         });
@@ -1222,17 +1203,10 @@
             let val = parseFloat(amountInput.value) || 0;
             const maxBalance = mainBalance;
 
-            // Clamp to max balance if needed
             if (val > maxBalance && maxBalance > 0) {
                 amountInput.value = maxBalance;
                 val = maxBalance;
-                // Remove active preset class if any
                 presetBtns.forEach(b => b.classList.remove('active-preset'));
-            }
-
-            // Minimum check
-            if (val < 500 && val > 0) {
-                // Show tax but warn
             }
 
             if (val >= 500 && val <= maxBalance) {
@@ -1252,15 +1226,11 @@
             } else {
                 taxBreakdown.classList.remove('active');
             }
-
-            // If balance is less than amount, show a subtle warning via toast? We'll handle on submit.
         }
 
         amountInput.addEventListener('input', function() {
             updateTaxBreakdown();
-            // Remove preset active style if user manually types
             presetBtns.forEach(b => b.classList.remove('active-preset'));
-            // If value matches a preset, highlight it
             const val = parseFloat(this.value);
             presetBtns.forEach(b => {
                 if (parseInt(b.getAttribute('data-amt')) === val) {
@@ -1270,16 +1240,12 @@
         });
 
         // ============================================================
-        // LOAD MINI HISTORY (withdrawals)
+        // LOAD MINI HISTORY (RTDB)
         // ============================================================
         async function loadMiniHistory(uid) {
             try {
-                const q = await db.collection('withdrawals')
-                    .where('uid', '==', uid)
-                    .orderBy('timestamp', 'desc')
-                    .limit(5)
-                    .get();
-                if (q.empty) {
+                const snap = await rtdb.ref('withdrawals').orderByChild('uid').equalTo(uid).once('value');
+                if (!snap.exists()) {
                     miniHistoryList.innerHTML = `
                         <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
                             <i class="fa-regular fa-folder-open"></i> No withdrawal requests yet.
@@ -1287,15 +1253,23 @@
                     `;
                     return;
                 }
+                const items = [];
+                const data = snap.val();
+                for (const key in data) {
+                    const item = data[key];
+                    let date = item.timestamp ? new Date(item.timestamp) : new Date(0);
+                    items.push({ ...item, id: key, _date: date });
+                }
+                items.sort((a, b) => b._date - a._date);
+                const recent = items.slice(0, 5);
                 let html = '';
-                q.forEach(doc => {
-                    const data = doc.data();
-                    const gross = data.grossAmount || 0;
-                    const net = data.netAmount || (gross * 0.9);
-                    const status = data.status || 'pending';
+                recent.forEach(item => {
+                    const gross = item.grossAmount || 0;
+                    const net = item.netAmount || (gross * 0.9);
+                    const status = item.status || 'pending';
                     const statusText = status.charAt(0).toUpperCase() + status.slice(1);
                     const statusClass = `status-${status}`;
-                    const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString() : 'Unknown';
+                    const date = item._date ? item._date.toLocaleDateString() : 'Unknown';
                     html += `
                         <div class="mini-history-item">
                             <span>₦${net.toLocaleString()} <span style="color:#6b7280;font-size:0.6rem;">${date}</span></span>
@@ -1315,7 +1289,7 @@
         }
 
         // ============================================================
-        // AUTH + REAL‑TIME USER DATA + PENDING CHECK
+        // AUTH + REAL‑TIME USER DATA + PENDING CHECK (RTDB)
         // ============================================================
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
@@ -1325,35 +1299,34 @@
             }
             currentUser = user;
 
-            // Unsubscribe previous listeners
-            if (unsubscribeUser) unsubscribeUser();
-            if (unsubscribePending) unsubscribePending();
+            if (unsubscribeUser) {
+                rtdb.ref('users/' + user.uid).off();
+            }
+            if (unsubscribePending) {
+                rtdb.ref('withdrawals').orderByChild('uid').equalTo(user.uid).off();
+            }
 
-            // Listen to user data (balance, tier, bank details)
-            const userRef = db.collection('users').doc(user.uid);
-            unsubscribeUser = userRef.onSnapshot((snap) => {
-                if (!snap.exists) {
+            const userRef = rtdb.ref('users/' + user.uid);
+            userRef.on('value', (snap) => {
+                if (!snap.exists()) {
                     showToast('User data not found. Please contact support.', true);
                     return;
                 }
-                userData = snap.data();
+                userData = snap.val();
                 mainBalance = userData.balance || 0;
                 balanceDisplay.textContent = `₦${mainBalance.toLocaleString(undefined, {minimumFractionDigits:2})}`;
 
-                // VIP check
                 const tier = userData.tierCode || 'NONE';
                 if (tier === 'NONE') {
                     vipWarning.classList.add('active');
                     withdrawBtn.disabled = true;
                 } else {
                     vipWarning.classList.remove('active');
-                    // Re-evaluate pending & bank before enabling
                     if (!hasPending && userData.bankName && userData.accountNumber) {
                         withdrawBtn.disabled = false;
                     }
                 }
 
-                // Bank details
                 const bank = userData.bankName || 'Not set';
                 const accNum = userData.accountNumber || 'Not set';
                 const accName = userData.accountName || 'Not set';
@@ -1371,50 +1344,38 @@
                     }
                 }
 
-                // Update tax breakdown if needed
                 updateTaxBreakdown();
-            }, (error) => {
-                console.error('User snapshot error:', error);
-                showToast('Error loading user data.', true);
             });
 
-            // Listen to pending withdrawals (only ONE pending at a time)
-            const pendingQuery = db.collection('withdrawals')
-                .where('uid', '==', user.uid)
-                .where('status', '==', 'pending');
-            unsubscribePending = pendingQuery.onSnapshot((snap) => {
-                hasPending = !snap.empty;
+            // Pending withdrawal listener
+            const pendingRef = rtdb.ref('withdrawals').orderByChild('uid').equalTo(user.uid);
+            pendingRef.on('value', (snap) => {
+                hasPending = false;
+                if (snap.exists()) {
+                    const data = snap.val();
+                    for (const key in data) {
+                        if (data[key].status === 'pending') {
+                            hasPending = true;
+                            break;
+                        }
+                    }
+                }
                 if (hasPending) {
                     lockoutBox.classList.add('active');
                     withdrawBtn.disabled = true;
                 } else {
                     lockoutBox.classList.remove('active');
-                    // Re-enable if VIP and bank details set
                     if (userData && userData.tierCode !== 'NONE' && userData.bankName && userData.accountNumber) {
                         withdrawBtn.disabled = false;
                     }
                 }
-            }, (error) => {
-                console.error('Pending query error:', error);
             });
 
-            // Load mini history
             loadMiniHistory(user.uid);
-
-            // Listen for real‑time updates on history
-            const historyQuery = db.collection('withdrawals')
-                .where('uid', '==', user.uid)
-                .orderBy('timestamp', 'desc')
-                .limit(5);
-            db.collection('withdrawals')
-                .where('uid', '==', user.uid)
-                .onSnapshot(() => {
-                    loadMiniHistory(user.uid);
-                });
         });
 
         // ============================================================
-        // WITHDRAW SUBMIT
+        // WITHDRAW SUBMIT (RTDB)
         // ============================================================
         withdrawBtn.addEventListener('click', async function() {
             if (!currentUser || !userData) {
@@ -1422,29 +1383,24 @@
                 return;
             }
 
-            // Check VIP
             if (userData.tierCode === 'NONE') {
                 showToast('VIP 1+ membership required to withdraw.', true);
                 return;
             }
 
-            // Check pending
             if (hasPending) {
                 showToast('You have a pending withdrawal request. Please wait for approval.', true);
                 return;
             }
 
-            // Check bank details
             if (!userData.bankName || !userData.accountNumber || userData.bankName === 'Not set') {
                 showToast('Please add your bank details in the Profile tab first.', true);
                 return;
             }
 
-            // Time restrictions (Mon-Sat, 10-18 WAT)
             const now = new Date();
             const hour = now.getHours();
             const day = now.getDay();
-            // Day 0 = Sunday
             if (day === 0) {
                 await showSweetAlert(
                     '⛔ Withdrawals Unavailable on Sundays',
@@ -1464,7 +1420,6 @@
                 return;
             }
 
-            // Amount validation
             let amount = parseFloat(amountInput.value);
             if (isNaN(amount) || amount < 500) {
                 showToast('Minimum withdrawal amount is ₦500.', true);
@@ -1479,11 +1434,9 @@
                 return;
             }
 
-            // Calculate tax
             const tax = amount * 0.10;
             const net = amount - tax;
 
-            // Confirm
             const confirmResult = await Swal.fire({
                 title: 'Confirm Withdrawal',
                 html: `
@@ -1511,25 +1464,21 @@
 
             if (!confirmResult.isConfirmed) return;
 
-            // Disable button
             isSubmitting = true;
             withdrawBtn.disabled = true;
             withdrawBtn.innerHTML = '<div class="spinner-small"></div> Processing...';
 
             try {
-                // Deduct from balance (in a transaction)
-                await db.runTransaction(async (transaction) => {
-                    const userRef = db.collection('users').doc(currentUser.uid);
-                    const snap = await transaction.get(userRef);
-                    const currentBalance = snap.data().balance || 0;
-                    if (currentBalance < amount) throw new Error('Insufficient balance');
-                    transaction.update(userRef, {
-                        balance: currentBalance - amount
-                    });
+                const userRef = rtdb.ref('users/' + currentUser.uid);
+                const snap = await userRef.once('value');
+                const currentBalance = snap.val().balance || 0;
+                if (currentBalance < amount) throw new Error('Insufficient balance');
+                await userRef.update({
+                    balance: currentBalance - amount
                 });
 
-                // Create withdrawal request
-                await db.collection('withdrawals').add({
+                const withdrawalRef = rtdb.ref('withdrawals').push();
+                await withdrawalRef.set({
                     uid: currentUser.uid,
                     username: userData.username || 'User',
                     email: currentUser.email,
@@ -1540,11 +1489,10 @@
                     accountNumber: userData.accountNumber,
                     accountName: userData.accountName,
                     status: 'pending',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    timestamp: new Date().toISOString(),
                     requestedAt: new Date().toISOString()
                 });
 
-                // Success
                 await showSweetAlert(
                     '✅ Withdrawal Request Submitted!',
                     `
@@ -1563,13 +1511,10 @@
                     5000
                 );
 
-                // Reset form
                 amountInput.value = '';
                 taxBreakdown.classList.remove('active');
                 presetBtns.forEach(b => b.classList.remove('active-preset'));
-                // Reload mini history
                 loadMiniHistory(currentUser.uid);
-                // Disable button until pending is resolved (listener will handle)
                 withdrawBtn.disabled = true;
                 withdrawBtn.innerHTML = '<i class="fa-solid fa-clock"></i> Request Pending...';
 
@@ -1580,7 +1525,6 @@
                 } else {
                     showToast('Error processing withdrawal. Please try again.', true);
                 }
-                // Re-enable if conditions allow
                 if (userData.tierCode !== 'NONE' && !hasPending && userData.bankName && userData.accountNumber) {
                     withdrawBtn.disabled = false;
                 }
@@ -1591,7 +1535,7 @@
         });
 
         // ============================================================
-        // INITIAL SETUP: ensure tax breakdown is hidden if no amount
+        // INIT: hide tax breakdown initially
         // ============================================================
         taxBreakdown.classList.remove('active');
     </script>

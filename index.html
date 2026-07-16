@@ -4,26 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 
-    <!-- ============================================================
-     MASTER HEADER – all meta tags, AdSense, fonts, Firebase
-     ============================================================ -->
-    <meta property="og:title" content="NEXUS EARN – Register & Get ₦500 Bonus | 1‑Year VIP Plans" />
-    <meta property="og:description" content="Start earning ₦500 to ₦2,048,000 daily with 365‑day contracts. Secure bank deposits via PalmPay. 10% referral commission. CBN licensed." />
+    <!-- Meta tags for sharing -->
+    <meta property="og:title" content="NEXUS EARN – Register & Get ₦500 Bonus" />
+    <meta property="og:description" content="Start earning ₦500 to ₦2,048,000 daily with 365‑day contracts." />
     <meta property="og:image" content="https://nexus-earn.com/logo.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://nexus-earn.com" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="NEXUS EARN" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="NEXUS EARN – 1‑Year Investment Plans" />
-    <meta name="twitter:description" content="Earn daily from ₦500 to ₦2,048,000. Secure bank transfers, instant approvals, 10% referral bonus." />
-    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
     <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
-    <title>NEXUS EARN – Register & Get ₦500 Bonus | 1‑Year VIP Plans</title>
-    <meta name="description" content="Join NEXUS EARN – get ₦500 signup bonus, invest in 365‑day VIP plans, earn daily returns, and refer friends for 10% commission." />
+    <title>NEXUS EARN – Register & Get ₦500 Bonus</title>
     <meta name="theme-color" content="#e5b842" />
 
     <!-- Fonts & Icons -->
@@ -31,14 +21,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Firebase (compat) -->
+    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         /* ============================================================
-           GLOBAL RESET & BASE (extends header styles)
+           GLOBAL RESET & BASE
            ============================================================ */
         * {
             margin: 0;
@@ -1114,11 +1104,11 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT – REGISTRATION LOGIC + DARK MODE + FAQ
+    JAVASCRIPT – REALTIME DATABASE (FULL)
     ============================================================ -->
     <script>
         // ============================================================
-        // FIREBASE CONFIG (same as header)
+        // FIREBASE CONFIG – CORRECT REGION URL
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -1126,14 +1116,16 @@
             projectId: "nexus-earn-1",
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"   // ← Fixed
         };
+
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const rtdb = firebase.database(); // Works now
 
         // ============================================================
-        // TOAST SYSTEM
+        // TOAST
         // ============================================================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
@@ -1152,34 +1144,23 @@
         // ============================================================
         function togglePass(id, el) {
             const input = document.getElementById(id);
-            if (input.type === "password") { input.type = "text";
-                el.classList.replace('fa-eye', 'fa-eye-slash'); } else { input.type = "password";
-                el.classList.replace('fa-eye-slash', 'fa-eye'); }
+            if (input.type === "password") { input.type = "text"; el.classList.replace('fa-eye', 'fa-eye-slash'); }
+            else { input.type = "password"; el.classList.replace('fa-eye-slash', 'fa-eye'); }
         }
 
         // ============================================================
-        // DARK MODE TOGGLE (persist)
+        // DARK MODE
         // ============================================================
         (function() {
             const toggle = document.getElementById('darkModeToggle');
             const saved = localStorage.getItem('nexusTheme');
             const body = document.body;
-            if (saved === 'light') {
-                body.classList.add('light-mode');
-                toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-            } else {
-                body.classList.remove('light-mode');
-                toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            }
+            if (saved === 'light') { body.classList.add('light-mode'); toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; }
+            else { body.classList.remove('light-mode'); toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; }
             toggle.addEventListener('click', function() {
                 const isLight = body.classList.toggle('light-mode');
-                if (isLight) {
-                    toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                    localStorage.setItem('nexusTheme', 'light');
-                } else {
-                    toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-                    localStorage.setItem('nexusTheme', 'dark');
-                }
+                if (isLight) { toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; localStorage.setItem('nexusTheme', 'light'); }
+                else { toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; localStorage.setItem('nexusTheme', 'dark'); }
             });
         })();
 
@@ -1187,9 +1168,7 @@
         // FAQ ACCORDION
         // ============================================================
         document.querySelectorAll('.faq-item').forEach(item => {
-            item.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
+            item.addEventListener('click', function() { this.classList.toggle('active'); });
         });
 
         // ============================================================
@@ -1216,11 +1195,12 @@
         async function loadReferrerInfo(refCode) {
             if (!refCode) return;
             try {
-                const snap = await db.collection('users').where('referralCode', '==', refCode).limit(1).get();
-                if (!snap.empty) {
-                    const doc = snap.docs[0];
-                    referrerUserId = doc.id;
-                    referrerUsername = doc.data().username || 'Investor';
+                const snap = await rtdb.ref('users').orderByChild('referralCode').equalTo(refCode).once('value');
+                if (snap.exists()) {
+                    const key = Object.keys(snap.val())[0];
+                    const data = snap.val()[key];
+                    referrerUserId = key;
+                    referrerUsername = data.username || 'Investor';
                     const box = document.getElementById('referralInfoBox');
                     document.getElementById('referrerNameDisplay').innerText = referrerUsername;
                     box.classList.add('active');
@@ -1228,16 +1208,12 @@
                     field.value = refCode;
                     field.disabled = true;
                     field.style.background = 'rgba(0,0,0,0.2)';
-                    showToast(`✅ Referred by ${referrerUsername}! You both get bonuses.`);
+                    showToast(`✅ Referred by ${referrerUsername}!`);
                 }
             } catch (e) { console.error('Referrer load error:', e); }
         }
-
         if (activeReferralCode) loadReferrerInfo(activeReferralCode);
 
-        // ============================================================
-        // GENERATE UNIQUE REFERRAL CODE (6 chars)
-        // ============================================================
         function generateReferralCode(len = 6) {
             const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
             let r = "";
@@ -1246,16 +1222,12 @@
         }
 
         // ============================================================
-        // CHECK IF USER IS ALREADY LOGGED IN → REDIRECT
+        // REDIRECT IF ALREADY LOGGED IN
         // ============================================================
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = 'dashboard.html';
-            }
-        });
+        auth.onAuthStateChanged(user => { if (user) window.location.href = 'dashboard.html'; });
 
         // ============================================================
-        // SIGNUP FORM SUBMIT (WITH VERIFICATION)
+        // SIGNUP FORM – RTDB
         // ============================================================
         document.getElementById('nexusSignupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1269,59 +1241,35 @@
             const confirm = document.getElementById('confirmPassword').value;
             let refCode = document.getElementById('referredByCode').value.trim();
 
-            // --- Validations ---
-            if (!/^[a-zA-Z0-9_]{3,15}$/.test(username)) {
-                showToast("Username must be 3–15 chars (letters, numbers, underscore)", true);
-                return;
-            }
-            if (!email.endsWith('@gmail.com')) {
-                showToast("Please use a valid Gmail address", true);
-                return;
-            }
-            if (phone.length !== 11 || !/^\d+$/.test(phone)) {
-                showToast("Phone number must be exactly 11 digits", true);
-                return;
-            }
-            if (password.length < 6) {
-                showToast("Password must be at least 6 characters", true);
-                return;
-            }
-            if (password !== confirm) {
-                showToast("Passwords do not match", true);
-                return;
-            }
+            // Validations
+            if (!/^[a-zA-Z0-9_]{3,15}$/.test(username)) { showToast("Username must be 3–15 chars", true); return; }
+            if (!email.endsWith('@gmail.com')) { showToast("Please use a valid Gmail address", true); return; }
+            if (phone.length !== 11 || !/^\d+$/.test(phone)) { showToast("Phone must be exactly 11 digits", true); return; }
+            if (password.length < 6) { showToast("Password min 6 chars", true); return; }
+            if (password !== confirm) { showToast("Passwords do not match", true); return; }
+            if (activeReferralCode && !refCode) { refCode = activeReferralCode; document.getElementById('referredByCode').value = activeReferralCode; }
 
-            // If referral link was active but user cleared the field, restore it
-            if (activeReferralCode && !refCode) {
-                refCode = activeReferralCode;
-                document.getElementById('referredByCode').value = activeReferralCode;
-            }
-
-            // --- UI: loading ---
             btn.disabled = true;
             btn.innerHTML = '<div class="spinner-small"></div> Creating account...';
             spinner.style.display = 'block';
 
             try {
-                // 1. Check duplicates
-                const emailCheck = await db.collection('users').where('email', '==', email).get();
-                if (!emailCheck.empty) throw new Error("Email already registered");
+                // 1. Check duplicates via RTDB
+                const allUsers = await rtdb.ref('users').once('value');
+                const users = allUsers.val() || {};
+                for (const uid in users) {
+                    const u = users[uid];
+                    if (u.email === email) throw new Error("Email already registered");
+                    if (u.phone === phone) throw new Error("Phone already registered");
+                    if (u.username === username) throw new Error("Username already taken");
+                }
 
-                const phoneCheck = await db.collection('users').where('phone', '==', phone).get();
-                if (!phoneCheck.empty) throw new Error("Phone number already registered");
-
-                const userCheck = await db.collection('users').where('username', '==', username).get();
-                if (!userCheck.empty) throw new Error("Username already taken");
-
-                // 2. Verify referral code if provided
+                // 2. Verify referral
                 let referrerId = null;
                 if (refCode) {
-                    const refSnap = await db.collection('users').where('referralCode', '==', refCode).get();
-                    if (!refSnap.empty) {
-                        referrerId = refSnap.docs[0].id;
-                    } else {
-                        throw new Error("Invalid referral code. Please check and try again.");
-                    }
+                    const refSnap = await rtdb.ref('users').orderByChild('referralCode').equalTo(refCode).once('value');
+                    if (!refSnap.exists()) throw new Error("Invalid referral code.");
+                    referrerId = Object.keys(refSnap.val())[0];
                 }
 
                 // 3. Create Auth user
@@ -1329,8 +1277,8 @@
                 const uid = authResult.user.uid;
                 const newRefCode = generateReferralCode(6);
 
-                // 4. Create user document in Firestore
-                await db.collection('users').doc(uid).set({
+                // 4. Save to RTDB
+                await rtdb.ref('users/' + uid).set({
                     uid: uid,
                     username: username,
                     email: email,
@@ -1348,47 +1296,32 @@
                     contractDaysRemaining: 0,
                     activeDailyYield: 0,
                     status: "active",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: new Date().toISOString()
                 });
 
-                // ⭐ VERIFY the document was actually written
-                const checkDoc = await db.collection('users').doc(uid).get();
-                if (!checkDoc.exists) {
-                    throw new Error("User document was not saved. Please check your network and Firestore rules.");
-                }
-
-                // 5. Ledger entry for signup bonus
-                await db.collection('ledger').add({
+                // 5. Ledger entry
+                await rtdb.ref('ledger').push({
                     uid: uid,
                     title: "🎉 Welcome Bonus – Account Creation",
                     amount: 500,
                     type: "credit",
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: new Date().toISOString()
                 });
 
-                // 6. Show success
-                showToast("✅ Account created! Redirecting to your dashboard...");
-
-                // Set session flag so info page shows only once
+                showToast("✅ Account created! Redirecting...");
                 sessionStorage.setItem('nexusInfoShown', 'true');
-                setTimeout(() => {
-                    window.location.href = "info.html?redirect=dashboard.html";
-                }, 1500);
+                setTimeout(() => { window.location.href = "info.html?redirect=dashboard.html"; }, 1500);
 
             } catch (err) {
-                console.error("Registration error:", err);
-                // If document creation failed, delete the auth user (cleanup)
-                if (auth.currentUser) {
-                    try {
-                        await auth.currentUser.delete();
-                    } catch (e) { /* ignore */ }
-                }
-                showToast(err.message || "Registration failed. Please try again.", true);
+                console.error(err);
+                if (auth.currentUser) { try { await auth.currentUser.delete(); } catch(e) {} }
+                showToast(err.message || "Registration failed.", true);
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Register & Get ₦500';
                 spinner.style.display = 'none';
             }
         });
     </script>
+
 </body>
 </html>

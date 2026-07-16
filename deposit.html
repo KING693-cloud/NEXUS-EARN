@@ -31,10 +31,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Firebase (compat) -->
+    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         /* ============================================================
@@ -1062,7 +1062,7 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // FIREBASE CONFIG
+        // FIREBASE CONFIG – CORRECT REGION URL
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -1070,11 +1070,12 @@
             projectId: "nexus-earn-1",
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const rtdb = firebase.database();
 
         // ============================================================
         // GLOBALS
@@ -1238,16 +1239,12 @@
         }
 
         // ============================================================
-        // LOAD MINI HISTORY (FIXED: no orderBy, client-side sort)
+        // LOAD MINI HISTORY (RTDB – client-side sort)
         // ============================================================
         async function loadMiniHistory(uid) {
             try {
-                // Query WITHOUT orderBy – just filter by uid
-                const q = await db.collection('deposits')
-                    .where('uid', '==', uid)
-                    .get();
-
-                if (q.empty) {
+                const snap = await rtdb.ref('deposits').orderByChild('uid').equalTo(uid).once('value');
+                if (!snap.exists()) {
                     miniHistoryList.innerHTML = `
                         <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
                             <i class="fa-regular fa-folder-open"></i> No deposit requests yet.
@@ -1255,22 +1252,16 @@
                     `;
                     return;
                 }
-
-                // Build array, sort by timestamp descending (client-side)
                 const items = [];
-                q.forEach(doc => {
-                    const data = doc.data();
-                    // Convert timestamp to Date for sorting
-                    let date = data.timestamp ? data.timestamp.toDate() : new Date(0);
-                    items.push({ ...data, id: doc.id, _date: date });
-                });
-
+                const data = snap.val();
+                for (const key in data) {
+                    const item = data[key];
+                    let date = item.timestamp ? new Date(item.timestamp) : new Date(0);
+                    items.push({ ...item, id: key, _date: date });
+                }
                 // Sort newest first
                 items.sort((a, b) => b._date - a._date);
-
-                // Take only the 5 most recent
                 const recent = items.slice(0, 5);
-
                 let html = '';
                 recent.forEach(item => {
                     const amount = item.amount || 0;
@@ -1311,19 +1302,15 @@
                 return;
             }
             currentUser = user;
-            // Show loading overlay
             depositLoading.classList.add('active');
-            // Simulate fetching bank details (just for UX)
             setTimeout(() => {
                 depositLoading.classList.remove('active');
                 setNewNarrationCode();
                 loadMiniHistory(user.uid);
-                // Real-time listener for history updates (without orderBy)
-                db.collection('deposits')
-                    .where('uid', '==', user.uid)
-                    .onSnapshot(() => {
-                        loadMiniHistory(user.uid);
-                    });
+                // Real-time listener for history updates
+                rtdb.ref('deposits').orderByChild('uid').equalTo(user.uid).on('value', () => {
+                    loadMiniHistory(user.uid);
+                });
             }, 1200);
         });
 
@@ -1375,7 +1362,7 @@
         });
 
         // ============================================================
-        // DEPOSIT FORM SUBMIT
+        // DEPOSIT FORM SUBMIT (RTDB)
         // ============================================================
         depositForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1449,7 +1436,8 @@
             submitBtn.innerHTML = '<div class="spinner-small"></div> Submitting...';
 
             try {
-                await db.collection('deposits').add({
+                const depositRef = rtdb.ref('deposits').push();
+                await depositRef.set({
                     uid: currentUser.uid,
                     username: currentUser.displayName || 'User',
                     email: currentUser.email,
@@ -1458,7 +1446,7 @@
                     senderName: senderName,
                     senderAccount: senderAccount || '',
                     status: 'pending',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: new Date().toISOString()
                 });
 
                 await showSweetAlert(
@@ -1505,5 +1493,6 @@
             }
         });
     </script>
+
 </body>
 </html>

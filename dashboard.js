@@ -1,28 +1,38 @@
 /**
  * ================================================================
- *  🔥 NEXUS EARN – MASTER DASHBOARD JAVASCRIPT (FIXED + FALLBACK)
+ *  NEXUS EARN – DASHBOARD (Realtime DB)
+ *  ================================================================
+ *  File: dashboard.js
+ *  Description: Complete dashboard logic using Firebase Realtime Database.
  *  ================================================================
  */
+
 (function() {
     'use strict';
 
+    // ================================================================
+    //  FIREBASE CONFIG – CORRECT REGION URL
+    // ================================================================
     const firebaseConfig = {
         apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
         authDomain: "nexus-earn-1.firebaseapp.com",
         projectId: "nexus-earn-1",
         storageBucket: "nexus-earn-1.firebasestorage.app",
         messagingSenderId: "779765076952",
-        appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+        appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+        databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"
     };
+
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
-    const FieldValue = firebase.firestore.FieldValue;
+    const rtdb = firebase.database();
 
+    // ================================================================
+    //  GLOBAL STATE
+    // ================================================================
     let activeUserSession = null;
     let localUserRecord = null;
-    let dbSnapshotUnsubscriber = null;
-    let settingsUnsubscriber = null;
+    let dbListener = null;
     let isClaiming = false;
 
     let adminSettings = {
@@ -51,6 +61,9 @@
 
     let reminderShownThisSession = false;
 
+    // ================================================================
+    //  UTILITY FUNCTIONS
+    // ================================================================
     function getNigeriaDate() {
         const now = new Date();
         const nigeriaTime = new Date(now.getTime() + 3600000);
@@ -94,6 +107,7 @@
         const el = document.getElementById(id);
         if (el) el.style.display = 'flex';
     };
+
     window.closePortalModal = function(id) {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -170,23 +184,51 @@
         document.body.removeChild(textarea);
     }
 
+    // ================================================================
+    //  ADMIN SETTINGS (Firestore – optional)
+    // ================================================================
     async function loadAdminSettings() {
         try {
+            const db = firebase.firestore();
             const settingsRef = db.collection('admin_settings').doc('platform_config');
             const docSnap = await settingsRef.get();
             if (docSnap.exists) { adminSettings = docSnap.data(); }
             else {
-                await settingsRef.set({ maintenanceMode:false, disabledVIPs:[], apkDownloadUrl:'', apkVersion:'1.0.0', dailyDeduction:0, defaultContractDays:365, referralCommissionRate:10, checkinBonus:50 });
-                adminSettings = { maintenanceMode:false, disabledVIPs:[], apkDownloadUrl:'', apkVersion:'1.0.0', referralCommissionRate:10, checkinBonus:50 };
+                await settingsRef.set({
+                    maintenanceMode: false,
+                    disabledVIPs: [],
+                    apkDownloadUrl: '',
+                    apkVersion: '1.0.0',
+                    dailyDeduction: 0,
+                    defaultContractDays: 365,
+                    referralCommissionRate: 10,
+                    checkinBonus: 50
+                });
+                adminSettings = {
+                    maintenanceMode: false,
+                    disabledVIPs: [],
+                    apkDownloadUrl: '',
+                    apkVersion: '1.0.0',
+                    referralCommissionRate: 10,
+                    checkinBonus: 50
+                };
             }
-            updateApkButton(); updateVIPDisabledState(); updateClaimButtonState();
+            updateApkButton();
+            updateVIPDisabledState();
+            updateClaimButtonState();
         } catch(err) { console.error('Error loading admin settings:', err); }
     }
 
     function listenToAdminSettings() {
+        const db = firebase.firestore();
         const settingsRef = db.collection('admin_settings').doc('platform_config');
-        settingsUnsubscriber = settingsRef.onSnapshot((snapshot) => {
-            if (snapshot.exists) { adminSettings = snapshot.data(); updateApkButton(); updateVIPDisabledState(); updateClaimButtonState(); }
+        settingsRef.onSnapshot((snapshot) => {
+            if (snapshot.exists) {
+                adminSettings = snapshot.data();
+                updateApkButton();
+                updateVIPDisabledState();
+                updateClaimButtonState();
+            }
         });
     }
 
@@ -205,8 +247,16 @@
         document.querySelectorAll('.upgrade-btn').forEach(btn => {
             const tier = btn.getAttribute('data-tier');
             if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tier)) {
-                btn.disabled = true; btn.title = 'Disabled by admin'; btn.style.opacity = '0.5'; btn.textContent = '🔒 Unavailable';
-            } else { btn.disabled = false; btn.title = ''; btn.style.opacity = '1'; btn.textContent = 'Activate Plan'; }
+                btn.disabled = true;
+                btn.title = 'Disabled by admin';
+                btn.style.opacity = '0.5';
+                btn.textContent = '🔒 Unavailable';
+            } else {
+                btn.disabled = false;
+                btn.title = '';
+                btn.style.opacity = '1';
+                btn.textContent = 'Activate Plan';
+            }
         });
     }
 
@@ -298,29 +348,35 @@
             document.getElementById('bankBindingBlock').style.borderColor = '#10b981';
         }
         if (data.createdAt) {
-            const date = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+            const date = new Date(data.createdAt);
             document.getElementById('profileRegDateDisplay').innerText = 'Profile Registered: ' + date.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
         }
     }
 
+    // ================================================================
+    //  TEAM BREAKDOWN (RTDB)
+    // ================================================================
     async function loadTeamBreakdownNetwork(userUID) {
         const container = document.getElementById('teamBreakdownContainer');
         if (!container) return;
         try {
-            const teamQuery = db.collection('users').where('referredBy', '==', userUID);
-            const snapshot = await teamQuery.get();
+            const snap = await rtdb.ref('users').orderByChild('referredBy').equalTo(userUID).once('value');
             const referredUsers = [];
-            snapshot.forEach(doc => referredUsers.push({ uid: doc.id, ...doc.data() }));
+            if (snap.exists()) {
+                const data = snap.val();
+                for (const key in data) {
+                    referredUsers.push({ uid: key, ...data[key] });
+                }
+            }
             document.getElementById('teamSizeText').innerText = referredUsers.length + ' Users';
             let level2Count = 0;
             for (const ref of referredUsers) {
-                const subQuery = db.collection('users').where('referredBy', '==', ref.uid);
-                const subSnap = await subQuery.get();
-                level2Count += subSnap.size;
+                const subSnap = await rtdb.ref('users').orderByChild('referredBy').equalTo(ref.uid).once('value');
+                if (subSnap.exists()) level2Count += Object.keys(subSnap.val()).length;
             }
             document.getElementById('teamLvl2SizeText').innerText = level2Count + ' Users';
             if (referredUsers.length === 0) {
-                container.innerHTML = `<p style="font-size: 0.75rem; color: #9ca3af; text-align: center; padding: 10px;">No downline network links registered under this connection node.</p>`;
+                container.innerHTML = '<p style="font-size:0.75rem;color:#9ca3af;text-align:center;padding:10px;">No downline network links registered under this connection node.</p>';
                 return;
             }
             container.innerHTML = '';
@@ -330,9 +386,9 @@
                 const displayName = member.username || 'Anonymous Invitee';
                 const activeTier = member.tierCode && member.tierCode !== 'NONE' ? member.tierCode : null;
                 const depositValue = parseFloat(member.totalDepositedAmount || 0);
-                let badgeHtml = member.username ? `<span class="status-badge registered">Registered</span>` : `<span class="status-badge unregistered">Unregistered</span>`;
+                let badgeHtml = member.username ? '<span class="status-badge registered">Registered</span>' : '<span class="status-badge unregistered">Unregistered</span>';
                 if (activeTier) badgeHtml += `<span class="status-badge vip-tag">${activeTier}</span>`;
-                else badgeHtml += `<span class="status-badge not-activated">Not Activated</span>`;
+                else badgeHtml += '<span class="status-badge not-activated">Not Activated</span>';
                 row.innerHTML = `
                     <div class="user-meta-info">
                         <div class="user-display-name">${displayName}</div>
@@ -346,10 +402,13 @@
             }
         } catch (error) {
             console.error('Team breakdown error:', error);
-            container.innerHTML = `<p style="font-size: 0.75rem; color: #ef4444; text-align: center; padding: 10px;">Error loading team. Please refresh.</p>`;
+            container.innerHTML = '<p style="font-size:0.75rem;color:#ef4444;text-align:center;padding:10px;">Error loading team. Please refresh.</p>';
         }
     }
 
+    // ================================================================
+    //  MILESTONES (RTDB)
+    // ================================================================
     function renderMilestones() {
         if (!localUserRecord) return;
         const container = document.getElementById('milestoneList');
@@ -360,7 +419,7 @@
         for (const m of MILESTONES) {
             const reached = teamDepositTotal >= m.target;
             const alreadyClaimed = claimedMilestones.includes(m.target);
-            let statusText = '', statusClass = '', buttonDisabled = true, buttonText = '';
+            let statusText, statusClass, buttonDisabled, buttonText;
             if (alreadyClaimed) { statusText = 'Claimed ✓'; statusClass = 'status-claimed'; buttonDisabled = true; buttonText = 'Claimed'; }
             else if (reached) { statusText = 'Available!'; statusClass = 'status-available'; buttonDisabled = false; buttonText = `Claim ₦${m.reward.toLocaleString()}`; }
             else { statusText = 'Locked'; statusClass = 'status-locked'; buttonDisabled = true; buttonText = 'Locked'; }
@@ -394,19 +453,22 @@
         const teamDepositTotal = parseFloat(localUserRecord.teamDepositTotal || 0);
         if (teamDepositTotal < target) { showToast(`You need total referral deposits of ₦${target.toLocaleString()} to claim this reward.`, false); return; }
         try {
-            const userRef = db.collection('users').doc(activeUserSession.uid);
-            await db.runTransaction(async (transaction) => {
-                const snap = await transaction.get(userRef);
-                const currentBalance = snap.data().balance || 0;
-                const currentClaimed = snap.data().claimedMilestones || [];
-                if (currentClaimed.includes(target)) throw new Error('Already claimed');
-                transaction.update(userRef, { balance: currentBalance + reward, claimedMilestones: FieldValue.arrayUnion(target) });
+            const userRef = rtdb.ref('users/' + activeUserSession.uid);
+            await userRef.update({
+                balance: (localUserRecord.balance || 0) + reward,
+                claimedMilestones: [...(localUserRecord.claimedMilestones || []), target]
             });
-            await db.collection('ledger').add({ uid: activeUserSession.uid, title: `🎯 Milestone Reward: ₦${target.toLocaleString()} Team Deposits`, amount: reward, type: 'credit', timestamp: FieldValue.serverTimestamp() });
+            await rtdb.ref('ledger').push({
+                uid: activeUserSession.uid,
+                title: `🎯 Milestone Reward: ₦${target.toLocaleString()} Team Deposits`,
+                amount: reward,
+                type: 'credit',
+                timestamp: new Date().toISOString()
+            });
             showToast(`🎉 You claimed ₦${reward.toLocaleString()} milestone reward!`);
-            const userDoc = await db.collection('users').doc(activeUserSession.uid).get();
-            if (userDoc.exists) {
-                localUserRecord = userDoc.data();
+            const snap = await userRef.once('value');
+            if (snap.exists()) {
+                localUserRecord = snap.val();
                 renderTerminalMetrics(localUserRecord);
                 renderMilestones();
             }
@@ -416,10 +478,13 @@
         }
     }
 
+    // ================================================================
+    //  VIP ACTIVATION (RTDB)
+    // ================================================================
     async function runProductActivationCycle(packageName, packageCost, dailyYield, tierCode) {
         if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
         if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tierCode)) { showToast('This VIP plan is currently disabled by admin. Please try another plan.', false); return; }
-        const userRef = db.collection('users').doc(activeUserSession.uid);
+        const userRef = rtdb.ref('users/' + activeUserSession.uid);
         const currentTier = localUserRecord.tierCode || 'NONE';
         const currentTierValue = getTierValue(currentTier);
         const newTierValue = getTierValue(tierCode);
@@ -427,61 +492,68 @@
         const currentBalance = parseFloat(localUserRecord.balance || 0);
         if (currentBalance < packageCost) { showToast(`Insufficient balance! You need ₦${packageCost.toLocaleString()}.`, false); return; }
         try {
-            await db.runTransaction(async (transaction) => {
-                const userSnapshot = await transaction.get(userRef);
-                const walletBalance = parseFloat(userSnapshot.data().balance || 0);
-                if (walletBalance < packageCost) throw new Error('INSUFFICIENT_FUNDS');
-                transaction.update(userRef, {
-                    balance: walletBalance - packageCost,
-                    tierCode: tierCode,
-                    contractDaysRemaining: 365,
-                    activeDailyYield: dailyYield,
-                    lastMiningClaimDate: ''
-                });
+            await userRef.update({
+                balance: currentBalance - packageCost,
+                tierCode: tierCode,
+                contractDaysRemaining: 365,
+                activeDailyYield: dailyYield,
+                lastMiningClaimDate: ''
             });
-            await db.collection('ledger').add({ uid: activeUserSession.uid, title: '🚀 Activated ' + packageName, amount: packageCost, type: 'debit', timestamp: FieldValue.serverTimestamp() });
+            await rtdb.ref('ledger').push({
+                uid: activeUserSession.uid,
+                title: '🚀 Activated ' + packageName,
+                amount: packageCost,
+                type: 'debit',
+                timestamp: new Date().toISOString()
+            });
             showToast(packageName + ' Plan Successfully Activated!');
             if (localUserRecord.referredBy) { triggerNetworkReferralReward(localUserRecord.referredBy, packageCost); }
-            const updatedDoc = await userRef.get();
-            if (updatedDoc.exists) {
-                localUserRecord = updatedDoc.data();
+            const snap = await userRef.once('value');
+            if (snap.exists()) {
+                localUserRecord = snap.val();
                 renderTerminalMetrics(localUserRecord);
                 updateClaimButtonState();
             }
         } catch (error) {
             console.error('VIP activation error:', error);
-            if (error.message === 'INSUFFICIENT_FUNDS') { showToast('Insufficient balance to activate this investment plan.', false); }
-            else { showToast('Network error. Please try again.', false); }
+            showToast('Network error. Please try again.', false);
         }
     }
 
     async function triggerNetworkReferralReward(referrerUID, purchasedPlanCost) {
         if (!referrerUID) return;
-        const referrerRef = db.collection('users').doc(referrerUID);
+        const referrerRef = rtdb.ref('users/' + referrerUID);
         try {
-            await db.runTransaction(async (transaction) => {
-                const referrerSnap = await transaction.get(referrerRef);
-                if (!referrerSnap.exists) return;
-                const currentBalance = parseFloat(referrerSnap.data().balance || 0);
-                const currentBonusEarned = parseFloat(referrerSnap.data().referralBonusEarned || 0);
-                const directInvitesCount = parseInt(referrerSnap.data().directInvitesCount || 0);
-                const oldTeamDepositTotal = parseFloat(referrerSnap.data().teamDepositTotal || 0);
-                const teamCapitalVolume = parseFloat(referrerSnap.data().teamCapitalVolume || 0);
-                const newTeamDepositTotal = oldTeamDepositTotal + purchasedPlanCost;
-                const calculatedCommission = purchasedPlanCost * (adminSettings.referralCommissionRate || 10) / 100;
-                const finalPayoutSum = calculatedCommission;
-                transaction.update(referrerRef, {
-                    balance: currentBalance + finalPayoutSum,
-                    referralBonusEarned: currentBonusEarned + finalPayoutSum,
-                    directInvitesCount: directInvitesCount + 1,
-                    teamDepositTotal: newTeamDepositTotal,
-                    teamCapitalVolume: teamCapitalVolume + purchasedPlanCost
-                });
-                await db.collection('ledger').add({ uid: referrerUID, title: `🤝 ${adminSettings.referralCommissionRate || 10}% Direct Plan Referral Commission`, amount: finalPayoutSum, type: 'credit', timestamp: FieldValue.serverTimestamp() });
+            const snap = await referrerRef.once('value');
+            if (!snap.exists()) return;
+            const data = snap.val();
+            const currentBalance = parseFloat(data.balance || 0);
+            const currentBonusEarned = parseFloat(data.referralBonusEarned || 0);
+            const directInvitesCount = parseInt(data.directInvitesCount || 0);
+            const oldTeamDepositTotal = parseFloat(data.teamDepositTotal || 0);
+            const teamCapitalVolume = parseFloat(data.teamCapitalVolume || 0);
+            const newTeamDepositTotal = oldTeamDepositTotal + purchasedPlanCost;
+            const commission = purchasedPlanCost * (adminSettings.referralCommissionRate || 10) / 100;
+            await referrerRef.update({
+                balance: currentBalance + commission,
+                referralBonusEarned: currentBonusEarned + commission,
+                directInvitesCount: directInvitesCount + 1,
+                teamDepositTotal: newTeamDepositTotal,
+                teamCapitalVolume: teamCapitalVolume + purchasedPlanCost
+            });
+            await rtdb.ref('ledger').push({
+                uid: referrerUID,
+                title: `🤝 ${adminSettings.referralCommissionRate || 10}% Direct Plan Referral Commission`,
+                amount: commission,
+                type: 'credit',
+                timestamp: new Date().toISOString()
             });
         } catch (error) { console.error('Referral reward error:', error); }
     }
 
+    // ================================================================
+    //  DAILY CLAIM (RTDB)
+    // ================================================================
     window.executeDailyMiningCycle = async function() {
         if (isClaiming) { showToast('Please wait, processing your previous claim...', false); return; }
         if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
@@ -491,7 +563,7 @@
         if (localUserRecord.lastMiningClaimDate === todayStr) { showToast('Today\'s earnings already collected. Come back tomorrow at midnight reset.', false); return; }
         let daysRemaining = parseInt(localUserRecord.contractDaysRemaining || 0);
         if (daysRemaining <= 0) {
-            const userRef = db.collection('users').doc(activeUserSession.uid);
+            const userRef = rtdb.ref('users/' + activeUserSession.uid);
             await userRef.update({ tierCode: 'NONE', contractDaysRemaining: 0, activeDailyYield: 0 });
             showToast('Your 365‑day investment contract has expired. Please purchase a new plan.', false);
             updateClaimButtonState();
@@ -505,25 +577,29 @@
         claimBox.classList.add('claim-loading');
         document.getElementById('taskIcon').className = 'fa-solid fa-spinner fa-pulse';
         document.getElementById('taskStatusText').innerText = 'Processing...';
-        const userRef = db.collection('users').doc(activeUserSession.uid);
+        const userRef = rtdb.ref('users/' + activeUserSession.uid);
         try {
-            await db.runTransaction(async (transaction) => {
-                const snap = await transaction.get(userRef);
-                const currentBalance = parseFloat(snap.data().balance || 0);
-                let remaining = parseInt(snap.data().contractDaysRemaining || 0);
-                let newRemaining = remaining - 1;
-                if (newRemaining < 0) newRemaining = 0;
-                transaction.update(userRef, {
-                    balance: currentBalance + finalEarning,
-                    lastMiningClaimDate: todayStr,
-                    contractDaysRemaining: newRemaining
-                });
+            const snap = await userRef.once('value');
+            const currentBalance = parseFloat(snap.val().balance || 0);
+            let remaining = parseInt(snap.val().contractDaysRemaining || 0);
+            let newRemaining = remaining - 1;
+            if (newRemaining < 0) newRemaining = 0;
+            await userRef.update({
+                balance: currentBalance + finalEarning,
+                lastMiningClaimDate: todayStr,
+                contractDaysRemaining: newRemaining
             });
-            await db.collection('ledger').add({ uid: activeUserSession.uid, title: '💰 Daily Plan Returns', amount: finalEarning, type: 'credit', timestamp: FieldValue.serverTimestamp() });
+            await rtdb.ref('ledger').push({
+                uid: activeUserSession.uid,
+                title: '💰 Daily Plan Returns',
+                amount: finalEarning,
+                type: 'credit',
+                timestamp: new Date().toISOString()
+            });
             showToast('✅ Success! ₦' + finalEarning.toLocaleString() + ' added to your balance.');
-            const updatedDoc = await userRef.get();
-            if (updatedDoc.exists) {
-                localUserRecord = updatedDoc.data();
+            const updated = await userRef.once('value');
+            if (updated.exists()) {
+                localUserRecord = updated.val();
                 renderTerminalMetrics(localUserRecord);
                 updateClaimButtonState();
             }
@@ -543,24 +619,34 @@
         }
     };
 
+    // ================================================================
+    //  ATTENDANCE CHECK-IN (RTDB)
+    // ================================================================
     window.executeProfileAttendanceCheckIn = async function() {
         if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
         if (adminSettings.maintenanceMode) { showToast('System maintenance in progress. Check-in unavailable.', false); return; }
         if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { showToast('Daily attendance rewards require an active plan level.', false); return; }
         const todayStr = getNigeriaDate();
         if (localUserRecord.lastAttendanceClaimDate === todayStr) { showToast('Attendance bonus already processed for today.', false); return; }
-        const userRef = db.collection('users').doc(activeUserSession.uid);
+        const userRef = rtdb.ref('users/' + activeUserSession.uid);
         try {
-            await db.runTransaction(async (transaction) => {
-                const snap = await transaction.get(userRef);
-                const currentBalance = parseFloat(snap.data().balance || 0);
-                transaction.update(userRef, { balance: currentBalance + (adminSettings.checkinBonus || 50), lastAttendanceClaimDate: todayStr });
+            const snap = await userRef.once('value');
+            const currentBalance = parseFloat(snap.val().balance || 0);
+            await userRef.update({
+                balance: currentBalance + (adminSettings.checkinBonus || 50),
+                lastAttendanceClaimDate: todayStr
             });
-            await db.collection('ledger').add({ uid: activeUserSession.uid, title: '📅 Daily Attendance Check-In (+₦' + (adminSettings.checkinBonus || 50) + ')', amount: (adminSettings.checkinBonus || 50), type: 'credit', timestamp: FieldValue.serverTimestamp() });
+            await rtdb.ref('ledger').push({
+                uid: activeUserSession.uid,
+                title: '📅 Daily Attendance Check-In (+₦' + (adminSettings.checkinBonus || 50) + ')',
+                amount: (adminSettings.checkinBonus || 50),
+                type: 'credit',
+                timestamp: new Date().toISOString()
+            });
             showToast('✅ Verified! ₦' + (adminSettings.checkinBonus || 50) + ' credited to your balance.');
-            const updatedDoc = await userRef.get();
-            if (updatedDoc.exists) {
-                localUserRecord = updatedDoc.data();
+            const updated = await userRef.once('value');
+            if (updated.exists()) {
+                localUserRecord = updated.val();
                 renderTerminalMetrics(localUserRecord);
             }
         } catch (error) {
@@ -569,6 +655,9 @@
         }
     };
 
+    // ================================================================
+    //  BANK DETAILS (RTDB)
+    // ================================================================
     async function saveBankDetails() {
         if (!activeUserSession) return;
         const bank = document.getElementById('inputBankName').value;
@@ -581,12 +670,12 @@
         }
         window.closePortalModal('bankLockRulesPopup');
         try {
-            const userRef = db.collection('users').doc(activeUserSession.uid);
+            const userRef = rtdb.ref('users/' + activeUserSession.uid);
             await userRef.update({ bankName: bank, accountName: holder, accountNumber: num });
             showToast('✅ Payout profile successfully linked and saved.');
-            const updatedDoc = await userRef.get();
-            if (updatedDoc.exists) {
-                localUserRecord = updatedDoc.data();
+            const snap = await userRef.once('value');
+            if (snap.exists()) {
+                localUserRecord = snap.val();
                 renderTerminalMetrics(localUserRecord);
             }
         } catch (error) {
@@ -600,21 +689,24 @@
         copyTextToClipboard(textToCopy, '📋 Referral tracking URL copied to clipboard!');
     }
 
+    // ================================================================
+    //  VOUCHER SYSTEM (RTDB)
+    // ================================================================
     async function loadVoucherHistory() {
         if (!activeUserSession) return;
         try {
-            const historyQuery = db.collection('voucherRedemptions').where('userId', '==', activeUserSession.uid);
-            const snapshot = await historyQuery.get();
+            const snap = await rtdb.ref('voucherRedemptions').orderByChild('userId').equalTo(activeUserSession.uid).once('value');
             const historySection = document.getElementById('voucherHistorySection');
             const historyList = document.getElementById('voucherHistoryList');
             if (!historySection || !historyList) return;
-            if (snapshot.empty) { historySection.style.display = 'none'; return; }
+            if (!snap.exists()) { historySection.style.display = 'none'; return; }
             const items = [];
-            snapshot.forEach(docSnap => {
-                const redemption = docSnap.data();
-                const timestamp = redemption.timestamp?.toDate() || new Date(0);
+            const data = snap.val();
+            for (const key in data) {
+                const redemption = data[key];
+                const timestamp = redemption.timestamp ? new Date(redemption.timestamp) : new Date(0);
                 items.push({ redemption, timestamp });
-            });
+            }
             items.sort((a, b) => b.timestamp - a.timestamp);
             const recent = items.slice(0, 5);
             historySection.style.display = 'block';
@@ -646,40 +738,34 @@
         claimBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
         claimBtn.disabled = true;
         try {
-            const voucherQuery = db.collection('progressiveVouchers').where('code', '==', code);
-            const voucherSnapshot = await voucherQuery.get();
-            if (voucherSnapshot.empty) { showToast('❌ Invalid voucher code.', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-            const voucherDoc = voucherSnapshot.docs[0];
-            const voucher = voucherDoc.data();
+            const voucherSnap = await rtdb.ref('progressiveVouchers').orderByChild('code').equalTo(code).once('value');
+            if (!voucherSnap.exists()) { showToast('❌ Invalid voucher code.', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
+            const voucherKey = Object.keys(voucherSnap.val())[0];
+            const voucher = voucherSnap.val()[voucherKey];
             if (!voucher.isActive || voucher.isFullyClaimed) { showToast('❌ This voucher has been fully claimed!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-            if (voucher.expiry && voucher.expiry.toDate() < new Date()) { showToast('❌ This voucher has expired!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
+            if (voucher.expiry && new Date(voucher.expiry) < new Date()) { showToast('❌ This voucher has expired!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
             if (voucher.claimedBy && voucher.claimedBy.includes(activeUserSession.uid)) { showToast('❌ You have already claimed this voucher!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
             const currentIndex = voucher.currentClaimIndex || 0;
             const claimAmount = voucher.splitAmounts[currentIndex];
             if (!claimAmount || claimAmount <= 0) { showToast('❌ Voucher error - no remaining value', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
-            const userRef = db.collection('users').doc(activeUserSession.uid);
-            await db.runTransaction(async (transaction) => {
-                const freshVoucher = await transaction.get(voucherDoc.ref);
-                const freshData = freshVoucher.data();
-                if (freshData.isFullyClaimed || freshData.remainingClaims <= 0) throw new Error('Voucher fully claimed');
-                const userSnap = await transaction.get(userRef);
-                const currentBalance = parseFloat(userSnap.data().balance || 0);
-                transaction.update(userRef, { balance: currentBalance + claimAmount });
-                const newRemainingClaims = freshData.remainingClaims - 1;
-                const newRemainingAmount = freshData.remainingAmount - claimAmount;
-                const newClaimIndex = freshData.currentClaimIndex + 1;
-                const newClaimedBy = [...(freshData.claimedBy || []), activeUserSession.uid];
-                const newClaimedAmounts = [...(freshData.claimedAmounts || []), claimAmount];
-                transaction.update(voucherDoc.ref, {
-                    remainingClaims: newRemainingClaims,
-                    remainingAmount: newRemainingAmount,
-                    currentClaimIndex: newClaimIndex,
-                    claimedBy: newClaimedBy,
-                    claimedAmounts: newClaimedAmounts,
-                    isFullyClaimed: newRemainingClaims === 0
-                });
+            const userRef = rtdb.ref('users/' + activeUserSession.uid);
+            const userSnap = await userRef.once('value');
+            const currentBalance = parseFloat(userSnap.val().balance || 0);
+            await userRef.update({ balance: currentBalance + claimAmount });
+            const newRemainingClaims = voucher.remainingClaims - 1;
+            const newRemainingAmount = voucher.remainingAmount - claimAmount;
+            const newClaimIndex = voucher.currentClaimIndex + 1;
+            const newClaimedBy = [...(voucher.claimedBy || []), activeUserSession.uid];
+            const newClaimedAmounts = [...(voucher.claimedAmounts || []), claimAmount];
+            await rtdb.ref('progressiveVouchers/' + voucherKey).update({
+                remainingClaims: newRemainingClaims,
+                remainingAmount: newRemainingAmount,
+                currentClaimIndex: newClaimIndex,
+                claimedBy: newClaimedBy,
+                claimedAmounts: newClaimedAmounts,
+                isFullyClaimed: newRemainingClaims === 0
             });
-            await db.collection('voucherRedemptions').add({
+            await rtdb.ref('voucherRedemptions').push({
                 voucherCode: code,
                 voucherName: voucher.name || 'Gift Card',
                 userId: activeUserSession.uid,
@@ -688,9 +774,15 @@
                 amountClaimed: claimAmount,
                 claimNumber: voucher.currentClaimIndex + 1,
                 totalClaims: voucher.totalPeople,
-                timestamp: FieldValue.serverTimestamp()
+                timestamp: new Date().toISOString()
             });
-            await db.collection('ledger').add({ uid: activeUserSession.uid, title: `🎫 Voucher Claim: ${code} - ${voucher.name || 'Gift Card'}`, amount: claimAmount, type: 'credit', timestamp: FieldValue.serverTimestamp() });
+            await rtdb.ref('ledger').push({
+                uid: activeUserSession.uid,
+                title: `🎫 Voucher Claim: ${code} - ${voucher.name || 'Gift Card'}`,
+                amount: claimAmount,
+                type: 'credit',
+                timestamp: new Date().toISOString()
+            });
             claimBtn.innerHTML = originalText;
             claimBtn.disabled = false;
             await Swal.fire({
@@ -705,9 +797,9 @@
             document.getElementById('voucherCodeField').value = '';
             window.closePortalModal('couponModalPopup');
             await loadVoucherHistory();
-            const updatedDoc = await userRef.get();
-            if (updatedDoc.exists) {
-                localUserRecord = updatedDoc.data();
+            const updated = await userRef.once('value');
+            if (updated.exists()) {
+                localUserRecord = updated.val();
                 renderTerminalMetrics(localUserRecord);
             }
         } catch (error) {
@@ -718,32 +810,9 @@
         }
     }
 
-    function initOneTimeApkButton() {
-        const apkBtn = document.getElementById('oneTimeApkButton');
-        if (!apkBtn) return;
-        const alreadyInstalled = localStorage.getItem('nexus_apk_installed') === 'true';
-        if (alreadyInstalled) { apkBtn.style.display = 'none'; return; }
-        apkBtn.style.display = 'flex';
-        apkBtn.onclick = function(e) {
-            e.stopPropagation();
-            const link = document.createElement('a');
-            link.href = 'nexus-earn.apk';
-            link.download = 'nexus-earn.apk';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            localStorage.setItem('nexus_apk_installed', 'true');
-            apkBtn.style.display = 'none';
-            showToast('✅ Download started. Your app will be saved.', true);
-        };
-    }
-
-    const originalOpenPortalModal = window.openPortalModal;
-    window.openPortalModal = function(id) {
-        originalOpenPortalModal(id);
-        if (id === 'couponModalPopup') { initOneTimeApkButton(); }
-    };
-
+    // ================================================================
+    //  LOGOUT
+    // ================================================================
     window.logout = async function() {
         const result = await Swal.fire({
             title: '⚠️ Confirm Logout',
@@ -764,6 +833,9 @@
         }
     };
 
+    // ================================================================
+    //  EVENT LISTENERS
+    // ================================================================
     function bindEventListeners() {
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) logoutBtn.addEventListener('click', window.logout);
@@ -812,9 +884,8 @@
     }
 
     // ================================================================
-    //  SECTION 12: 🎯 REDIRECT TO INFO (ONCE PER SESSION – FIXED)
+    //  REDIRECT LOGIC (FIXED)
     // ================================================================
-
     function shouldRedirectToInfo() {
         const currentPath = window.location.pathname;
         const isOnInfoPage = currentPath.includes('info.html') || currentPath === '/' || currentPath === '';
@@ -823,9 +894,8 @@
     }
 
     // ================================================================
-    //  SECTION 13: AUTHENTICATION & INIT
+    //  AUTHENTICATION & INIT
     // ================================================================
-
     function initApp() {
         bindEventListeners();
         startMidnightCountdownTracker();
@@ -843,23 +913,15 @@
                     return;
                 }
 
-                if (dbSnapshotUnsubscriber) {
-                    dbSnapshotUnsubscriber();
-                    dbSnapshotUnsubscriber = null;
+                if (dbListener) {
+                    dbListener.off();
+                    dbListener = null;
                 }
 
-                const userDocRef = db.collection('users').doc(user.uid);
-                dbSnapshotUnsubscriber = userDocRef.onSnapshot(async (snapshot) => {
-                    if (snapshot.exists) {
-                        localUserRecord = snapshot.data();
-                        const updates = {};
-                        if (localUserRecord.firstReferralBonusPaid !== undefined) { updates.firstReferralBonusPaid = FieldValue.deleteField(); }
-                        if (localUserRecord.extraReferral300 !== undefined) { updates.extraReferral300 = FieldValue.deleteField(); }
-                        if (Object.keys(updates).length > 0) {
-                            await userDocRef.update(updates);
-                            const refreshedSnap = await userDocRef.get();
-                            if (refreshedSnap.exists) { localUserRecord = refreshedSnap.data(); }
-                        }
+                const userRef = rtdb.ref('users/' + user.uid);
+                userRef.on('value', async (snapshot) => {
+                    if (snapshot.exists()) {
+                        localUserRecord = snapshot.val();
                         renderTerminalMetrics(localUserRecord);
                         loadTeamBreakdownNetwork(user.uid);
                         loadVoucherHistory();
@@ -870,12 +932,10 @@
                             if (document.getElementById('viewHome').classList.contains('active-view')) showReminderModalOnce();
                         }, 500);
                     } else {
-                        // ================================================
-                        // ⭐ FALLBACK: CREATE MISSING USER DOCUMENT
-                        // ================================================
+                        // Fallback: create user document
                         console.warn('⚠️ User document missing – creating one now...');
                         try {
-                            await userDocRef.set({
+                            await userRef.set({
                                 uid: user.uid,
                                 username: user.email?.split('@')[0] || 'Investor',
                                 email: user.email || '',
@@ -893,22 +953,19 @@
                                 contractDaysRemaining: 0,
                                 activeDailyYield: 0,
                                 status: 'active',
-                                createdAt: FieldValue.serverTimestamp()
+                                createdAt: new Date().toISOString()
                             });
                             showToast('✅ Account repaired. Reloading...', true);
                             setTimeout(() => window.location.reload(), 1500);
                         } catch (err) {
                             console.error('Failed to create user document:', err);
                             showToast('Account data error. Please contact support.', false);
-                            // Redirect to login as last resort
                             setTimeout(() => window.location.href = 'login.html', 2000);
                         }
                         return;
                     }
-                }, (error) => {
-                    console.error('User document listener error:', error);
-                    showToast('Error loading user data. Please refresh.', false);
                 });
+                dbListener = userRef;
 
                 loadAdminSettings();
                 listenToAdminSettings();
@@ -921,15 +978,15 @@
     }
 
     // ================================================================
-    //  SECTION 14: START
+    //  START
     // ================================================================
-
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initApp);
     } else {
         initApp();
     }
 
+    // Expose functions
     window.showToast = showToast;
     window.executeDailyMiningCycle = executeDailyMiningCycle;
     window.executeProfileAttendanceCheckIn = executeProfileAttendanceCheckIn;
@@ -941,5 +998,5 @@
     window.closePortalModal = closePortalModal;
     window.copyTextToClipboard = copyTextToClipboard;
 
-    console.log('🚀 NEXUS EARN Dashboard JS loaded successfully.');
+    console.log('🚀 NEXUS EARN Dashboard JS (RTDB) loaded successfully.');
 })();

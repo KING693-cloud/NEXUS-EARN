@@ -31,13 +31,11 @@
     <meta name="twitter:description" content="Earn daily from ₦500 to ₦2,048,000. Secure bank deposits, 10% referral commission, instant approvals." />
     <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
 
-    <!-- ---- Google AdSense (place your publisher ID below) ---- -->
-    <!-- ============================================================
-         🔴 REPLACE 'ca-pub-XXXXXXXXXXXXXXXX' WITH YOUR OWN ID
-         ============================================================ -->
+    <!-- ---- Google AdSense (disabled for now) ---- -->
+    <!--
     <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    <!-- If AdSense is not yet active, the script simply won't load – no blank spaces. -->
+    -->
 
     <!-- ---- Fonts & Icons ---- -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -46,17 +44,15 @@
     <!-- ---- SweetAlert2 (for all pages) ---- -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- ---- Firebase (compat) – loaded globally for all pages ---- -->
+    <!-- ---- Firebase (compat) – loaded globally ---- -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <!-- ---- Global Firebase Config (centralised) ---- -->
+    <!-- ---- Global Firebase Config + Init (centralised) ---- -->
     <script>
         // ============================================================
         //  FIREBASE CONFIG – SAME FOR ALL PAGES
-        //  DO NOT DUPLICATE – USE THIS SINGLE SOURCE
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -64,14 +60,19 @@
             projectId: "nexus-earn-1",
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"   // ← Correct region
         };
+
         // Initialize only once (guard against multiple inclusions)
         if (!window._firebaseInitialized) {
             firebase.initializeApp(firebaseConfig);
             window._firebaseInitialized = true;
             console.log("🔥 Firebase initialised from master header.");
         }
+
+        // Expose auth and rtdb for all pages (optional)
+        // (You can also access them directly via firebase.auth() and firebase.database())
     </script>
 
     <!-- ---- Base CSS (shared across all pages) ---- -->
@@ -98,7 +99,7 @@
             transition: background-color 0.3s ease, color 0.2s ease;
         }
 
-        /* ---- Light mode overrides (will be extended by each page) ---- */
+        /* ---- Light mode overrides ---- */
         body.light-mode {
             background-color: #f0f2f8 !important;
             color: #1a1e2e;
@@ -116,7 +117,7 @@
             border-radius: 4px;
         }
 
-        /* ---- Minimal header preview (visible only if file opened directly) ---- */
+        /* ---- Minimal preview when header.html is opened directly ---- */
         .header-preview-placeholder {
             display: none;
         }
@@ -164,7 +165,7 @@
          ============================================================ -->
     <div class="header-preview-placeholder">
         <h1>NEXUS EARN</h1>
-        <p>Master header file – contains all meta tags, AdSense, fonts, Firebase config, and global styles.</p>
+        <p>Master header file – contains all meta tags, fonts, Firebase config, and global styles.</p>
         <p style="font-size:0.8rem;color:#6b7280;margin-top:8px;">
             <i class="fa-solid fa-code"></i> Include this file in every page's <code>&lt;head&gt;</code> section.
         </p>

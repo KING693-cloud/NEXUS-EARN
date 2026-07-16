@@ -31,10 +31,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Firebase (compat) -->
+    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         /* ============================================================
@@ -135,28 +135,15 @@
 
         /* ---- Animations ---- */
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         /* ---- Top Bar ---- */
@@ -873,11 +860,11 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT – Fetch, Merge, Filter, Render (No Index Errors)
+    JAVASCRIPT – RTDB Version (fetch from 3 nodes, client‑side sort)
     ============================================================ -->
     <script>
         // ============================================================
-        // FIREBASE CONFIG
+        // FIREBASE CONFIG – CORRECT REGION URL
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -885,11 +872,12 @@
             projectId: "nexus-earn-1",
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const rtdb = firebase.database();
 
         // ============================================================
         // GLOBALS
@@ -989,12 +977,10 @@
             const query = searchInput.value.toLowerCase().trim();
             let filtered = [...allTransactions];
 
-            // Filter by type
             if (currentFilter !== 'all') {
                 filtered = filtered.filter(tx => tx.type === currentFilter);
             }
 
-            // Filter by search query
             if (query) {
                 filtered = filtered.filter(tx => {
                     const title = (tx.title || '').toLowerCase();
@@ -1010,10 +996,9 @@
         }
 
         // ============================================================
-        // UPDATE STATS (from filtered list or all)
+        // UPDATE STATS
         // ============================================================
         function updateStats(transactions) {
-            // If no transactions passed, use allTransactions
             const list = transactions || allTransactions;
             let totalEarned = 0;
             let totalDeposited = 0;
@@ -1120,7 +1105,7 @@
         }
 
         // ============================================================
-        // LOAD ALL HISTORY (NO ORDER BY – client‑side sort)
+        // LOAD ALL HISTORY (RTDB – no orderBy, client‑side sort)
         // ============================================================
         async function loadAllHistory(uid) {
             if (isLoading) return;
@@ -1136,107 +1121,111 @@
             `;
 
             try {
-                // 1. Fetch Ledger (earnings, bonuses, VIP activations)
-                const ledgerSnap = await db.collection('ledger').where('uid', '==', uid).get();
-                // 2. Fetch Withdrawals
-                const withdrawalsSnap = await db.collection('withdrawals').where('uid', '==', uid).get();
-                // 3. Fetch Deposits
-                const depositsSnap = await db.collection('deposits').where('uid', '==', uid).get();
-
                 const combined = [];
 
-                // Process Ledger
-                ledgerSnap.forEach(doc => {
-                    const data = doc.data();
-                    let type = 'earning';
-                    let title = data.title || 'Transaction';
-                    const lowerTitle = title.toLowerCase();
+                // 1. Ledger (earnings, bonuses, VIP activations)
+                const ledgerSnap = await rtdb.ref('ledger').orderByChild('uid').equalTo(uid).once('value');
+                if (ledgerSnap.exists()) {
+                    const data = ledgerSnap.val();
+                    for (const key in data) {
+                        const item = data[key];
+                        let type = 'earning';
+                        let title = item.title || 'Transaction';
+                        const lowerTitle = title.toLowerCase();
 
-                    if (lowerTitle.includes('welcome') || lowerTitle.includes('bonus')) {
-                        type = 'bonus';
-                    } else if (lowerTitle.includes('activated vip') || lowerTitle.includes('vip 1') ||
-                        lowerTitle.includes('vip 2') || lowerTitle.includes('vip 3') ||
-                        lowerTitle.includes('vip 4') || lowerTitle.includes('vip 5') ||
-                        lowerTitle.includes('vip 6') || lowerTitle.includes('vip 7') ||
-                        lowerTitle.includes('vip 8') || lowerTitle.includes('vip 9') ||
-                        lowerTitle.includes('vip 10') || lowerTitle.includes('vip 11') ||
-                        lowerTitle.includes('vip 12') || lowerTitle.includes('vip 13') ||
-                        lowerTitle.includes('starter') || lowerTitle.includes('bronze') ||
-                        lowerTitle.includes('silver') || lowerTitle.includes('gold')) {
-                        type = 'activation';
-                    } else if (lowerTitle.includes('daily plan') || lowerTitle.includes('daily mining') ||
-                        lowerTitle.includes('daily claim')) {
-                        type = 'earning';
-                    } else if (lowerTitle.includes('referral')) {
-                        type = 'bonus';
+                        if (lowerTitle.includes('welcome') || lowerTitle.includes('bonus')) {
+                            type = 'bonus';
+                        } else if (lowerTitle.includes('activated vip') || lowerTitle.includes('vip 1') ||
+                            lowerTitle.includes('vip 2') || lowerTitle.includes('vip 3') ||
+                            lowerTitle.includes('vip 4') || lowerTitle.includes('vip 5') ||
+                            lowerTitle.includes('vip 6') || lowerTitle.includes('vip 7') ||
+                            lowerTitle.includes('vip 8') || lowerTitle.includes('vip 9') ||
+                            lowerTitle.includes('vip 10') || lowerTitle.includes('vip 11') ||
+                            lowerTitle.includes('vip 12') || lowerTitle.includes('vip 13') ||
+                            lowerTitle.includes('starter') || lowerTitle.includes('bronze') ||
+                            lowerTitle.includes('silver') || lowerTitle.includes('gold')) {
+                            type = 'activation';
+                        } else if (lowerTitle.includes('daily plan') || lowerTitle.includes('daily mining') ||
+                            lowerTitle.includes('daily claim')) {
+                            type = 'earning';
+                        } else if (lowerTitle.includes('referral')) {
+                            type = 'bonus';
+                        }
+
+                        const amount = parseFloat(item.amount) || 0;
+                        const finalAmount = type === 'activation' ? -Math.abs(amount) : Math.abs(amount);
+                        const date = item.timestamp ? new Date(item.timestamp) : new Date(0);
+
+                        combined.push({
+                            id: key,
+                            title: title,
+                            amount: finalAmount,
+                            grossAmount: finalAmount,
+                            date: date,
+                            type: type,
+                            status: 'completed',
+                            reason: null,
+                            narrationCode: null,
+                            bankName: null,
+                            raw: item
+                        });
                     }
+                }
 
-                    const amount = parseFloat(data.amount) || 0;
-                    // For activations, amount is negative (debit)
-                    const finalAmount = type === 'activation' ? -Math.abs(amount) : Math.abs(amount);
-                    const date = data.timestamp ? data.timestamp.toDate() : new Date(0);
+                // 2. Withdrawals
+                const withdrawalsSnap = await rtdb.ref('withdrawals').orderByChild('uid').equalTo(uid).once('value');
+                if (withdrawalsSnap.exists()) {
+                    const data = withdrawalsSnap.val();
+                    for (const key in data) {
+                        const item = data[key];
+                        const gross = parseFloat(item.grossAmount) || 0;
+                        const tax = parseFloat(item.taxWithheld) || (gross * 0.10);
+                        const net = parseFloat(item.netAmount) || (gross - tax);
+                        const date = item.timestamp ? new Date(item.timestamp) : new Date(0);
 
-                    combined.push({
-                        id: doc.id,
-                        title: title,
-                        amount: finalAmount,
-                        grossAmount: finalAmount,
-                        date: date,
-                        type: type,
-                        status: 'completed',
-                        reason: null,
-                        narrationCode: null,
-                        bankName: null,
-                        raw: data
-                    });
-                });
+                        combined.push({
+                            id: key,
+                            title: '💰 Withdrawal Request',
+                            amount: -Math.abs(net),
+                            grossAmount: gross,
+                            netAmount: net,
+                            taxWithheld: tax,
+                            date: date,
+                            type: 'withdrawal',
+                            status: item.status || 'pending',
+                            reason: item.reason || item.rejectionReason || null,
+                            narrationCode: null,
+                            bankName: item.bankName || 'Unknown Bank',
+                            raw: item
+                        });
+                    }
+                }
 
-                // Process Withdrawals
-                withdrawalsSnap.forEach(doc => {
-                    const data = doc.data();
-                    const gross = parseFloat(data.grossAmount) || 0;
-                    const tax = parseFloat(data.taxWithheld) || (gross * 0.10);
-                    const net = parseFloat(data.netAmount) || (gross - tax);
-                    const date = data.timestamp ? data.timestamp.toDate() : new Date(0);
+                // 3. Deposits
+                const depositsSnap = await rtdb.ref('deposits').orderByChild('uid').equalTo(uid).once('value');
+                if (depositsSnap.exists()) {
+                    const data = depositsSnap.val();
+                    for (const key in data) {
+                        const item = data[key];
+                        const amount = parseFloat(item.amount) || 0;
+                        const date = item.timestamp ? new Date(item.timestamp) : new Date(0);
 
-                    combined.push({
-                        id: doc.id,
-                        title: '💰 Withdrawal Request',
-                        amount: -Math.abs(net),
-                        grossAmount: gross,
-                        netAmount: net,
-                        taxWithheld: tax,
-                        date: date,
-                        type: 'withdrawal',
-                        status: data.status || 'pending',
-                        reason: data.reason || data.rejectionReason || null,
-                        narrationCode: null,
-                        bankName: data.bankName || 'Unknown Bank',
-                        raw: data
-                    });
-                });
-
-                // Process Deposits
-                depositsSnap.forEach(doc => {
-                    const data = doc.data();
-                    const amount = parseFloat(data.amount) || 0;
-                    const date = data.timestamp ? data.timestamp.toDate() : new Date(0);
-
-                    combined.push({
-                        id: doc.id,
-                        title: '🏦 Bank Deposit',
-                        amount: Math.abs(amount),
-                        grossAmount: amount,
-                        date: date,
-                        type: 'deposit',
-                        status: data.status || 'pending',
-                        reason: data.reason || null,
-                        narrationCode: data.narrationCode || null,
-                        bankName: 'PalmPay',
-                        senderName: data.senderName || 'Unknown',
-                        raw: data
-                    });
-                });
+                        combined.push({
+                            id: key,
+                            title: '🏦 Bank Deposit',
+                            amount: Math.abs(amount),
+                            grossAmount: amount,
+                            date: date,
+                            type: 'deposit',
+                            status: item.status || 'pending',
+                            reason: item.reason || null,
+                            narrationCode: item.narrationCode || null,
+                            bankName: 'PalmPay',
+                            senderName: item.senderName || 'Unknown',
+                            raw: item
+                        });
+                    }
+                }
 
                 // Sort by date descending (newest first)
                 combined.sort((a, b) => b.date - a.date);
@@ -1262,7 +1251,7 @@
         }
 
         // ============================================================
-        // AUTH CHECK + REAL‑TIME UPDATES
+        // AUTH + REAL‑TIME UPDATES
         // ============================================================
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
@@ -1280,10 +1269,10 @@
             currentUser = user;
             await loadAllHistory(user.uid);
 
-            // Real‑time listeners (without orderBy) – refresh on any change
-            const collections = ['ledger', 'withdrawals', 'deposits'];
-            collections.forEach(col => {
-                db.collection(col).where('uid', '==', user.uid).onSnapshot(() => {
+            // Real‑time listeners on all three nodes (without orderBy on timestamp – we sort client‑side)
+            const nodes = ['ledger', 'withdrawals', 'deposits'];
+            nodes.forEach(node => {
+                rtdb.ref(node).orderByChild('uid').equalTo(user.uid).on('value', () => {
                     loadAllHistory(user.uid);
                 });
             });

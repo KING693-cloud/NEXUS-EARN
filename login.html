@@ -31,10 +31,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Firebase (compat) -->
+    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         /* ============================================================
@@ -928,7 +928,7 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // FIREBASE CONFIG (same as header)
+        // FIREBASE CONFIG – CORRECT REGION URL
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -936,14 +936,15 @@
             projectId: "nexus-earn-1",
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
+            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
+        const rtdb = firebase.database();
 
         // ============================================================
-        // TOAST SYSTEM
+        // TOAST
         // ============================================================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
@@ -958,24 +959,7 @@
         }
 
         // ============================================================
-        // SWEET ALERT WRAPPER
-        // ============================================================
-        async function showSweetAlert(title, message, icon, timer = 3000) {
-            return Swal.fire({
-                title: title,
-                html: message,
-                icon: icon,
-                background: '#111424',
-                color: '#fff',
-                confirmButtonColor: '#e5b842',
-                timer: timer,
-                showConfirmButton: true,
-                backdrop: 'rgba(0,0,0,0.8)'
-            });
-        }
-
-        // ============================================================
-        // DARK MODE TOGGLE (persist)
+        // DARK MODE
         // ============================================================
         (function() {
             const toggle = document.getElementById('darkModeToggle');
@@ -1019,7 +1003,7 @@
         });
 
         // ============================================================
-        // LOGIN FORM SUBMIT (preserved logic, enhanced UI)
+        // LOGIN FORM SUBMIT
         // ============================================================
         document.getElementById('nexusLoginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1031,11 +1015,27 @@
 
             // --- Basic Validation ---
             if (!inputVal || !password) {
-                await showSweetAlert('Missing Fields', 'Please enter both your identifier and password.', 'warning', 2500);
+                await Swal.fire({
+                    title: 'Missing Fields',
+                    text: 'Please enter both your identifier and password.',
+                    icon: 'warning',
+                    background: '#111424',
+                    color: '#fff',
+                    confirmButtonColor: '#e5b842',
+                    timer: 2000
+                });
                 return;
             }
             if (password.length < 4) {
-                await showSweetAlert('Invalid Password', 'Password must be at least 4 characters.', 'error', 2500);
+                await Swal.fire({
+                    title: 'Invalid Password',
+                    text: 'Password must be at least 4 characters.',
+                    icon: 'error',
+                    background: '#111424',
+                    color: '#fff',
+                    confirmButtonColor: '#e5b842',
+                    timer: 2000
+                });
                 return;
             }
 
@@ -1051,7 +1051,15 @@
                 if (inputVal.includes('@')) {
                     // Email
                     if (!inputVal.toLowerCase().endsWith('@gmail.com')) {
-                        await showSweetAlert('Invalid Email', 'Please use a valid Gmail address (@gmail.com).', 'error', 2500);
+                        await Swal.fire({
+                            title: 'Invalid Email',
+                            text: 'Please use a valid Gmail address (@gmail.com).',
+                            icon: 'error',
+                            background: '#111424',
+                            color: '#fff',
+                            confirmButtonColor: '#e5b842',
+                            timer: 2000
+                        });
                         loginBtn.disabled = false;
                         loginBtn.innerHTML = originalText;
                         return;
@@ -1065,30 +1073,58 @@
                         phoneDigits = phoneDigits.substring(1);
                     }
                     const formattedPhone = "234" + phoneDigits;
-                    const phoneQuery = await db.collection('users').where('phone', '==', formattedPhone).get();
-                    if (phoneQuery.empty) {
-                        await showSweetAlert('Account Not Found', 'No account found with this phone number.', 'error', 3000);
+                    const phoneQuery = await rtdb.ref('users').orderByChild('phone').equalTo(formattedPhone).once('value');
+                    if (!phoneQuery.exists()) {
+                        await Swal.fire({
+                            title: 'Account Not Found',
+                            text: 'No account found with this phone number.',
+                            icon: 'error',
+                            background: '#111424',
+                            color: '#fff',
+                            confirmButtonColor: '#e5b842',
+                            timer: 2000
+                        });
                         loginBtn.disabled = false;
                         loginBtn.innerHTML = originalText;
                         return;
                     }
-                    targetEmail = phoneQuery.docs[0].data().email;
+                    const data = phoneQuery.val();
+                    const firstKey = Object.keys(data)[0];
+                    targetEmail = data[firstKey].email;
                     foundVia = "phone";
                 } else {
                     // Username
-                    const userQuery = await db.collection('users').where('username', '==', inputVal.toLowerCase()).get();
-                    if (userQuery.empty) {
-                        await showSweetAlert('Account Not Found', 'No account found with this username.', 'error', 3000);
+                    const userQuery = await rtdb.ref('users').orderByChild('username').equalTo(inputVal.toLowerCase()).once('value');
+                    if (!userQuery.exists()) {
+                        await Swal.fire({
+                            title: 'Account Not Found',
+                            text: 'No account found with this username.',
+                            icon: 'error',
+                            background: '#111424',
+                            color: '#fff',
+                            confirmButtonColor: '#e5b842',
+                            timer: 2000
+                        });
                         loginBtn.disabled = false;
                         loginBtn.innerHTML = originalText;
                         return;
                     }
-                    targetEmail = userQuery.docs[0].data().email;
+                    const data = userQuery.val();
+                    const firstKey = Object.keys(data)[0];
+                    targetEmail = data[firstKey].email;
                     foundVia = "username";
                 }
 
                 if (!targetEmail) {
-                    await showSweetAlert('Account Not Found', 'No account found with the provided credentials.', 'error', 3000);
+                    await Swal.fire({
+                        title: 'Account Not Found',
+                        text: 'No account found with the provided credentials.',
+                        icon: 'error',
+                        background: '#111424',
+                        color: '#fff',
+                        confirmButtonColor: '#e5b842',
+                        timer: 2000
+                    });
                     loginBtn.disabled = false;
                     loginBtn.innerHTML = originalText;
                     return;
@@ -1098,36 +1134,53 @@
                 const userCredential = await auth.signInWithEmailAndPassword(targetEmail, password);
                 const user = userCredential.user;
 
-                // 3. Verify user document exists and check status
-                const userSnap = await db.collection('users').where('uid', '==', user.uid).get();
-                if (userSnap.empty) {
-                    await showSweetAlert('Account Error', 'Account data not found. Please contact support.', 'error', 3000);
+                // 3. Verify user document exists in RTDB and check status
+                const userSnap = await rtdb.ref('users/' + user.uid).once('value');
+                if (!userSnap.exists()) {
+                    await Swal.fire({
+                        title: 'Account Error',
+                        text: 'Account data not found. Please contact support.',
+                        icon: 'error',
+                        background: '#111424',
+                        color: '#fff',
+                        confirmButtonColor: '#e5b842',
+                        timer: 3000
+                    });
                     loginBtn.disabled = false;
                     loginBtn.innerHTML = originalText;
                     return;
                 }
 
-                const userData = userSnap.docs[0].data();
+                const userData = userSnap.val();
                 if (userData.status === 'suspended') {
-                    await showSweetAlert(
-                        'Account Suspended',
-                        'Your account has been suspended. Please contact customer support for assistance.',
-                        'error',
-                        3500
-                    );
+                    await Swal.fire({
+                        title: 'Account Suspended',
+                        text: 'Your account has been suspended. Please contact customer support for assistance.',
+                        icon: 'error',
+                        background: '#111424',
+                        color: '#fff',
+                        confirmButtonColor: '#e5b842',
+                        timer: 3500
+                    });
                     loginBtn.disabled = false;
                     loginBtn.innerHTML = originalText;
                     return;
                 }
 
                 // 4. Success
-                await showSweetAlert(
-                    'Login Successful!',
-                    `Welcome back, <strong>${userData.username || 'Investor'}</strong>! Redirecting to your dashboard...`,
-                    'success',
-                    2000
-                );
+                await Swal.fire({
+                    title: 'Login Successful!',
+                    html: `Welcome back, <strong>${userData.username || 'Investor'}</strong>! Redirecting to your dashboard...`,
+                    icon: 'success',
+                    background: '#111424',
+                    color: '#fff',
+                    confirmButtonColor: '#e5b842',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
 
+                // Clear any old info flag so user sees info page again if needed
+                sessionStorage.removeItem('nexusInfoShown');
                 setTimeout(() => {
                     window.location.href = 'info.html?redirect=dashboard.html';
                 }, 1800);
@@ -1146,7 +1199,15 @@
                 } else if (error.code === 'auth/network-request-failed') {
                     msg = 'Network error. Please check your internet connection.';
                 }
-                await showSweetAlert('Login Failed', msg, 'error', 3500);
+                await Swal.fire({
+                    title: 'Login Failed',
+                    text: msg,
+                    icon: 'error',
+                    background: '#111424',
+                    color: '#fff',
+                    confirmButtonColor: '#e5b842',
+                    timer: 3500
+                });
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = originalText;
             }
