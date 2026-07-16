@@ -121,34 +121,16 @@
 
         /* ---- Animations ---- */
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.02);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ---- Top Bar (Logo + Dark Mode + Login) ---- */
@@ -744,25 +726,15 @@
             display: inline-block;
         }
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         /* ---- Responsive tweaks ---- */
         @media (max-width: 420px) {
-            .steps-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            .vip-preview-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .hero-banner h1 {
-                font-size: 1.3rem;
-            }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .vip-preview-grid { grid-template-columns: 1fr 1fr; }
+            .hero-banner h1 { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -801,289 +773,88 @@
         <section class="hero-banner">
             <img src="logo.png" alt="NEXUS EARN" class="logo-img" onerror="this.style.display='none';" />
             <h1>Start Earning <span class="gold">₦500 Daily</span> with Just <span class="gold">₦15,500</span></h1>
-            <p class="subtitle">
-                365‑day contracts • VIP 1–13 • Daily payouts up to ₦2,048,000
-            </p>
-            <div class="bonus-badge">
-                <i class="fa-solid fa-gift"></i> ₦500 SIGNUP BONUS
-            </div>
+            <p class="subtitle">365‑day contracts • VIP 1–13 • Daily payouts up to ₦2,048,000</p>
+            <div class="bonus-badge"><i class="fa-solid fa-gift"></i> ₦500 SIGNUP BONUS</div>
         </section>
 
         <!-- ---- TRUST BAR ---- -->
         <div class="trust-bar">
-            <div class="trust-item">
-                <i class="fa-solid fa-shield-halved"></i>
-                <strong>Licensed</strong>
-                <span>CBN &amp; NDIC Insured</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-clock"></i>
-                <strong>365 Days</strong>
-                <span>Full Contract Term</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-users"></i>
-                <strong>10K+</strong>
-                <span>Active Investors</span>
-            </div>
+            <div class="trust-item"><i class="fa-solid fa-shield-halved"></i><strong>Licensed</strong><span>CBN &amp; NDIC Insured</span></div>
+            <div class="trust-item"><i class="fa-solid fa-clock"></i><strong>365 Days</strong><span>Full Contract Term</span></div>
+            <div class="trust-item"><i class="fa-solid fa-users"></i><strong>10K+</strong><span>Active Investors</span></div>
         </div>
 
         <!-- ---- CONTENT ---- -->
         <main class="content">
 
-            <!-- ============================================================
-            SECTION 1 – HOW IT WORKS
-            ============================================================ -->
+            <!-- SECTION 1 – HOW IT WORKS -->
             <div>
                 <h2 class="section-title"><i class="fa-solid fa-route"></i> How It Works</h2>
                 <p class="section-sub">Get started in 4 simple steps and watch your earnings grow daily.</p>
                 <div class="steps-grid">
-                    <div class="step-card">
-                        <span class="step-num">STEP 1</span>
-                        <i class="fa-solid fa-user-plus"></i>
-                        <h4>Create Account</h4>
-                        <div class="step-desc">Sign up free &amp; get ₦500 welcome bonus instantly.</div>
-                    </div>
-                    <div class="step-card">
-                        <span class="step-num">STEP 2</span>
-                        <i class="fa-solid fa-money-bill-transfer"></i>
-                        <h4>Deposit via Bank</h4>
-                        <div class="step-desc">Send ₦15,000+ to PalmPay <strong>896‑2925‑124</strong> with your unique narration code.</div>
-                    </div>
-                    <div class="step-card">
-                        <span class="step-num">STEP 3</span>
-                        <i class="fa-solid fa-crown"></i>
-                        <h4>Activate VIP Plan</h4>
-                        <div class="step-desc">Choose VIP 1–13 and start earning daily returns for 1 year.</div>
-                    </div>
-                    <div class="step-card">
-                        <span class="step-num">STEP 4</span>
-                        <i class="fa-solid fa-hand-holding-usd"></i>
-                        <h4>Earn &amp; Refer</h4>
-                        <div class="step-desc">Collect daily income + 10% commission on every referral.</div>
-                    </div>
+                    <div class="step-card"><span class="step-num">STEP 1</span><i class="fa-solid fa-user-plus"></i><h4>Create Account</h4><div class="step-desc">Sign up free &amp; get ₦500 welcome bonus instantly.</div></div>
+                    <div class="step-card"><span class="step-num">STEP 2</span><i class="fa-solid fa-money-bill-transfer"></i><h4>Deposit via Bank</h4><div class="step-desc">Send ₦15,000+ to PalmPay with your unique narration code.</div></div>
+                    <div class="step-card"><span class="step-num">STEP 3</span><i class="fa-solid fa-crown"></i><h4>Activate VIP Plan</h4><div class="step-desc">Choose VIP 1–13 and start earning daily returns for 1 year.</div></div>
+                    <div class="step-card"><span class="step-num">STEP 4</span><i class="fa-solid fa-hand-holding-usd"></i><h4>Earn &amp; Refer</h4><div class="step-desc">Collect daily income + 10% commission on every referral.</div></div>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 2 – VIP PLANS PREVIEW
-            ============================================================ -->
+            <!-- SECTION 2 – VIP PLANS PREVIEW -->
             <div>
                 <h2 class="section-title"><i class="fa-solid fa-crown"></i> VIP Plans (1‑Year)</h2>
                 <p class="section-sub">Every plan runs for 365 days. Upgrade anytime – your timer resets.</p>
                 <div class="vip-preview-grid">
-                    <div class="vip-preview-card">
-                        <span class="tier">VIP 1</span>
-                        <div class="price">₦15,500</div>
-                        <div class="daily">+ ₦500 / day</div>
-                        <div class="days">365 days contract</div>
-                    </div>
-                    <div class="vip-preview-card">
-                        <span class="tier">VIP 2</span>
-                        <div class="price">₦30,500</div>
-                        <div class="daily">+ ₦1,000 / day</div>
-                        <div class="days">365 days contract</div>
-                    </div>
-                    <div class="vip-preview-card">
-                        <span class="tier">VIP 3</span>
-                        <div class="price">₦60,000</div>
-                        <div class="daily">+ ₦2,000 / day</div>
-                        <div class="days">365 days contract</div>
-                    </div>
-                    <div class="vip-preview-card">
-                        <span class="tier">VIP 13</span>
-                        <div class="price">₦61.44M</div>
-                        <div class="daily">+ ₦2,048,000 / day</div>
-                        <div class="days">365 days contract</div>
-                    </div>
+                    <div class="vip-preview-card"><span class="tier">VIP 1</span><div class="price">₦15,500</div><div class="daily">+ ₦500 / day</div><div class="days">365 days contract</div></div>
+                    <div class="vip-preview-card"><span class="tier">VIP 2</span><div class="price">₦30,500</div><div class="daily">+ ₦1,000 / day</div><div class="days">365 days contract</div></div>
+                    <div class="vip-preview-card"><span class="tier">VIP 3</span><div class="price">₦60,000</div><div class="daily">+ ₦2,000 / day</div><div class="days">365 days contract</div></div>
+                    <div class="vip-preview-card"><span class="tier">VIP 13</span><div class="price">₦61.44M</div><div class="daily">+ ₦2,048,000 / day</div><div class="days">365 days contract</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.65rem;color:#6b7280;margin-top:8px;">
-                    <i class="fa-solid fa-arrow-right"></i> Full list available after login on your dashboard.
-                </p>
+                <p style="text-align:center;font-size:0.65rem;color:#6b7280;margin-top:8px;"><i class="fa-solid fa-arrow-right"></i> Full list available after login on your dashboard.</p>
             </div>
 
-            <!-- ============================================================
-            SECTION 3 – WHY NEXUS EARN
-            ============================================================ -->
+            <!-- SECTION 3 – WHY NEXUS EARN -->
             <div>
                 <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Why Choose Us</h2>
                 <p class="section-sub">Trusted, secure, and built for long‑term growth.</p>
                 <div class="features-grid">
-                    <div class="feature-card">
-                        <i class="fa-solid fa-building-columns"></i>
-                        <div>
-                            <h4>Bank‑Grade Security</h4>
-                            <p>All deposits are tracked via unique narration codes. Admin‑verified approvals.</p>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-certificate"></i>
-                        <div>
-                            <h4>Licensed &amp; Insured</h4>
-                            <p>Pass‑through deposit via PalmPay. Licensed by the CBN &amp; NDIC insured.</p>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                        <div>
-                            <h4>Guaranteed Returns</h4>
-                            <p>Fixed daily payouts for 365 days. No hidden fees – what you see is what you get.</p>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fa-solid fa-headset"></i>
-                        <div>
-                            <h4>24/7 Support</h4>
-                            <p>Official Telegram &amp; WhatsApp channels. Real‑time help from our team.</p>
-                        </div>
-                    </div>
+                    <div class="feature-card"><i class="fa-solid fa-building-columns"></i><div><h4>Bank‑Grade Security</h4><p>All deposits are tracked via unique narration codes. Admin‑verified approvals.</p></div></div>
+                    <div class="feature-card"><i class="fa-solid fa-certificate"></i><div><h4>Licensed &amp; Insured</h4><p>Pass‑through deposit via PalmPay. Licensed by the CBN &amp; NDIC insured.</p></div></div>
+                    <div class="feature-card"><i class="fa-solid fa-arrow-trend-up"></i><div><h4>Guaranteed Returns</h4><p>Fixed daily payouts for 365 days. No hidden fees – what you see is what you get.</p></div></div>
+                    <div class="feature-card"><i class="fa-solid fa-headset"></i><div><h4>24/7 Support</h4><p>Official Telegram &amp; WhatsApp channels. Real‑time help from our team.</p></div></div>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 4 – FAQ
-            ============================================================ -->
+            <!-- SECTION 4 – FAQ -->
             <div>
                 <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Frequently Asked</h2>
                 <p class="section-sub">Quick answers to the most common questions.</p>
                 <div class="faq-list">
-                    <div class="faq-item active">
-                        <div class="faq-question">
-                            <span>How do I deposit?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            Go to the <strong>Deposit</strong> page, copy the PalmPay account details (<strong>896‑2925‑124</strong>, <strong>NEXUS EARN LIMITED(TAIWO)</strong>), generate a 10‑character narration code, send your amount (min ₦15,000), and submit the form with your sender name. Admin approves within 24 hours.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>What is the narration code?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            A unique 10‑character alphanumeric code (e.g., <strong>188EBEDIR</strong>) generated for each deposit session. You <strong>must</strong> include it in your bank transfer description. If you forget it, your deposit will be rejected.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>How long is the contract?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            All VIP plans run for <strong>365 days (1 year)</strong>. When you upgrade to a higher VIP tier, the counter resets to 365 days for the new plan.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>Can I withdraw anytime?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            Yes, withdrawals are processed Monday–Saturday, 10:00 AM – 6:00 PM (WAT). Minimum withdrawal is <strong>₦500</strong>. 10% processing fee applies. Only <strong>1 pending withdrawal</strong> at a time.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>How does the referral bonus work?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            When someone registers with your referral link and activates a VIP plan, you earn <strong>10% commission</strong> on their plan purchase. Plus, you get milestone bonuses as your team deposits grow.
-                        </div>
-                    </div>
+                    <div class="faq-item active"><div class="faq-question"><span>How do I deposit?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">Go to the <strong>Deposit</strong> page, copy the PalmPay account details, generate a 10‑character narration code, send your amount (min ₦15,000), and submit the form with your sender name. Admin approves within 24 hours.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>What is the narration code?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">A unique 10‑character alphanumeric code generated for each deposit session. You <strong>must</strong> include it in your bank transfer description. If you forget it, your deposit will be rejected.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>How long is the contract?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">All VIP plans run for <strong>365 days (1 year)</strong>. When you upgrade to a higher VIP tier, the counter resets to 365 days for the new plan.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>Can I withdraw anytime?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">Yes, withdrawals are processed Monday–Saturday, 10:00 AM – 6:00 PM (WAT). Minimum withdrawal is <strong>₦500</strong>. 10% processing fee applies. Only <strong>1 pending withdrawal</strong> at a time.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>How does the referral bonus work?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">When someone registers with your referral link and activates a VIP plan, you earn <strong>10% commission</strong> on their plan purchase. Plus, you get milestone bonuses as your team deposits grow.</div></div>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 5 – REGISTRATION FORM
-            ============================================================ -->
+            <!-- SECTION 5 – REGISTRATION FORM -->
             <div>
                 <h2 class="section-title"><i class="fa-solid fa-user-plus"></i> Create Your Account</h2>
                 <p class="section-sub">Join thousands of investors and start earning today.</p>
-
                 <div class="form-card">
-                    <div class="form-title">
-                        <i class="fa-solid fa-pen-to-square"></i> Registration
-                        <span style="font-size:0.6rem;background:#10b98120;padding:2px 10px;border-radius:20px;color:#10b981;margin-left:auto;">₦500 Bonus</span>
-                    </div>
-
-                    <!-- Referral Info Box -->
-                    <div class="ref-code-box" id="referralInfoBox">
-                        <span><i class="fa-solid fa-user-group"></i> Invited by:</span>
-                        <strong id="referrerNameDisplay">User</strong>
-                        <i class="fa-solid fa-check-circle"></i>
-                    </div>
-
+                    <div class="form-title"><i class="fa-solid fa-pen-to-square"></i> Registration <span style="font-size:0.6rem;background:#10b98120;padding:2px 10px;border-radius:20px;color:#10b981;margin-left:auto;">₦500 Bonus</span></div>
+                    <div class="ref-code-box" id="referralInfoBox"><span><i class="fa-solid fa-user-group"></i> Invited by:</span><strong id="referrerNameDisplay">User</strong><i class="fa-solid fa-check-circle"></i></div>
                     <form id="nexusSignupForm">
-                        <!-- Username -->
-                        <div class="profile-input-wrapper">
-                            <label><i class="fa-regular fa-user"></i> Username</label>
-                            <div class="input-row-container">
-                                <i class="fa-solid fa-user"></i>
-                                <input type="text" id="username" placeholder="Choose a unique username (3‑15 chars)" required autocomplete="username" />
-                            </div>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="profile-input-wrapper">
-                            <label><i class="fa-regular fa-envelope"></i> Email Address</label>
-                            <div class="input-row-container">
-                                <i class="fa-solid fa-envelope"></i>
-                                <input type="email" id="email" placeholder="you@gmail.com" required autocomplete="email" />
-                            </div>
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="profile-input-wrapper">
-                            <label><i class="fa-solid fa-phone"></i> Phone Number</label>
-                            <div class="input-row-container">
-                                <i class="fa-solid fa-phone"></i>
-                                <input type="tel" id="phone" pattern="\d{11}" maxlength="11" placeholder="080XXXXXXXX" required />
-                            </div>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="profile-input-wrapper">
-                            <label><i class="fa-solid fa-lock"></i> Password</label>
-                            <div class="input-row-container">
-                                <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="password" placeholder="Create password (min 6 chars)" required autocomplete="new-password" />
-                                <i class="fa-solid fa-eye password-toggle" onclick="togglePass('password', this)"></i>
-                            </div>
-                        </div>
-
-                        <!-- Confirm Password -->
-                        <div class="profile-input-wrapper">
-                            <label><i class="fa-solid fa-lock"></i> Confirm Password</label>
-                            <div class="input-row-container">
-                                <i class="fa-solid fa-lock"></i>
-                                <input type="password" id="confirmPassword" placeholder="Confirm your password" required autocomplete="new-password" />
-                                <i class="fa-solid fa-eye password-toggle" onclick="togglePass('confirmPassword', this)"></i>
-                            </div>
-                        </div>
-
-                        <!-- Referral Code (Optional) -->
-                        <div class="profile-input-wrapper">
-                            <label><i class="fa-solid fa-gift"></i> Referral Code <span style="font-weight:400;color:#6b7280;text-transform:none;">(optional)</span></label>
-                            <div class="input-row-container">
-                                <i class="fa-solid fa-ticket"></i>
-                                <input type="text" id="referredByCode" placeholder="Enter referral code if you have one" maxlength="10" />
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-submit" id="submitBtn">
-                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Register &amp; Get ₦500
-                        </button>
-                        <div id="loadingSpinner" style="display:none;text-align:center;margin-top:12px;">
-                            <div class="spinner-small"></div>
-                            <p style="font-size:0.65rem;color:#9ca3af;margin-top:4px;">Creating your secure vault...</p>
-                        </div>
+                        <div class="profile-input-wrapper"><label><i class="fa-regular fa-user"></i> Username</label><div class="input-row-container"><i class="fa-solid fa-user"></i><input type="text" id="username" placeholder="Choose a unique username (3‑15 chars)" required autocomplete="username" /></div></div>
+                        <div class="profile-input-wrapper"><label><i class="fa-regular fa-envelope"></i> Email Address</label><div class="input-row-container"><i class="fa-solid fa-envelope"></i><input type="email" id="email" placeholder="you@gmail.com" required autocomplete="email" /></div></div>
+                        <div class="profile-input-wrapper"><label><i class="fa-solid fa-phone"></i> Phone Number</label><div class="input-row-container"><i class="fa-solid fa-phone"></i><input type="tel" id="phone" pattern="\d{11}" maxlength="11" placeholder="080XXXXXXXX" required /></div></div>
+                        <div class="profile-input-wrapper"><label><i class="fa-solid fa-lock"></i> Password</label><div class="input-row-container"><i class="fa-solid fa-lock"></i><input type="password" id="password" placeholder="Create password (min 6 chars)" required autocomplete="new-password" /><i class="fa-solid fa-eye password-toggle" onclick="togglePass('password', this)"></i></div></div>
+                        <div class="profile-input-wrapper"><label><i class="fa-solid fa-lock"></i> Confirm Password</label><div class="input-row-container"><i class="fa-solid fa-lock"></i><input type="password" id="confirmPassword" placeholder="Confirm your password" required autocomplete="new-password" /><i class="fa-solid fa-eye password-toggle" onclick="togglePass('confirmPassword', this)"></i></div></div>
+                        <div class="profile-input-wrapper"><label><i class="fa-solid fa-gift"></i> Referral Code <span style="font-weight:400;color:#6b7280;text-transform:none;">(optional)</span></label><div class="input-row-container"><i class="fa-solid fa-ticket"></i><input type="text" id="referredByCode" placeholder="Enter referral code if you have one" maxlength="10" /></div></div>
+                        <button type="submit" class="btn-submit" id="submitBtn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Register &amp; Get ₦500</button>
+                        <div id="loadingSpinner" style="display:none;text-align:center;margin-top:12px;"><div class="spinner-small"></div><p style="font-size:0.65rem;color:#9ca3af;margin-top:4px;">Creating your secure vault...</p></div>
                     </form>
-
-                    <div class="login-nav">
-                        Already have an account? <a href="login.html">Login here <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+                    <div class="login-nav">Already have an account? <a href="login.html">Login here <i class="fa-solid fa-arrow-right"></i></a></div>
                 </div>
             </div>
 
@@ -1117,12 +888,12 @@
             storageBucket: "nexus-earn-1.firebasestorage.app",
             messagingSenderId: "779765076952",
             appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
-            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"   // ← Fixed
+            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"
         };
 
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const rtdb = firebase.database(); // Works now
+        const rtdb = firebase.database();
 
         // ============================================================
         // TOAST
@@ -1222,9 +993,9 @@
         }
 
         // ============================================================
-        // REDIRECT IF ALREADY LOGGED IN
+        // REDIRECT IF ALREADY LOGGED IN – REMOVED! (No auto-redirect)
+        // User goes to info.html after registration
         // ============================================================
-        auth.onAuthStateChanged(user => { if (user) window.location.href = 'dashboard.html'; });
 
         // ============================================================
         // SIGNUP FORM – RTDB
@@ -1309,7 +1080,7 @@
                 });
 
                 showToast("✅ Account created! Redirecting...");
-                sessionStorage.setItem('nexusInfoShown', 'true');
+                // Always redirect to info.html first
                 setTimeout(() => { window.location.href = "info.html?redirect=dashboard.html"; }, 1500);
 
             } catch (err) {
@@ -1322,6 +1093,5 @@
             }
         });
     </script>
-
 </body>
 </html>

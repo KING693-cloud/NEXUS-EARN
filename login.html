@@ -40,672 +40,126 @@
         /* ============================================================
            GLOBAL RESET & BASE (matches index.html)
            ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        body {
-            background-color: #0b0d17;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            transition: background-color 0.3s ease, color 0.2s ease;
-            padding-bottom: 40px;
-        }
+        body { background-color: #0b0d17; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; transition: background-color 0.3s ease, color 0.2s ease; padding-bottom: 40px; }
 
-        body.light-mode {
-            background-color: #f0f2f8 !important;
-            color: #1a1e2e;
-        }
-        body.light-mode .app-container {
-            background: #ffffff;
-        }
-        body.light-mode .hero-banner {
-            background: #ffffff;
-        }
-        body.light-mode .login-card,
-        body.light-mode .trust-bar,
-        body.light-mode .benefit-card,
-        body.light-mode .faq-item,
-        body.light-mode .security-tip {
-            background: #f0f2f8;
-            border-color: #e0e4ec;
-            color: #1a1e2e;
-        }
-        body.light-mode .input-row-container {
-            background: #ffffff;
-            border-color: #d1d5db;
-        }
-        body.light-mode .input-row-container input {
-            color: #1a1e2e;
-        }
-        body.light-mode .input-row-container i {
-            color: #e5b842;
-        }
-        body.light-mode .subtitle,
-        body.light-mode .benefit-desc,
-        body.light-mode .faq-answer {
-            color: #4b5563;
-        }
-        body.light-mode .footer {
-            border-top-color: #e0e4ec;
-        }
-        body.light-mode .footer a {
-            color: #1a1e2e;
-        }
-        body.light-mode .trust-item strong {
-            color: #1a1e2e;
-        }
+        body.light-mode { background-color: #f0f2f8 !important; color: #1a1e2e; }
+        body.light-mode .app-container { background: #ffffff; }
+        body.light-mode .hero-banner { background: #ffffff; }
+        body.light-mode .login-card, body.light-mode .trust-bar, body.light-mode .benefit-card, body.light-mode .faq-item, body.light-mode .security-tip { background: #f0f2f8; border-color: #e0e4ec; color: #1a1e2e; }
+        body.light-mode .input-row-container { background: #ffffff; border-color: #d1d5db; }
+        body.light-mode .input-row-container input { color: #1a1e2e; }
+        body.light-mode .input-row-container i { color: #e5b842; }
+        body.light-mode .subtitle, body.light-mode .benefit-desc, body.light-mode .faq-answer { color: #4b5563; }
+        body.light-mode .footer { border-top-color: #e0e4ec; }
+        body.light-mode .footer a { color: #1a1e2e; }
+        body.light-mode .trust-item strong { color: #1a1e2e; }
 
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1b203a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #e5b842;
-            border-radius: 4px;
-        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #1b203a; }
+        ::-webkit-scrollbar-thumb { background: #e5b842; border-radius: 4px; }
 
-        /* ---- App Container ---- */
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            background: #111424;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            transition: background 0.3s ease;
-        }
+        .app-container { width: 100%; max-width: 480px; min-height: 100vh; background: #111424; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.5); transition: background 0.3s ease; }
 
-        /* ---- Animations ---- */
-        @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.02);
-            }
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes glowPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 5px rgba(229, 184, 66, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(229, 184, 66, 0.4);
-            }
-        }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.02)} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes glowPulse { 0%,100%{box-shadow:0 0 5px rgba(229,184,66,0.2)} 50%{box-shadow:0 0 25px rgba(229,184,66,0.4)} }
 
-        /* ---- Top Bar (Logo + Dark Mode + Register) ---- */
-        .top-bar {
-            width: 100%;
-            background: #161a2e;
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(229, 184, 66, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .top-bar .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-        .top-bar .brand i {
-            color: #e5b842;
-            font-size: 1.4rem;
-            animation: float 3s ease-in-out infinite;
-        }
-        .top-bar .brand span {
-            font-size: 1.1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #fff, #e5b842);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .top-bar .actions {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .dark-toggle {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(229, 184, 66, 0.1);
-            border: 1px solid rgba(229, 184, 66, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #e5b842;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        .dark-toggle:hover {
-            background: rgba(229, 184, 66, 0.25);
-            transform: scale(1.05);
-        }
-        .register-link {
-            color: #e5b842;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-        }
-        .register-link:hover {
-            gap: 8px;
-        }
+        .top-bar { width: 100%; background: #161a2e; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(229,184,66,0.1); position: sticky; top: 0; z-index: 100; }
+        .top-bar .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .top-bar .brand i { color: #e5b842; font-size: 1.4rem; animation: float 3s ease-in-out infinite; }
+        .top-bar .brand span { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; background: linear-gradient(135deg,#fff,#e5b842); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .top-bar .actions { display: flex; align-items: center; gap: 14px; }
+        .dark-toggle { width: 36px; height: 36px; border-radius: 50%; background: rgba(229,184,66,0.1); border: 1px solid rgba(229,184,66,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #e5b842; transition: all 0.3s; font-size: 0.9rem; }
+        .dark-toggle:hover { background: rgba(229,184,66,0.25); transform: scale(1.05); }
+        .register-link { color: #e5b842; text-decoration: none; font-weight: 700; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; transition: all 0.2s; }
+        .register-link:hover { gap: 8px; }
 
-        /* ---- Hero Banner ---- */
-        .hero-banner {
-            width: 100%;
-            background: radial-gradient(circle at 70% 30%, #1b203a 0%, #0b0d17 100%);
-            padding: 30px 24px 28px;
-            text-align: center;
-            border-bottom: 1px solid rgba(229, 184, 66, 0.15);
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            left: -30%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(229, 184, 66, 0.06) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .hero-banner .badge {
-            display: inline-block;
-            background: rgba(229, 184, 66, 0.12);
-            border: 1px solid rgba(229, 184, 66, 0.25);
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.65rem;
-            color: #e5b842;
-            font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-        .hero-banner h1 {
-            font-size: 1.7rem;
-            font-weight: 900;
-            line-height: 1.2;
-            margin-bottom: 6px;
-        }
-        .hero-banner h1 .gold {
-            background: linear-gradient(135deg, #f5d061, #e5b842);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-banner .subtitle {
-            font-size: 0.85rem;
-            color: #9ca3af;
-            line-height: 1.5;
-            max-width: 320px;
-            margin: 0 auto;
-        }
+        .hero-banner { width: 100%; background: radial-gradient(circle at 70% 30%, #1b203a 0%, #0b0d17 100%); padding: 30px 24px 28px; text-align: center; border-bottom: 1px solid rgba(229,184,66,0.15); position: relative; overflow: hidden; transition: background 0.3s ease; }
+        .hero-banner::before { content: ''; position: absolute; top: -40%; left: -30%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(229,184,66,0.06) 0%, transparent 70%); pointer-events: none; }
+        .hero-banner .badge { display: inline-block; background: rgba(229,184,66,0.12); border: 1px solid rgba(229,184,66,0.25); padding: 4px 14px; border-radius: 30px; font-size: 0.65rem; color: #e5b842; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }
+        .hero-banner h1 { font-size: 1.7rem; font-weight: 900; line-height: 1.2; margin-bottom: 6px; }
+        .hero-banner h1 .gold { background: linear-gradient(135deg,#f5d061,#e5b842); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-banner .subtitle { font-size: 0.85rem; color: #9ca3af; line-height: 1.5; max-width: 320px; margin: 0 auto; }
 
-        /* ---- Trust Bar (Stats) ---- */
-        .trust-bar {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .trust-item {
-            text-align: center;
-            padding: 4px 0;
-        }
-        .trust-item i {
-            color: #e5b842;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 3px;
-        }
-        .trust-item span {
-            font-size: 0.6rem;
-            color: #9ca3af;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .trust-item strong {
-            font-size: 0.95rem;
-            color: #fff;
-            display: block;
-            font-weight: 800;
-        }
+        .trust-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; padding: 16px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .trust-item { text-align: center; padding: 4px 0; }
+        .trust-item i { color: #e5b842; font-size: 1.1rem; display: block; margin-bottom: 3px; }
+        .trust-item span { font-size: 0.6rem; color: #9ca3af; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
+        .trust-item strong { font-size: 0.95rem; color: #fff; display: block; font-weight: 800; }
 
-        /* ---- Main Content ---- */
-        .content {
-            padding: 24px 20px 10px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
+        .content { padding: 24px 20px 10px; flex: 1; display: flex; flex-direction: column; gap: 24px; }
 
-        /* ---- Login Card ---- */
-        .login-card {
-            background: #161a2e;
-            border-radius: 24px;
-            padding: 28px 24px;
-            border: 1px solid rgba(229, 184, 66, 0.12);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-        .login-card:hover {
-            border-color: rgba(229, 184, 66, 0.25);
-        }
-        .login-card .card-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-        .login-card .card-title i {
-            color: #e5b842;
-        }
-        .login-card .card-sub {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-bottom: 22px;
-            line-height: 1.4;
-        }
+        .login-card { background: #161a2e; border-radius: 24px; padding: 28px 24px; border: 1px solid rgba(229,184,66,0.12); box-shadow: 0 8px 30px rgba(0,0,0,0.2); transition: all 0.3s ease; }
+        .login-card:hover { border-color: rgba(229,184,66,0.25); }
+        .login-card .card-title { font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .login-card .card-title i { color: #e5b842; }
+        .login-card .card-sub { font-size: 0.75rem; color: #9ca3af; margin-bottom: 22px; line-height: 1.4; }
 
-        /* ---- Inputs ---- */
-        .profile-input-wrapper {
-            margin-bottom: 18px;
-        }
-        .profile-input-wrapper label {
-            font-size: 0.65rem;
-            color: #9ca3af;
-            text-transform: uppercase;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-        .input-row-container {
-            width: 100%;
-            background: #0b0d17;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            height: 52px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        .input-row-container:focus-within {
-            border-color: #e5b842;
-            box-shadow: 0 0 0 3px rgba(229, 184, 66, 0.08);
-        }
-        .input-row-container i {
-            color: #e5b842;
-            width: 24px;
-            font-size: 0.95rem;
-        }
-        .input-row-container input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            padding: 0 10px;
-            height: 100%;
-        }
-        .input-row-container input::placeholder {
-            color: #4a5568;
-        }
+        .profile-input-wrapper { margin-bottom: 18px; }
+        .profile-input-wrapper label { font-size: 0.65rem; color: #9ca3af; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .input-row-container { width: 100%; background: #0b0d17; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; display: flex; align-items: center; padding: 0 16px; height: 52px; position: relative; transition: all 0.3s ease; }
+        .input-row-container:focus-within { border-color: #e5b842; box-shadow: 0 0 0 3px rgba(229,184,66,0.08); }
+        .input-row-container i { color: #e5b842; width: 24px; font-size: 0.95rem; }
+        .input-row-container input { width: 100%; border: none; background: transparent; color: #fff; font-size: 0.95rem; outline: none; padding: 0 10px; height: 100%; }
+        .input-row-container input::placeholder { color: #4a5568; }
 
-        .login-hint {
-            font-size: 0.6rem;
-            color: #6b7280;
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .login-hint i {
-            color: #e5b842;
-            font-size: 0.6rem;
-        }
+        .login-hint { font-size: 0.6rem; color: #6b7280; margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+        .login-hint i { color: #e5b842; font-size: 0.6rem; }
 
-        /* ---- Recovery Links ---- */
-        .recovery-links {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .recovery-links a {
-            color: #e5b842;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-        }
-        .recovery-links a:hover {
-            gap: 8px;
-            text-decoration: underline;
-        }
-        .recovery-links a.danger {
-            color: #ef4444;
-        }
+        .recovery-links { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+        .recovery-links a { color: #e5b842; text-decoration: none; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: all 0.2s; }
+        .recovery-links a:hover { gap: 8px; text-decoration: underline; }
+        .recovery-links a.danger { color: #ef4444; }
 
-        /* ---- Submit Button ---- */
-        .btn-submit {
-            width: 100%;
-            height: 52px;
-            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
-            border: none;
-            border-radius: 12px;
-            color: #111424;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-        }
-        .btn-submit:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(229, 184, 66, 0.35);
-        }
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-submit { width: 100%; height: 52px; background: linear-gradient(135deg,#f5d061 0%,#e5b842 100%); border: none; border-radius: 12px; color: #111424; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(229,184,66,0.35); }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        .spinner-small {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #111424;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        .spinner-small { width: 20px; height: 20px; border: 2px solid #111424; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ---- Security Notice (inside card) ---- */
-        .security-notice {
-            background: rgba(16, 185, 129, 0.06);
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin-top: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(16, 185, 129, 0.12);
-        }
-        .security-notice i {
-            color: #10b981;
-            font-size: 1rem;
-        }
-        .security-notice p {
-            font-size: 0.65rem;
-            color: #a1a1aa;
-            line-height: 1.3;
-        }
+        .security-notice { background: rgba(16,185,129,0.06); border-radius: 12px; padding: 12px 14px; margin-top: 18px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(16,185,129,0.12); }
+        .security-notice i { color: #10b981; font-size: 1rem; }
+        .security-notice p { font-size: 0.65rem; color: #a1a1aa; line-height: 1.3; }
 
-        /* ---- Benefits Section (Why Login) ---- */
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 6px;
-        }
-        .benefit-card {
-            background: #161a2e;
-            border-radius: 14px;
-            padding: 16px 14px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            text-align: center;
-            transition: all 0.3s;
-        }
-        .benefit-card:hover {
-            border-color: rgba(229, 184, 66, 0.25);
-            transform: translateY(-2px);
-        }
-        .benefit-card i {
-            font-size: 1.4rem;
-            color: #e5b842;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .benefit-card h4 {
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-        .benefit-card .benefit-desc {
-            font-size: 0.6rem;
-            color: #9ca3af;
-            line-height: 1.3;
-        }
+        .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
+        .benefit-card { background: #161a2e; border-radius: 14px; padding: 16px 14px; border: 1px solid rgba(255,255,255,0.04); text-align: center; transition: all 0.3s; }
+        .benefit-card:hover { border-color: rgba(229,184,66,0.25); transform: translateY(-2px); }
+        .benefit-card i { font-size: 1.4rem; color: #e5b842; display: block; margin-bottom: 6px; }
+        .benefit-card h4 { font-size: 0.75rem; font-weight: 700; margin-bottom: 3px; }
+        .benefit-card .benefit-desc { font-size: 0.6rem; color: #9ca3af; line-height: 1.3; }
 
-        /* ---- Security Tips ---- */
-        .security-tip {
-            background: rgba(229, 184, 66, 0.06);
-            border: 1px solid rgba(229, 184, 66, 0.12);
-            border-radius: 14px;
-            padding: 16px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        .security-tip i {
-            color: #e5b842;
-            font-size: 1.1rem;
-            margin-top: 2px;
-        }
-        .security-tip div h4 {
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .security-tip div p {
-            font-size: 0.65rem;
-            color: #9ca3af;
-            line-height: 1.4;
-        }
+        .security-tip { background: rgba(229,184,66,0.06); border: 1px solid rgba(229,184,66,0.12); border-radius: 14px; padding: 16px; display: flex; align-items: flex-start; gap: 12px; }
+        .security-tip i { color: #e5b842; font-size: 1.1rem; margin-top: 2px; }
+        .security-tip div h4 { font-size: 0.75rem; font-weight: 700; margin-bottom: 2px; }
+        .security-tip div p { font-size: 0.65rem; color: #9ca3af; line-height: 1.4; }
 
-        /* ---- FAQ ---- */
-        .faq-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 4px;
-        }
-        .faq-item {
-            background: #161a2e;
-            border-radius: 14px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .faq-item:hover {
-            border-color: rgba(229, 184, 66, 0.2);
-        }
-        .faq-item .faq-question {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-        .faq-item .faq-question i {
-            color: #e5b842;
-            transition: transform 0.3s;
-        }
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-        .faq-item .faq-answer {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            line-height: 1.5;
-            margin-top: 8px;
-            display: none;
-        }
-        .faq-item.active .faq-answer {
-            display: block;
-            animation: fadeInUp 0.3s ease;
-        }
+        .faq-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+        .faq-item { background: #161a2e; border-radius: 14px; padding: 16px; border: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: all 0.3s; }
+        .faq-item:hover { border-color: rgba(229,184,66,0.2); }
+        .faq-item .faq-question { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.8rem; }
+        .faq-item .faq-question i { color: #e5b842; transition: transform 0.3s; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-item .faq-answer { font-size: 0.7rem; color: #9ca3af; line-height: 1.5; margin-top: 8px; display: none; }
+        .faq-item.active .faq-answer { display: block; animation: fadeInUp 0.3s ease; }
 
-        /* ---- Footer ---- */
-        .footer {
-            padding: 24px 20px 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            margin-top: 10px;
-        }
-        .footer .logo-small {
-            font-weight: 900;
-            font-size: 0.9rem;
-            color: #e5b842;
-            letter-spacing: 1px;
-        }
-        .footer p {
-            font-size: 0.6rem;
-            color: #6b7280;
-            margin-top: 6px;
-            line-height: 1.4;
-        }
-        .footer .links {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .footer .links a {
-            color: #9ca3af;
-            text-decoration: none;
-            font-size: 0.65rem;
-            transition: color 0.2s;
-        }
-        .footer .links a:hover {
-            color: #e5b842;
-        }
+        .footer { padding: 24px 20px 10px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; margin-top: 10px; }
+        .footer .logo-small { font-weight: 900; font-size: 0.9rem; color: #e5b842; letter-spacing: 1px; }
+        .footer p { font-size: 0.6rem; color: #6b7280; margin-top: 6px; line-height: 1.4; }
+        .footer .links { display: flex; justify-content: center; gap: 18px; margin-top: 10px; flex-wrap: wrap; }
+        .footer .links a { color: #9ca3af; text-decoration: none; font-size: 0.65rem; transition: color 0.2s; }
+        .footer .links a:hover { color: #e5b842; }
 
-        /* ---- Toast Notification ---- */
-        .toast-notification {
-            position: fixed;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            width: calc(100% - 32px);
-            max-width: 400px;
-            background: #1b203a;
-            border-left: 4px solid #e5b842;
-            padding: 15px;
-            border-radius: 10px;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 9999;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .toast-notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-        .toast-notification i {
-            font-size: 1.2rem;
-        }
-        .toast-notification .toast-msg {
-            font-size: 0.85rem;
-            font-weight: 600;
-            flex: 1;
-            color: #fff;
-        }
+        .toast-notification { position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-120px); width: calc(100% - 32px); max-width: 400px; background: #1b203a; border-left: 4px solid #e5b842; padding: 15px; border-radius: 10px; transition: transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275); z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; }
+        .toast-notification.show { transform: translateX(-50%) translateY(0); }
+        .toast-notification i { font-size: 1.2rem; }
+        .toast-notification .toast-msg { font-size: 0.85rem; font-weight: 600; flex: 1; color: #fff; }
 
-        /* ---- Responsive ---- */
-        @media (max-width: 420px) {
-            .benefits-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .hero-banner h1 {
-                font-size: 1.4rem;
-            }
-            .login-card {
-                padding: 20px 16px;
-            }
-        }
+        @media (max-width: 420px) { .benefits-grid { grid-template-columns: 1fr 1fr; } .hero-banner h1 { font-size: 1.4rem; } .login-card { padding: 20px 16px; } }
     </style>
 </head>
 <body>
@@ -725,17 +179,10 @@
 
         <!-- ---- TOP BAR ---- -->
         <header class="top-bar">
-            <a href="#" class="brand">
-                <i class="fa-solid fa-cubes"></i>
-                <span>NEXUS EARN</span>
-            </a>
+            <a href="#" class="brand"><i class="fa-solid fa-cubes"></i><span>NEXUS EARN</span></a>
             <div class="actions">
-                <div class="dark-toggle" id="darkModeToggle" title="Toggle dark/light mode">
-                    <i class="fa-solid fa-moon"></i>
-                </div>
-                <a href="index.html" class="register-link">
-                    <i class="fa-solid fa-user-plus"></i> Register
-                </a>
+                <div class="dark-toggle" id="darkModeToggle" title="Toggle dark/light mode"><i class="fa-solid fa-moon"></i></div>
+                <a href="index.html" class="register-link"><i class="fa-solid fa-user-plus"></i> Register</a>
             </div>
         </header>
 
@@ -746,51 +193,29 @@
             <p class="subtitle">Access your vault, claim daily earnings, and track your portfolio.</p>
         </section>
 
-        <!-- ---- TRUST BAR (Stats) ---- -->
+        <!-- ---- TRUST BAR ---- -->
         <div class="trust-bar">
-            <div class="trust-item">
-                <i class="fa-solid fa-users"></i>
-                <strong>10K+</strong>
-                <span>Active Investors</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-naira-sign"></i>
-                <strong>₦1B+</strong>
-                <span>Total Paid Out</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-headset"></i>
-                <strong>24/7</strong>
-                <span>Support Available</span>
-            </div>
+            <div class="trust-item"><i class="fa-solid fa-users"></i><strong>10K+</strong><span>Active Investors</span></div>
+            <div class="trust-item"><i class="fa-solid fa-naira-sign"></i><strong>₦1B+</strong><span>Total Paid Out</span></div>
+            <div class="trust-item"><i class="fa-solid fa-headset"></i><strong>24/7</strong><span>Support Available</span></div>
         </div>
 
         <!-- ---- CONTENT ---- -->
         <main class="content">
 
-            <!-- ============================================================
-            SECTION 1 – LOGIN CARD
-            ============================================================ -->
+            <!-- LOGIN CARD -->
             <div class="login-card">
-                <div class="card-title">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Access Your Account
-                </div>
+                <div class="card-title"><i class="fa-solid fa-arrow-right-to-bracket"></i> Access Your Account</div>
                 <p class="card-sub">Enter your credentials to securely access your investment dashboard.</p>
-
                 <form id="nexusLoginForm">
-                    <!-- Identifier (Email / Username / Phone) -->
                     <div class="profile-input-wrapper">
                         <label><i class="fa-regular fa-envelope"></i> Email, Username, or Phone</label>
                         <div class="input-row-container">
                             <i class="fa-solid fa-circle-user"></i>
                             <input type="text" id="loginIdentifier" placeholder="Enter email, username, or phone" required autocomplete="username" />
                         </div>
-                        <div class="login-hint">
-                            <i class="fa-solid fa-info-circle"></i> You can login with your email, username, or 11‑digit phone number.
-                        </div>
+                        <div class="login-hint"><i class="fa-solid fa-info-circle"></i> You can login with your email, username, or 11‑digit phone number.</div>
                     </div>
-
-                    <!-- Password -->
                     <div class="profile-input-wrapper">
                         <label><i class="fa-solid fa-lock"></i> Password</label>
                         <div class="input-row-container">
@@ -798,112 +223,37 @@
                             <input type="password" id="loginPass" placeholder="Enter your secure password" required autocomplete="current-password" />
                         </div>
                     </div>
-
-                    <!-- Recovery Links -->
                     <div class="recovery-links">
                         <a href="forgot-password.html" class="danger"><i class="fa-solid fa-unlock-keyhole"></i> Forgot Password?</a>
                         <a href="index.html"><i class="fa-solid fa-user-plus"></i> Create Account</a>
                     </div>
-
-                    <!-- Submit -->
-                    <button type="submit" class="btn-submit" id="loginBtn">
-                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Access Dashboard
-                    </button>
+                    <button type="submit" class="btn-submit" id="loginBtn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Access Dashboard</button>
                 </form>
-
-                <!-- Security Notice -->
-                <div class="security-notice">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <p>Your account is protected with bank‑grade encryption. All data is securely stored and never shared.</p>
-                </div>
+                <div class="security-notice"><i class="fa-solid fa-shield-halved"></i><p>Your account is protected with bank‑grade encryption. All data is securely stored and never shared.</p></div>
             </div>
 
-            <!-- ============================================================
-            SECTION 2 – WHY LOGIN? (Benefits)
-            ============================================================ -->
+            <!-- BENEFITS -->
             <div>
-                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-                    <i class="fa-solid fa-star" style="color:#e5b842;"></i> What Awaits You
-                </h2>
+                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;"><i class="fa-solid fa-star" style="color:#e5b842;"></i> What Awaits You</h2>
                 <div class="benefits-grid">
-                    <div class="benefit-card">
-                        <i class="fa-solid fa-wallet"></i>
-                        <h4>View Balance</h4>
-                        <div class="benefit-desc">Check your available funds and total earnings at a glance.</div>
-                    </div>
-                    <div class="benefit-card">
-                        <i class="fa-solid fa-hand-holding-usd"></i>
-                        <h4>Claim Daily</h4>
-                        <div class="benefit-desc">Collect your daily mining rewards with one tap.</div>
-                    </div>
-                    <div class="benefit-card">
-                        <i class="fa-solid fa-users"></i>
-                        <h4>Track Referrals</h4>
-                        <div class="benefit-desc">Monitor your team growth and milestone bonuses.</div>
-                    </div>
-                    <div class="benefit-card">
-                        <i class="fa-solid fa-money-bill-transfer"></i>
-                        <h4>Withdraw Instantly</h4>
-                        <div class="benefit-desc">Request withdrawals to your bank account securely.</div>
-                    </div>
+                    <div class="benefit-card"><i class="fa-solid fa-wallet"></i><h4>View Balance</h4><div class="benefit-desc">Check your available funds and total earnings at a glance.</div></div>
+                    <div class="benefit-card"><i class="fa-solid fa-hand-holding-usd"></i><h4>Claim Daily</h4><div class="benefit-desc">Collect your daily mining rewards with one tap.</div></div>
+                    <div class="benefit-card"><i class="fa-solid fa-users"></i><h4>Track Referrals</h4><div class="benefit-desc">Monitor your team growth and milestone bonuses.</div></div>
+                    <div class="benefit-card"><i class="fa-solid fa-money-bill-transfer"></i><h4>Withdraw Instantly</h4><div class="benefit-desc">Request withdrawals to your bank account securely.</div></div>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 3 – SECURITY TIP
-            ============================================================ -->
-            <div class="security-tip">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <div>
-                    <h4>🔐 Pro Security Tip</h4>
-                    <p>Never share your password with anyone. NEXUS EARN will <strong>never</strong> ask for your password via Telegram, WhatsApp, or email. If you receive such a request, report it immediately.</p>
-                </div>
-            </div>
+            <!-- SECURITY TIP -->
+            <div class="security-tip"><i class="fa-solid fa-triangle-exclamation"></i><div><h4>🔐 Pro Security Tip</h4><p>Never share your password with anyone. NEXUS EARN will <strong>never</strong> ask for your password via Telegram, WhatsApp, or email. If you receive such a request, report it immediately.</p></div></div>
 
-            <!-- ============================================================
-            SECTION 4 – FAQ (Login Issues)
-            ============================================================ -->
+            <!-- FAQ -->
             <div>
-                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-                    <i class="fa-solid fa-circle-question" style="color:#e5b842;"></i> Having Trouble Logging In?
-                </h2>
+                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;"><i class="fa-solid fa-circle-question" style="color:#e5b842;"></i> Having Trouble Logging In?</h2>
                 <div class="faq-list">
-                    <div class="faq-item active">
-                        <div class="faq-question">
-                            <span>I forgot my password. What should I do?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            Click the <strong>"Forgot Password?"</strong> link below the login form. Enter your registered email address, and we'll send you a secure reset link. Check your spam/junk folder if you don't see it within 5 minutes.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>My account is suspended. How do I fix it?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            If your account is suspended, please contact our customer support via <strong>Telegram</strong> (@Nexusearncustomerservice) or <strong>WhatsApp</strong> (link in footer). Our team will assist you within 24 hours.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>Can I login with my phone number?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            Yes! You can login using your <strong>11‑digit phone number</strong> (e.g., 080XXXXXXXX), your <strong>email address</strong>, or your <strong>username</strong>. The system will automatically detect which one you entered.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>I'm getting "Too many attempts". What now?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            For security, we limit login attempts. Wait <strong>5‑10 minutes</strong> before trying again. If you've forgotten your password, use the reset link instead of repeatedly guessing.
-                        </div>
-                    </div>
+                    <div class="faq-item active"><div class="faq-question"><span>I forgot my password. What should I do?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">Click the <strong>"Forgot Password?"</strong> link below the login form. Enter your registered email address, and we'll send you a secure reset link. Check your spam/junk folder if you don't see it within 5 minutes.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>My account is suspended. How do I fix it?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">If your account is suspended, please contact our customer support via <strong>Telegram</strong> (@Nexusearncustomerservice) or <strong>WhatsApp</strong> (link in footer). Our team will assist you within 24 hours.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>Can I login with my phone number?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">Yes! You can login using your <strong>11‑digit phone number</strong> (e.g., 080XXXXXXXX), your <strong>email address</strong>, or your <strong>username</strong>. The system will automatically detect which one you entered.</div></div>
+                    <div class="faq-item"><div class="faq-question"><span>I'm getting "Too many attempts". What now?</span><i class="fa-solid fa-chevron-down"></i></div><div class="faq-answer">For security, we limit login attempts. Wait <strong>5‑10 minutes</strong> before trying again. If you've forgotten your password, use the reset link instead of repeatedly guessing.</div></div>
                 </div>
             </div>
 
@@ -965,22 +315,12 @@
             const toggle = document.getElementById('darkModeToggle');
             const saved = localStorage.getItem('nexusTheme');
             const body = document.body;
-            if (saved === 'light') {
-                body.classList.add('light-mode');
-                toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-            } else {
-                body.classList.remove('light-mode');
-                toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            }
+            if (saved === 'light') { body.classList.add('light-mode'); toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; }
+            else { body.classList.remove('light-mode'); toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; }
             toggle.addEventListener('click', function() {
                 const isLight = body.classList.toggle('light-mode');
-                if (isLight) {
-                    toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                    localStorage.setItem('nexusTheme', 'light');
-                } else {
-                    toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-                    localStorage.setItem('nexusTheme', 'dark');
-                }
+                if (isLight) { toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; localStorage.setItem('nexusTheme', 'light'); }
+                else { toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; localStorage.setItem('nexusTheme', 'dark'); }
             });
         })();
 
@@ -988,19 +328,13 @@
         // FAQ ACCORDION
         // ============================================================
         document.querySelectorAll('.faq-item').forEach(item => {
-            item.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
+            item.addEventListener('click', function() { this.classList.toggle('active'); });
         });
 
         // ============================================================
-        // CHECK IF USER IS ALREADY LOGGED IN → REDIRECT
+        // REDIRECT IF ALREADY LOGGED IN – REMOVED!
+        // No auto-redirect – user goes to info.html after login
         // ============================================================
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = 'dashboard.html';
-            }
-        });
 
         // ============================================================
         // LOGIN FORM SUBMIT
@@ -1013,33 +347,15 @@
             const inputVal = document.getElementById('loginIdentifier').value.trim();
             const password = document.getElementById('loginPass').value;
 
-            // --- Basic Validation ---
             if (!inputVal || !password) {
-                await Swal.fire({
-                    title: 'Missing Fields',
-                    text: 'Please enter both your identifier and password.',
-                    icon: 'warning',
-                    background: '#111424',
-                    color: '#fff',
-                    confirmButtonColor: '#e5b842',
-                    timer: 2000
-                });
+                await Swal.fire({ title: 'Missing Fields', text: 'Please enter both your identifier and password.', icon: 'warning', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
                 return;
             }
             if (password.length < 4) {
-                await Swal.fire({
-                    title: 'Invalid Password',
-                    text: 'Password must be at least 4 characters.',
-                    icon: 'error',
-                    background: '#111424',
-                    color: '#fff',
-                    confirmButtonColor: '#e5b842',
-                    timer: 2000
-                });
+                await Swal.fire({ title: 'Invalid Password', text: 'Password must be at least 4 characters.', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
                 return;
             }
 
-            // --- UI: loading ---
             loginBtn.disabled = true;
             loginBtn.innerHTML = '<div class="spinner-small"></div> Authenticating...';
 
@@ -1047,67 +363,31 @@
                 let targetEmail = "";
                 let foundVia = "";
 
-                // 1. Detect identifier type: Email, Phone, or Username
                 if (inputVal.includes('@')) {
-                    // Email
                     if (!inputVal.toLowerCase().endsWith('@gmail.com')) {
-                        await Swal.fire({
-                            title: 'Invalid Email',
-                            text: 'Please use a valid Gmail address (@gmail.com).',
-                            icon: 'error',
-                            background: '#111424',
-                            color: '#fff',
-                            confirmButtonColor: '#e5b842',
-                            timer: 2000
-                        });
-                        loginBtn.disabled = false;
-                        loginBtn.innerHTML = originalText;
-                        return;
+                        await Swal.fire({ title: 'Invalid Email', text: 'Please use a valid Gmail address (@gmail.com).', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
+                        loginBtn.disabled = false; loginBtn.innerHTML = originalText; return;
                     }
                     targetEmail = inputVal.toLowerCase();
                     foundVia = "email";
                 } else if (/^\d+$/.test(inputVal)) {
-                    // Phone number
                     let phoneDigits = inputVal.replace(/\D/g, '');
-                    if (phoneDigits.length === 11) {
-                        phoneDigits = phoneDigits.substring(1);
-                    }
+                    if (phoneDigits.length === 11) { phoneDigits = phoneDigits.substring(1); }
                     const formattedPhone = "234" + phoneDigits;
                     const phoneQuery = await rtdb.ref('users').orderByChild('phone').equalTo(formattedPhone).once('value');
                     if (!phoneQuery.exists()) {
-                        await Swal.fire({
-                            title: 'Account Not Found',
-                            text: 'No account found with this phone number.',
-                            icon: 'error',
-                            background: '#111424',
-                            color: '#fff',
-                            confirmButtonColor: '#e5b842',
-                            timer: 2000
-                        });
-                        loginBtn.disabled = false;
-                        loginBtn.innerHTML = originalText;
-                        return;
+                        await Swal.fire({ title: 'Account Not Found', text: 'No account found with this phone number.', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
+                        loginBtn.disabled = false; loginBtn.innerHTML = originalText; return;
                     }
                     const data = phoneQuery.val();
                     const firstKey = Object.keys(data)[0];
                     targetEmail = data[firstKey].email;
                     foundVia = "phone";
                 } else {
-                    // Username
                     const userQuery = await rtdb.ref('users').orderByChild('username').equalTo(inputVal.toLowerCase()).once('value');
                     if (!userQuery.exists()) {
-                        await Swal.fire({
-                            title: 'Account Not Found',
-                            text: 'No account found with this username.',
-                            icon: 'error',
-                            background: '#111424',
-                            color: '#fff',
-                            confirmButtonColor: '#e5b842',
-                            timer: 2000
-                        });
-                        loginBtn.disabled = false;
-                        loginBtn.innerHTML = originalText;
-                        return;
+                        await Swal.fire({ title: 'Account Not Found', text: 'No account found with this username.', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
+                        loginBtn.disabled = false; loginBtn.innerHTML = originalText; return;
                     }
                     const data = userQuery.val();
                     const firstKey = Object.keys(data)[0];
@@ -1116,103 +396,55 @@
                 }
 
                 if (!targetEmail) {
-                    await Swal.fire({
-                        title: 'Account Not Found',
-                        text: 'No account found with the provided credentials.',
-                        icon: 'error',
-                        background: '#111424',
-                        color: '#fff',
-                        confirmButtonColor: '#e5b842',
-                        timer: 2000
-                    });
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = originalText;
-                    return;
+                    await Swal.fire({ title: 'Account Not Found', text: 'No account found with the provided credentials.', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
+                    loginBtn.disabled = false; loginBtn.innerHTML = originalText; return;
                 }
 
-                // 2. Attempt Firebase sign-in
                 const userCredential = await auth.signInWithEmailAndPassword(targetEmail, password);
                 const user = userCredential.user;
 
-                // 3. Verify user document exists in RTDB and check status
                 const userSnap = await rtdb.ref('users/' + user.uid).once('value');
                 if (!userSnap.exists()) {
-                    await Swal.fire({
-                        title: 'Account Error',
-                        text: 'Account data not found. Please contact support.',
-                        icon: 'error',
-                        background: '#111424',
-                        color: '#fff',
-                        confirmButtonColor: '#e5b842',
-                        timer: 3000
-                    });
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = originalText;
-                    return;
+                    await Swal.fire({ title: 'Account Error', text: 'Account data not found. Please contact support.', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 3000 });
+                    loginBtn.disabled = false; loginBtn.innerHTML = originalText; return;
                 }
 
                 const userData = userSnap.val();
                 if (userData.status === 'suspended') {
-                    await Swal.fire({
-                        title: 'Account Suspended',
-                        text: 'Your account has been suspended. Please contact customer support for assistance.',
-                        icon: 'error',
-                        background: '#111424',
-                        color: '#fff',
-                        confirmButtonColor: '#e5b842',
-                        timer: 3500
-                    });
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = originalText;
-                    return;
+                    await Swal.fire({ title: 'Account Suspended', text: 'Your account has been suspended. Please contact customer support for assistance.', icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 3500 });
+                    loginBtn.disabled = false; loginBtn.innerHTML = originalText; return;
                 }
 
-                // 4. Success
+                // Success – always redirect to info.html
                 await Swal.fire({
                     title: 'Login Successful!',
-                    html: `Welcome back, <strong>${userData.username || 'Investor'}</strong>! Redirecting to your dashboard...`,
+                    html: `Welcome back, <strong>${userData.username || 'Investor'}</strong>!`,
                     icon: 'success',
                     background: '#111424',
                     color: '#fff',
                     confirmButtonColor: '#e5b842',
-                    timer: 2000,
+                    timer: 1500,
                     showConfirmButton: false
                 });
 
-                // Clear any old info flag so user sees info page again if needed
-                sessionStorage.removeItem('nexusInfoShown');
+                // Always redirect to info
                 setTimeout(() => {
                     window.location.href = 'info.html?redirect=dashboard.html';
-                }, 1800);
+                }, 1500);
 
             } catch (error) {
                 console.error("Login error:", error);
                 let msg = 'An error occurred. Please try again.';
-                if (error.code === 'auth/wrong-password') {
-                    msg = 'The password you entered is incorrect. Please try again.';
-                } else if (error.code === 'auth/user-not-found') {
-                    msg = 'No account found with these credentials. Please register first.';
-                } else if (error.code === 'auth/invalid-email') {
-                    msg = 'The email format is invalid. Please check and try again.';
-                } else if (error.code === 'auth/too-many-requests') {
-                    msg = 'Too many failed attempts. Please wait 5‑10 minutes before trying again.';
-                } else if (error.code === 'auth/network-request-failed') {
-                    msg = 'Network error. Please check your internet connection.';
-                }
-                await Swal.fire({
-                    title: 'Login Failed',
-                    text: msg,
-                    icon: 'error',
-                    background: '#111424',
-                    color: '#fff',
-                    confirmButtonColor: '#e5b842',
-                    timer: 3500
-                });
+                if (error.code === 'auth/wrong-password') msg = 'The password you entered is incorrect. Please try again.';
+                else if (error.code === 'auth/user-not-found') msg = 'No account found with these credentials. Please register first.';
+                else if (error.code === 'auth/invalid-email') msg = 'The email format is invalid. Please check and try again.';
+                else if (error.code === 'auth/too-many-requests') msg = 'Too many failed attempts. Please wait 5‑10 minutes before trying again.';
+                else if (error.code === 'auth/network-request-failed') msg = 'Network error. Please check your internet connection.';
+                await Swal.fire({ title: 'Login Failed', text: msg, icon: 'error', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 3500 });
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = originalText;
             }
         });
     </script>
-
 </body>
 </html>

@@ -144,7 +144,7 @@
         toggle.addEventListener('click', function() {
             const isLight = body.classList.toggle('light-mode');
             if (isLight) { toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; localStorage.setItem('nexusTheme', 'light'); }
-            else { toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; localStorage.setItem('nexusTheme', 'dark'); }
+            else { toggle.innerHTML = '<i class="fa-solid fa-moon</i>'; localStorage.setItem('nexusTheme', 'dark'); }
         });
     }
 
@@ -185,7 +185,7 @@
     }
 
     // ================================================================
-    //  ADMIN SETTINGS (Firestore – optional)
+    //  ADMIN SETTINGS (Firestore – optional, can be moved to RTDB)
     // ================================================================
     async function loadAdminSettings() {
         try {
@@ -884,14 +884,9 @@
     }
 
     // ================================================================
-    //  REDIRECT LOGIC (FIXED)
+    //  REDIRECT LOGIC – REMOVED – Info shows every time
     // ================================================================
-    function shouldRedirectToInfo() {
-        const currentPath = window.location.pathname;
-        const isOnInfoPage = currentPath.includes('info.html') || currentPath === '/' || currentPath === '';
-        const infoShown = sessionStorage.getItem('nexusInfoShown') === 'true';
-        return !isOnInfoPage && !infoShown;
-    }
+    // No redirect logic – user goes directly to info after login/registration.
 
     // ================================================================
     //  AUTHENTICATION & INIT
@@ -906,12 +901,8 @@
                 activeUserSession = user;
                 console.log('👤 User authenticated:', user.uid);
 
-                if (shouldRedirectToInfo()) {
-                    console.log('🔄 First visit – showing info page');
-                    sessionStorage.setItem('nexusInfoShown', 'true');
-                    window.location.href = 'info.html?redirect=dashboard.html';
-                    return;
-                }
+                // No redirect check – dashboard loads directly.
+                // (Login and registration already redirect to info.html)
 
                 if (dbListener) {
                     dbListener.off();
