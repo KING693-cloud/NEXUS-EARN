@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 
     <!-- ============================================================
-     MASTER HEADER – meta, AdSense, fonts, Firebase
+     MASTER META TAGS – WhatsApp, Facebook, Telegram, Twitter
      ============================================================ -->
-    <meta property="og:title" content="NEXUS EARN – Latest Updates & Announcements" />
-    <meta property="og:description" content="Stay updated with the latest NEXUS EARN news: 1‑year VIP plans, bank deposit via PalmPay, 15‑minute timer, and new withdrawal rules." />
+    <meta property="og:title" content="NEXUS EARN – How to Use the App" />
+    <meta property="og:description" content="Step-by-step guide to using NEXUS EARN: download the app, deposit via PalmPay, earn daily, and withdraw securely." />
     <meta property="og:image" content="https://nexus-earn.com/logo.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -16,25 +16,20 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="NEXUS EARN" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="NEXUS EARN – What's New" />
-    <meta name="twitter:description" content="All the latest updates: 1‑year contracts, PalmPay deposits, new VIP pricing, and more." />
+    <meta name="twitter:title" content="NEXUS EARN – How to Use" />
+    <meta name="twitter:description" content="Your quick-start guide to earning daily with NEXUS EARN." />
     <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
     <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
-    <title>NEXUS EARN – Announcements & Updates</title>
-    <meta name="description" content="Stay informed about NEXUS EARN's latest features: 365‑day VIP plans, bank transfers, and enhanced security." />
+    <title>NEXUS EARN – How to Use | Quick Start Guide</title>
+    <meta name="description" content="Step-by-step guide to using NEXUS EARN – download the app, deposit, earn daily, withdraw, and redeem vouchers." />
     <meta name="theme-color" content="#e5b842" />
 
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Firebase (compat) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
         /* ============================================================
@@ -70,17 +65,15 @@
         body.light-mode .hero-banner {
             background: #ffffff;
         }
-        body.light-mode .update-card,
-        body.light-mode .trust-bar,
-        body.light-mode .vip-table,
-        body.light-mode .info-box,
-        body.light-mode .faq-item {
+        body.light-mode .step-card,
+        body.light-mode .info-card,
+        body.light-mode .voucher-card {
             background: #f0f2f8;
             border-color: #e0e4ec;
             color: #1a1e2e;
         }
-        body.light-mode .update-desc,
-        body.light-mode .faq-answer {
+        body.light-mode .step-desc,
+        body.light-mode .info-text {
             color: #4b5563;
         }
         body.light-mode .footer {
@@ -88,13 +81,6 @@
         }
         body.light-mode .footer a {
             color: #1a1e2e;
-        }
-        body.light-mode .trust-item strong {
-            color: #1a1e2e;
-        }
-        body.light-mode .highlight {
-            background: rgba(229, 184, 66, 0.08) !important;
-            border-left-color: #e5b842 !important;
         }
 
         ::-webkit-scrollbar {
@@ -122,23 +108,16 @@
 
         /* ---- Animations ---- */
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
         /* ---- Top Bar ---- */
@@ -196,25 +175,26 @@
             background: rgba(229, 184, 66, 0.25);
             transform: scale(1.05);
         }
-        .dash-link {
-            color: #e5b842;
+        .skip-link {
+            color: #9ca3af;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 0.8rem;
+            font-weight: 600;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
             gap: 5px;
             transition: all 0.2s;
         }
-        .dash-link:hover {
+        .skip-link:hover {
+            color: #e5b842;
             gap: 8px;
         }
 
         /* ---- Hero Banner ---- */
         .hero-banner {
             width: 100%;
-            background: radial-gradient(circle at 30% 50%, #1b203a 0%, #0b0d17 100%);
-            padding: 30px 24px 28px;
+            background: radial-gradient(circle at 30% 40%, #1b203a 0%, #0b0d17 100%);
+            padding: 24px 24px 20px;
             text-align: center;
             border-bottom: 1px solid rgba(229, 184, 66, 0.15);
             position: relative;
@@ -228,7 +208,7 @@
             right: -20%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(229, 184, 66, 0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(229, 184, 66, 0.05) 0%, transparent 70%);
             pointer-events: none;
         }
         .hero-banner .badge {
@@ -236,29 +216,20 @@
             background: linear-gradient(135deg, #10b981, #059669);
             padding: 4px 14px;
             border-radius: 30px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #fff;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
         }
         .hero-banner .badge i {
             margin-right: 4px;
         }
         .hero-banner h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 900;
             line-height: 1.2;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .hero-banner h1 .gold {
             background: linear-gradient(135deg, #f5d061, #e5b842);
@@ -266,365 +237,313 @@
             -webkit-text-fill-color: transparent;
         }
         .hero-banner .subtitle {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #9ca3af;
             line-height: 1.5;
             max-width: 320px;
             margin: 0 auto;
         }
 
-        /* ---- Trust Bar ---- */
-        .trust-bar {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 16px 20px;
+        /* ---- Status Bar ---- */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
             background: rgba(255, 255, 255, 0.02);
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.65rem;
         }
-        .trust-item {
-            text-align: center;
-            padding: 4px 0;
+        .status-bar .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            font-weight: 600;
         }
-        .trust-item i {
-            color: #e5b842;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 3px;
+        .status-bar .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
         }
-        .trust-item span {
-            font-size: 0.6rem;
-            color: #9ca3af;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+        .status-bar .status-badge.offline {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
         }
-        .trust-item strong {
-            font-size: 0.95rem;
-            color: #fff;
-            display: block;
-            font-weight: 800;
+        .status-bar .status-badge.offline .dot {
+            background: #ef4444;
         }
 
         /* ---- Content ---- */
         .content {
-            padding: 24px 20px 10px;
+            padding: 20px 20px 10px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 18px;
         }
 
-        /* ---- Section Headers ---- */
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 800;
+        /* ---- Scroll Indicator ---- */
+        .scroll-indicator {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #6b7280;
+            padding: 4px 0 8px;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+        .scroll-indicator i {
+            display: block;
+            font-size: 1.2rem;
             color: #e5b842;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-        .section-sub {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-bottom: 16px;
-            line-height: 1.5;
+            margin-top: 2px;
         }
 
-        /* ---- Update Cards ---- */
-        .update-card {
+        /* ---- Step Cards ---- */
+        .step-card {
             background: #161a2e;
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px 16px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-left: 3px solid #e5b842;
             transition: all 0.3s ease;
-            margin-bottom: 16px;
             animation: fadeInUp 0.4s ease-out;
         }
-        .update-card:hover {
+        .step-card:hover {
             transform: translateX(3px);
             border-color: rgba(229, 184, 66, 0.25);
         }
-        .update-card.highlight {
-            border-left-color: #10b981;
-            background: rgba(16, 185, 129, 0.04);
-        }
-        .update-card.highlight .update-title i {
-            color: #10b981;
-        }
-        .update-card .update-date {
-            display: inline-block;
-            font-size: 0.6rem;
-            background: rgba(229, 184, 66, 0.12);
-            padding: 2px 10px;
-            border-radius: 20px;
-            color: #e5b842;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .update-card .update-title {
-            font-size: 0.95rem;
-            font-weight: 800;
-            margin-bottom: 6px;
+        .step-card .step-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            margin-bottom: 6px;
         }
-        .update-card .update-title i {
+        .step-card .step-number {
+            font-size: 0.7rem;
+            font-weight: 800;
             color: #e5b842;
-            font-size: 0.9rem;
+            background: rgba(229, 184, 66, 0.1);
+            padding: 2px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
         }
-        .update-card .update-desc {
+        .step-card .step-icon {
+            font-size: 1.2rem;
+            color: #e5b842;
+            width: 28px;
+            text-align: center;
+        }
+        .step-card .step-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .step-card .step-desc {
             font-size: 0.78rem;
             color: #a1a1aa;
             line-height: 1.6;
+            padding-left: 40px;
         }
-        .update-card .update-desc strong {
+        .step-card .step-desc strong {
             color: #e5b842;
         }
-        .update-card .update-desc ul {
-            margin-top: 8px;
-            padding-left: 18px;
-        }
-        .update-card .update-desc ul li {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            margin-bottom: 3px;
-            list-style-type: disc;
-        }
-        .update-card .update-desc .badge-new {
-            background: #10b981;
-            color: #fff;
-            font-size: 0.55rem;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            margin-left: 6px;
-        }
-
-        /* ---- VIP Table ---- */
-        .vip-table-wrapper {
-            overflow-x: auto;
-            margin-top: 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .vip-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.75rem;
-            background: #161a2e;
-            min-width: 320px;
-        }
-        .vip-table th {
-            background: rgba(229, 184, 66, 0.08);
-            color: #e5b842;
-            padding: 10px 8px;
-            text-align: center;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.6rem;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .vip-table td {
-            padding: 8px 8px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: #d1d5db;
-        }
-        .vip-table tr:last-child td {
-            border-bottom: none;
-        }
-        .vip-table tr:hover td {
-            background: rgba(229, 184, 66, 0.03);
-        }
-        .vip-table .tier-name {
-            font-weight: 700;
-            color: #e5b842;
-        }
-        .vip-table .daily {
+        .step-card .step-desc .highlight {
             color: #10b981;
             font-weight: 600;
         }
-        body.light-mode .vip-table {
-            background: #ffffff;
+        .step-card .step-desc .warning {
+            color: #f97316;
+            font-weight: 600;
         }
-        body.light-mode .vip-table td {
-            color: #1a1e2e;
-            border-bottom-color: #e0e4ec;
+        .step-card .step-desc ul {
+            margin-top: 4px;
+            padding-left: 18px;
+        }
+        .step-card .step-desc ul li {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            margin-bottom: 2px;
+            list-style-type: disc;
+        }
+        .step-card .step-desc .copy-code {
+            display: inline-block;
+            background: rgba(229, 184, 66, 0.1);
+            border: 1px dashed rgba(229, 184, 66, 0.3);
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: #e5b842;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+        .step-card .step-desc .btn-small {
+            display: inline-block;
+            background: rgba(229, 184, 66, 0.15);
+            border: 1px solid rgba(229, 184, 66, 0.2);
+            color: #e5b842;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .step-card .step-desc .btn-small:hover {
+            background: rgba(229, 184, 66, 0.25);
         }
 
-        /* ---- Info Box (support, tips) ---- */
-        .info-box {
-            background: rgba(229, 184, 66, 0.04);
-            border: 1px solid rgba(229, 184, 66, 0.12);
+        /* ---- Voucher Card ---- */
+        .voucher-card {
+            background: linear-gradient(135deg, #1b203a, #161a2e);
+            border-radius: 16px;
+            padding: 18px 16px;
+            border: 1px solid rgba(229, 184, 66, 0.2);
+            border-left: 3px solid #a855f7;
+            transition: all 0.3s ease;
+        }
+        .voucher-card:hover {
+            transform: translateX(3px);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+        .voucher-card .voucher-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .voucher-card .voucher-header i {
+            font-size: 1.2rem;
+            color: #a855f7;
+        }
+        .voucher-card .voucher-header h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .voucher-card .voucher-header .vip-tag {
+            font-size: 0.55rem;
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-left: auto;
+        }
+        .voucher-card .voucher-desc {
+            font-size: 0.78rem;
+            color: #a1a1aa;
+            line-height: 1.6;
+            padding-left: 38px;
+        }
+        .voucher-card .voucher-desc strong {
+            color: #a855f7;
+        }
+        .voucher-card .voucher-desc .code-example {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: #a855f7;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        /* ---- Info Card ---- */
+        .info-card {
+            background: rgba(16, 185, 129, 0.04);
+            border: 1px solid rgba(16, 185, 129, 0.12);
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: flex-start;
             gap: 12px;
+            margin-top: 4px;
         }
-        .info-box i {
-            color: #e5b842;
+        .info-card i {
+            color: #10b981;
             font-size: 1.2rem;
             margin-top: 2px;
         }
-        .info-box div p {
-            font-size: 0.75rem;
+        .info-card .info-text {
+            font-size: 0.72rem;
             color: #a1a1aa;
             line-height: 1.5;
         }
-
-        /* ---- FAQ ---- */
-        .faq-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 4px;
-        }
-        .faq-item {
-            background: #161a2e;
-            border-radius: 14px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .faq-item:hover {
-            border-color: rgba(229, 184, 66, 0.2);
-        }
-        .faq-item .faq-question {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-        .faq-item .faq-question i {
+        .info-card .info-text a {
             color: #e5b842;
-            transition: transform 0.3s;
-        }
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-        .faq-item .faq-answer {
-            font-size: 0.72rem;
-            color: #9ca3af;
-            line-height: 1.5;
-            margin-top: 8px;
-            display: none;
-        }
-        .faq-item.active .faq-answer {
-            display: block;
-            animation: fadeInUp 0.3s ease;
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        /* ---- Dismiss / Reminder Controls ---- */
-        .reminder-controls {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 8px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .reminder-controls label {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-        .reminder-controls input[type="checkbox"] {
-            accent-color: #e5b842;
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-        .btn-remind {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 10px 16px;
-            border-radius: 10px;
-            color: #9ca3af;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-remind:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-        .btn-dismiss {
-            background: linear-gradient(135deg, #f5d061, #e5b842);
+        /* ---- Dashboard Button ---- */
+        .btn-dashboard {
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
             border: none;
-            padding: 10px 24px;
-            border-radius: 10px;
+            border-radius: 12px;
             color: #111424;
             font-weight: 800;
-            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 6px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
         }
-        .btn-dismiss:hover {
+        .btn-dashboard:hover {
             transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(229, 184, 66, 0.3);
+            box-shadow: 0 4px 20px rgba(229, 184, 66, 0.35);
         }
-        body.light-mode .btn-remind {
-            background: #f0f2f8;
-            border-color: #d1d5db;
-            color: #1a1e2e;
-        }
-        body.light-mode .btn-remind:hover {
-            background: #e0e4ec;
+        .btn-dashboard:active {
+            transform: scale(0.98);
         }
 
         /* ---- Footer ---- */
         .footer {
-            padding: 24px 20px 10px;
+            padding: 20px 20px 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center;
             margin-top: 10px;
         }
         .footer .logo-small {
             font-weight: 900;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #e5b842;
             letter-spacing: 1px;
         }
         .footer p {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #6b7280;
-            margin-top: 6px;
+            margin-top: 4px;
             line-height: 1.4;
         }
         .footer .links {
             display: flex;
             justify-content: center;
-            gap: 18px;
-            margin-top: 10px;
+            gap: 14px;
+            margin-top: 8px;
             flex-wrap: wrap;
         }
         .footer .links a {
             color: #9ca3af;
             text-decoration: none;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             transition: color 0.2s;
         }
         .footer .links a:hover {
@@ -641,7 +560,7 @@
             max-width: 400px;
             background: #1b203a;
             border-left: 4px solid #e5b842;
-            padding: 15px;
+            padding: 14px;
             border-radius: 10px;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 9999;
@@ -668,20 +587,30 @@
             .hero-banner h1 {
                 font-size: 1.3rem;
             }
-            .update-card {
-                padding: 16px;
+            .step-card {
+                padding: 14px 12px;
             }
-            .vip-table {
-                font-size: 0.65rem;
-                min-width: 280px;
+            .step-card .step-desc {
+                padding-left: 0;
+                margin-top: 4px;
             }
-            .reminder-controls {
+            .step-card .step-header {
+                flex-wrap: wrap;
+            }
+            .voucher-card .voucher-desc {
+                padding-left: 0;
+                margin-top: 4px;
+            }
+            .status-bar {
                 flex-direction: column;
-                align-items: stretch;
+                gap: 4px;
+                align-items: flex-start;
             }
-            .btn-dismiss,
-            .btn-remind {
-                justify-content: center;
+            .scroll-indicator {
+                font-size: 0.6rem;
+            }
+            .top-bar .brand span {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -693,7 +622,7 @@
     ============================================================ -->
     <div class="toast-notification" id="customToast">
         <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
-        <div class="toast-msg" id="toastMsg">Notification System Active.</div>
+        <div class="toast-msg" id="toastMsg">Welcome to NEXUS EARN!</div>
     </div>
 
     <!-- ============================================================
@@ -711,267 +640,152 @@
                 <div class="dark-toggle" id="darkModeToggle" title="Toggle dark/light mode">
                     <i class="fa-solid fa-moon"></i>
                 </div>
-                <a href="dashboard.html" class="dash-link">
-                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                <a href="#" class="skip-link" id="skipLink">
+                    Skip <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         </header>
 
         <!-- ---- HERO ---- -->
         <section class="hero-banner">
-            <div class="badge"><i class="fa-solid fa-bullhorn"></i> What's New</div>
-            <h1>Stay <span class="gold">Updated</span></h1>
-            <p class="subtitle">All the latest announcements, features, and improvements – delivered straight to you.</p>
+            <div class="badge"><i class="fa-solid fa-rocket"></i> Welcome to NEXUS EARN</div>
+            <h1>Your <span class="gold">Quick Start</span> Guide</h1>
+            <p class="subtitle">Everything you need to know to start earning daily returns.</p>
         </section>
 
-        <!-- ---- TRUST BAR ---- -->
-        <div class="trust-bar">
-            <div class="trust-item">
-                <i class="fa-solid fa-arrow-trend-up"></i>
-                <strong>365 Days</strong>
-                <span>New Contract Duration</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-building-columns"></i>
-                <strong>PalmPay</strong>
-                <span>New Deposit Method</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-clock"></i>
-                <strong>15 Min</strong>
-                <span>Deposit Timer</span>
+        <!-- ---- STATUS BAR (Network only) ---- -->
+        <div class="status-bar">
+            <div class="status-badge" id="networkStatus">
+                <span class="dot"></span>
+                <span id="statusText">Connected</span>
             </div>
         </div>
 
+        <!-- ---- SCROLL INDICATOR ---- -->
+        <div class="scroll-indicator" onclick="document.getElementById('guideContent').scrollIntoView({behavior:'smooth'})">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Scroll to read the guide</span>
+        </div>
+
         <!-- ---- CONTENT ---- -->
-        <main class="content">
+        <main class="content" id="guideContent">
 
-            <!-- ============================================================
-            SECTION 1 – NEW VIP PLANS (365 DAYS)
-            ============================================================ -->
-            <div>
-                <h2 class="section-title"><i class="fa-solid fa-crown"></i> NEW VIP PLANS – 365 DAYS</h2>
-                <p class="section-sub">We've upgraded every VIP plan to a <strong>full 1‑year contract</strong> (365 days). Upgrading resets your timer to 365 days for the new tier. Here's the complete new pricing:</p>
-
-                <div class="vip-table-wrapper">
-                    <table class="vip-table">
-                        <thead>
-                            <tr>
-                                <th>Tier</th>
-                                <th>Price (₦)</th>
-                                <th>Daily Yield (₦)</th>
-                                <th>Contract</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="tier-name">VIP 1</td><td>15,500</td><td class="daily">500</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 2</td><td>30,500</td><td class="daily">1,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 3</td><td>60,000</td><td class="daily">2,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 4</td><td>120,000</td><td class="daily">4,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 5</td><td>240,000</td><td class="daily">8,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 6</td><td>480,000</td><td class="daily">16,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 7</td><td>960,000</td><td class="daily">32,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 8</td><td>1,920,000</td><td class="daily">64,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 9</td><td>3,840,000</td><td class="daily">128,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 10</td><td>7,680,000</td><td class="daily">256,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 11</td><td>15,360,000</td><td class="daily">512,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 12</td><td>30,720,000</td><td class="daily">1,024,000</td><td>365 days</td></tr>
-                            <tr><td class="tier-name">VIP 13</td><td>61,440,000</td><td class="daily">2,048,000</td><td>365 days</td></tr>
-                        </tbody>
-                    </table>
+            <!-- STEP 1 – DOWNLOAD THE APP -->
+            <div class="step-card">
+                <div class="step-header">
+                    <span class="step-number">STEP 1</span>
+                    <span class="step-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                    <span class="step-title">Download the App</span>
                 </div>
-                <p style="font-size:0.65rem;color:#6b7280;margin-top:8px;text-align:center;">
-                    <i class="fa-solid fa-info-circle"></i> View full details and activate plans on your dashboard.
-                </p>
-            </div>
-
-            <!-- ============================================================
-            SECTION 2 – NEW DEPOSIT METHOD (BANK TRANSFER)
-            ============================================================ -->
-            <div>
-                <h2 class="section-title"><i class="fa-solid fa-money-bill-transfer"></i> NEW DEPOSIT METHOD – BANK TRANSFER</h2>
-                <p class="section-sub">We've moved to a <strong>secure manual bank transfer</strong> system via PalmPay. No more Paystack – just send money directly and get credited after admin approval.</p>
-
-                <div class="update-card highlight">
-                    <div class="update-date"><i class="fa-regular fa-calendar"></i> July 15, 2026</div>
-                    <div class="update-title">
-                        <i class="fa-solid fa-building-columns"></i> Deposit via PalmPay – What You Need to Know
-                    </div>
-                    <div class="update-desc">
-                        <ul>
-                            <li><strong>Bank:</strong> PalmPay</li>
-                            <li><strong>Account Number:</strong> <strong>896‑2925‑124</strong></li>
-                            <li><strong>Account Name:</strong> <strong>NEXUS EARN LIMITED(TAIWO)</strong> <span class="badge-new">Opay Note</span></li>
-                            <li style="list-style-type: none; padding-left: 0; margin-top: 4px; font-size:0.7rem; color:#e5b842;">
-                                <i class="fa-solid fa-triangle-exclamation"></i> On OPay and some banks, it may show as <strong>NEXUS(TAIWO)</strong> – that's still the correct account.
-                            </li>
-                        </ul>
-                        <br />
-                        <strong>🔐 Narration Code (IMPORTANT):</strong>
-                        <ul>
-                            <li>When you start a deposit, a <strong>unique 10‑character alphanumeric code</strong> will be generated (e.g., <strong>188EBEDIR</strong>).</li>
-                            <li>You <strong>MUST</strong> include this code in the transaction narration/description when sending money.</li>
-                            <li>If the code is missing or wrong, the admin will <strong>reject</strong> your deposit.</li>
-                            <li>The code is valid for <strong>15 minutes</strong> – after that, it expires and you must start a new deposit session.</li>
-                        </ul>
-                        <br />
-                        <strong>📋 After Sending Money:</strong>
-                        <ul>
-                            <li>Submit the form on the deposit page with: <strong>Amount, Sender Name, Sender Account Number (optional)</strong>.</li>
-                            <li>Admin verifies the narration code and amount, then <strong>approves</strong> your deposit – your balance is credited <strong>exactly</strong> the amount you sent (0% fee).</li>
-                            <li>You'll see the status in your <strong>History</strong> page: Pending → Approved / Rejected.</li>
-                        </ul>
-                        <br />
-                        <p style="font-size:0.7rem;color:#10b981;"><i class="fa-solid fa-circle-check"></i> <strong>Minimum Deposit:</strong> ₦15,000 (so you can start with VIP 1).</p>
-                    </div>
+                <div class="step-desc">
+                    Get the NEXUS EARN app for faster access and instant notifications.
+                    <ul>
+                        <li><strong>Android:</strong> Tap the floating <strong>Download App</strong> button (bottom‑left) or the <strong>"Get Nexus App"</strong> button inside the Voucher modal.</li>
+                        <li><strong>iOS:</strong> Open Safari, go to <strong>nexus-earn.com</strong>, tap <strong>Share</strong> → <strong>Add to Home Screen</strong>.</li>
+                        <li>Once installed, you'll get <span class="highlight">real‑time updates</span> and a smoother experience.</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 3 – NEW WITHDRAWAL RULES
-            ============================================================ -->
-            <div>
-                <h2 class="section-title"><i class="fa-solid fa-money-bill-wave"></i> NEW WITHDRAWAL RULES</h2>
-                <p class="section-sub">We've updated our withdrawal system to give you more flexibility while maintaining security.</p>
-
-                <div class="update-card">
-                    <div class="update-date"><i class="fa-regular fa-calendar"></i> July 15, 2026</div>
-                    <div class="update-title">
-                        <i class="fa-solid fa-clock"></i> Withdrawal Hours, Limits &amp; "One Pending" Rule
-                    </div>
-                    <div class="update-desc">
-                        <ul>
-                            <li><strong>Minimum Withdrawal:</strong> ₦500</li>
-                            <li><strong>Processing Fee:</strong> 10% (deducted from the withdrawn amount – you receive 90%)</li>
-                            <li><strong>Withdrawal Hours:</strong> Monday – Saturday, <strong>10:00 AM – 6:00 PM</strong> (WAT).</li>
-                            <li><strong>No withdrawals on Sundays.</strong> Requests outside hours are processed the next business day.</li>
-                            <li><strong>Preset Amounts:</strong> ₦500, ₦1,500, ₦5,000, ₦15,000, ₦50,000, ₦100,000, ₦500,000</li>
-                            <li><strong>One Pending Withdrawal at a Time:</strong> If you have a pending request from today or yesterday, you <strong>cannot</strong> submit a new one until it's approved or rejected.</li>
-                            <li>All withdrawal requests are processed <strong>manually</strong> by admin for security. You'll see status updates in your History page.</li>
-                        </ul>
-                    </div>
+            <!-- STEP 2 – DEPOSIT -->
+            <div class="step-card" style="border-left-color: #3b82f6;">
+                <div class="step-header">
+                    <span class="step-number">STEP 2</span>
+                    <span class="step-icon"><i class="fa-solid fa-money-bill-transfer"></i></span>
+                    <span class="step-title">Deposit via Bank Transfer</span>
+                </div>
+                <div class="step-desc">
+                    Fund your wallet using our secure PalmPay account.
+                    <ul>
+                        <li><strong>Bank:</strong> PalmPay</li>
+                        <li><strong>Account Number:</strong> <span class="copy-code">896-2925-124</span> <button class="btn-small" onclick="copyText('896-2925-124')"><i class="fa-regular fa-copy"></i> Copy</button></li>
+                        <li><strong>Account Name:</strong> <span class="copy-code">NEXUS EARN LIMITED(TAIWO)</span> <button class="btn-small" onclick="copyText('NEXUS EARN LIMITED(TAIWO)')"><i class="fa-regular fa-copy"></i> Copy</button></li>
+                        <li><span class="warning">⚠️ On OPay, it may show as <strong>NEXUS(TAIWO)</strong> – that's still correct.</span></li>
+                        <li><strong>Minimum Deposit:</strong> <span class="highlight">₦15,000</span></li>
+                        <li>Go to the <strong>Deposit</strong> page, generate your <strong>10‑character narration code</strong>, include it in your transfer, and submit the form.</li>
+                        <li>Admin approves within <strong>24 hours</strong> – <span class="highlight">0% fee</span> – you get exactly what you sent.</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 4 – PRESERVED UPDATES (APK, Referral, etc.)
-            ============================================================ -->
-            <div>
-                <h2 class="section-title"><i class="fa-solid fa-list-check"></i> OTHER UPDATES &amp; REMINDERS</h2>
-                <p class="section-sub">Additional important announcements to keep you informed.</p>
-
-                <!-- 1. Withdrawal Processing (Manual) – preserved -->
-                <div class="update-card highlight">
-                    <div class="update-date"><i class="fa-regular fa-calendar"></i> June 13, 2026</div>
-                    <div class="update-title">
-                        <i class="fa-solid fa-clock"></i> Withdrawal Processing – Manual Review
-                    </div>
-                    <div class="update-desc">
-                        All withdrawal requests are processed manually by our finance team to ensure security and accuracy. Please allow <strong>24‑48 hours</strong> for processing. You will receive a notification once your withdrawal is approved. Thank you for your patience and trust.
-                    </div>
+            <!-- STEP 3 – EARN DAILY -->
+            <div class="step-card" style="border-left-color: #10b981;">
+                <div class="step-header">
+                    <span class="step-number">STEP 3</span>
+                    <span class="step-icon"><i class="fa-solid fa-hand-holding-usd"></i></span>
+                    <span class="step-title">Earn Daily Returns</span>
                 </div>
-
-                <!-- 2. How to Download the App – preserved -->
-                <div class="update-card">
-                    <div class="update-date"><i class="fa-regular fa-calendar"></i> June 13, 2026</div>
-                    <div class="update-title">
-                        <i class="fa-solid fa-mobile-screen-button"></i> How to Download the NEXUS App
-                    </div>
-                    <div class="update-desc">
-                        📲 <strong>For Android:</strong> Tap the floating download icon (bottom‑left corner) or the “Get Nexus App” button inside the Voucher modal. The APK will save to your device.<br />
-                        🍏 <strong>For iOS:</strong> Visit our website on Safari and tap “Share” → “Add to Home Screen”.<br />
-                        The app gives you faster access, instant notifications, and a smoother experience.
-                    </div>
-                </div>
-
-                <!-- 3. Where to find Referral Link & Official Channels – preserved -->
-                <div class="update-card">
-                    <div class="update-date"><i class="fa-regular fa-calendar"></i> June 13, 2026</div>
-                    <div class="update-title">
-                        <i class="fa-solid fa-link"></i> Where to Find Your Referral Link &amp; Official Channels
-                    </div>
-                    <div class="update-desc">
-                        🔗 <strong>Referral Link:</strong> Go to the <strong>“Team”</strong> tab in your dashboard. Your unique referral link is displayed there – copy and share it.<br />
-                        💬 <strong>Official Channels:</strong> Use the <strong>Support</strong> button (floating headset icon) to join our Telegram and WhatsApp groups. There you can collect earning links, get real‑time updates, and connect with other investors.<br />
-                        ⭐ Always verify channels via the app – avoid fake groups.
-                    </div>
+                <div class="step-desc">
+                    After activating a VIP plan, you earn daily for <strong>365 days</strong>.
+                    <ul>
+                        <li>Go to the <strong>Mining</strong> tab (bottom navigation).</li>
+                        <li>Tap the <strong>collect income</strong> button once per day.</li>
+                        <li>Your earnings are added to your balance <strong>instantly</strong>.</li>
+                        <li>You must collect <strong>every day</strong> – missed days are lost.</li>
+                        <li>Upgrade to a higher VIP plan to <span class="highlight">increase your daily yield</span>.</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 5 – FREQUENTLY ASKED (NEW UPDATES)
-            ============================================================ -->
-            <div>
-                <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> FAQs About the New Changes</h2>
-                <p class="section-sub">Quick answers to the most common questions about the new updates.</p>
-
-                <div class="faq-list">
-                    <div class="faq-item active">
-                        <div class="faq-question">
-                            <span>Why did you change the contract to 365 days?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            We listened to our community! A full 1‑year contract gives you <strong>longer, more stable returns</strong> and aligns with our vision of building a sustainable investment ecosystem. Upgrading resets your timer, so you can always extend your earning period.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>How do I deposit with the new bank transfer method?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            Go to the <strong>Deposit</strong> page, copy the PalmPay details (<strong>896‑2925‑124</strong>, <strong>NEXUS EARN LIMITED(TAIWO)</strong>), generate your 10‑character narration code, send your amount (min ₦15,000), and submit the form with your sender name. Admin approves within 24 hours.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>What happens if I forget the narration code?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            The narration code is <strong>required</strong> for admin to identify your deposit. If you forget it, your deposit will be <strong>rejected</strong>. Always copy and paste the code into your bank transfer description. You can also copy it from the deposit page.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>Why is there a 15‑minute timer on deposits?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            The timer ensures that <strong>narration codes are unique and time‑bound</strong> for security. If the timer runs out, your code expires and you must start a fresh deposit session. This prevents code reuse and protects both users and admins.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <span>Can I withdraw more than once a day?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            You can only have <strong>one pending withdrawal at a time</strong>. If your pending request is from today or yesterday, you cannot submit another until it's approved or rejected. Once it's processed, you can request a new withdrawal immediately.
-                        </div>
-                    </div>
+            <!-- STEP 4 – WITHDRAW -->
+            <div class="step-card" style="border-left-color: #f97316;">
+                <div class="step-header">
+                    <span class="step-number">STEP 4</span>
+                    <span class="step-icon"><i class="fa-solid fa-money-bill-wave"></i></span>
+                    <span class="step-title">Withdraw Your Earnings</span>
+                </div>
+                <div class="step-desc">
+                    Cash out your earnings securely to your bank account.
+                    <ul>
+                        <li><strong>Minimum:</strong> ₦500</li>
+                        <li><strong>Processing Fee:</strong> 10% (you receive 90%)</li>
+                        <li><strong>Hours:</strong> Mon – Sat, <strong>10:00 AM – 6:00 PM</strong> (WAT)</li>
+                        <li><strong>No withdrawals on Sundays.</strong></li>
+                        <li>Only <strong>one pending withdrawal</strong> at a time – wait for approval before requesting another.</li>
+                        <li>Admin processes within <strong>24‑48 hours</strong>.</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SECTION 6 – REMINDER CONTROLS
-            ============================================================ -->
-            <div class="info-box" style="border-color: rgba(229,184,66,0.2);">
-                <i class="fa-solid fa-bell"></i>
-                <div>
-                    <p><strong>📢 Stay Informed</strong><br />
-                    We'll keep posting updates here. You can choose to be reminded later or dismiss this page for 24 hours.</p>
-                    <div class="reminder-controls">
-                        <label>
-                            <input type="checkbox" id="dontShowAgain" />
-                            <span>Don't show for 24 hours</span>
-                        </label>
-                        <button class="btn-remind" id="remindLaterBtn"><i class="fa-regular fa-clock"></i> Remind in 6h</button>
-                        <button class="btn-dismiss" id="dismissBtn"><i class="fa-solid fa-check"></i> Go to Dashboard</button>
-                    </div>
+            <!-- STEP 5 – VOUCHER CODES (VIP ONLY) -->
+            <div class="voucher-card">
+                <div class="voucher-header">
+                    <i class="fa-solid fa-ticket"></i>
+                    <h4>Voucher Codes</h4>
+                    <span class="vip-tag">VIP Only</span>
+                </div>
+                <div class="voucher-desc">
+                    <strong>VIP 1+ members</strong> can redeem special voucher codes for bonus funds.
+                    <ul>
+                        <li>Codes are <strong>6‑character alphanumeric</strong> (e.g., <span class="code-example">ABC123</span>).</li>
+                        <li>Tap the <strong>Voucher</strong> floating button (gift icon).</li>
+                        <li>Enter the code and tap <strong>Verify &amp; Claim</strong>.</li>
+                        <li>Each code can be used <strong>once per user</strong>.</li>
+                        <li>Codes are shared via our <strong>official Telegram</strong> and <strong>WhatsApp</strong> channels.</li>
+                        <li style="list-style-type: none; margin-top: 6px; font-size:0.7rem; color:#a855f7;">
+                            <i class="fa-solid fa-star"></i> <strong>Pro Tip:</strong> Follow our channels to get exclusive codes!
+                        </li>
+                    </ul>
                 </div>
             </div>
+
+            <!-- SUPPORT -->
+            <div class="info-card">
+                <i class="fa-solid fa-headset"></i>
+                <div class="info-text">
+                    <strong>Need help?</strong> Join our official channels for support and updates:
+                    <br />
+                    <a href="https://t.me/Nexusearnofficial" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram</a> &bull;
+                    <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <br />
+                    <span style="font-size:0.65rem;color:#6b7280;">We're here to help 24/7.</span>
+                </div>
+            </div>
+
+            <!-- DASHBOARD BUTTON -->
+            <button class="btn-dashboard" id="goToDashboardBtn">
+                <i class="fa-solid fa-gauge-high"></i> Go to Dashboard
+            </button>
 
         </main>
 
@@ -982,7 +796,7 @@
             <div class="links">
                 <a href="https://t.me/Nexusearnofficial" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram</a>
                 <a href="https://chat.whatsapp.com/Bl4SecixHmjKrIqw67HrH4" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-                <a href="#" onclick="alert('Coming soon!')">Privacy Policy</a>
+                <a href="#" onclick="alert('Coming soon!')">Privacy</a>
                 <a href="#" onclick="alert('Coming soon!')">Terms</a>
             </div>
         </footer>
@@ -990,7 +804,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT – DARK MODE + FAQ + REMINDER LOGIC
+    JAVASCRIPT – DARK MODE + COPY + NETWORK + REDIRECT
     ============================================================ -->
     <script>
         // ============================================================
@@ -1020,44 +834,36 @@
         })();
 
         // ============================================================
-        // FAQ ACCORDION
+        // COPY TEXT
         // ============================================================
-        document.querySelectorAll('.faq-item').forEach(item => {
-            item.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
-        });
-
-        // ============================================================
-        // REMINDER / DISMISS LOGIC (preserved from original)
-        // ============================================================
-        function getRedirectTarget() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('redirect') || 'dashboard.html';
-        }
-
-        function closeAndRedirect() {
-            const dontShow = document.getElementById('dontShowAgain').checked;
-            if (dontShow) {
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                localStorage.setItem('nexusInfoHiddenUntil', tomorrow.getTime());
+        function copyText(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => showToast('✅ Copied: ' + text))
+                    .catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
             }
-            window.location.href = getRedirectTarget();
         }
 
-        function remindLater() {
-            const remindTime = new Date();
-            remindTime.setHours(remindTime.getHours() + 6);
-            localStorage.setItem('nexusInfoHiddenUntil', remindTime.getTime());
-            window.location.href = getRedirectTarget();
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('✅ Copied: ' + text);
+            } catch (e) {
+                showToast('Failed to copy. Please copy manually.', false);
+            }
+            document.body.removeChild(textarea);
         }
-
-        document.getElementById('dismissBtn').addEventListener('click', closeAndRedirect);
-        document.getElementById('remindLaterBtn').addEventListener('click', remindLater);
 
         // ============================================================
-        // TOAST (for user feedback on actions)
+        // TOAST
         // ============================================================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
@@ -1071,13 +877,59 @@
             toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // If the user checks the "Don't show" box, show a friendly confirmation
-        document.getElementById('dontShowAgain').addEventListener('change', function() {
-            if (this.checked) {
-                showToast('✅ Noted! We\'ll hide this page for 24 hours.');
-            }
-        });
-    </script>
+        // ============================================================
+        // NETWORK STATUS
+        // ============================================================
+        function checkNetworkStatus() {
+            const statusBadge = document.getElementById('networkStatus');
+            const statusText = document.getElementById('statusText');
+            const dot = statusBadge.querySelector('.dot');
 
+            function updateStatus(online) {
+                if (online) {
+                    statusBadge.className = 'status-badge';
+                    statusText.textContent = 'Connected';
+                    dot.style.background = '#10b981';
+                } else {
+                    statusBadge.className = 'status-badge offline';
+                    statusText.textContent = '⚠️ Offline – Check your connection';
+                    dot.style.background = '#ef4444';
+                    showToast('⚠️ Your internet connection is unstable.', false);
+                }
+            }
+
+            updateStatus(navigator.onLine);
+            window.addEventListener('online', () => {
+                updateStatus(true);
+                showToast('✅ Back online!');
+            });
+            window.addEventListener('offline', () => {
+                updateStatus(false);
+            });
+            setInterval(() => {
+                updateStatus(navigator.onLine);
+            }, 30000);
+        }
+
+        // ============================================================
+        // REDIRECT TO DASHBOARD
+        // ============================================================
+        function goToDashboard() {
+            const redirectTarget = new URLSearchParams(window.location.search).get('redirect') || 'dashboard.html';
+            window.location.href = redirectTarget;
+        }
+
+        document.getElementById('goToDashboardBtn').addEventListener('click', goToDashboard);
+        document.getElementById('skipLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            goToDashboard();
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        checkNetworkStatus();
+        showToast('✅ Guide ready!');
+    </script>
 </body>
-</html>
+    </html>
