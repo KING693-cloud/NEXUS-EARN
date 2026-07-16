@@ -1255,7 +1255,7 @@
         });
 
         // ============================================================
-        // SIGNUP FORM SUBMIT
+        // SIGNUP FORM SUBMIT (WITH VERIFICATION)
         // ============================================================
         document.getElementById('nexusSignupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1351,6 +1351,12 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
+                // ⭐ VERIFY the document was actually written
+                const checkDoc = await db.collection('users').doc(uid).get();
+                if (!checkDoc.exists) {
+                    throw new Error("User document was not saved. Please check your network and Firestore rules.");
+                }
+
                 // 5. Ledger entry for signup bonus
                 await db.collection('ledger').add({
                     uid: uid,
@@ -1363,11 +1369,20 @@
                 // 6. Show success
                 showToast("✅ Account created! Redirecting to your dashboard...");
 
+                // Set session flag so info page shows only once
+                sessionStorage.setItem('nexusInfoShown', 'true');
                 setTimeout(() => {
                     window.location.href = "info.html?redirect=dashboard.html";
-                }, 2000);
+                }, 1500);
 
             } catch (err) {
+                console.error("Registration error:", err);
+                // If document creation failed, delete the auth user (cleanup)
+                if (auth.currentUser) {
+                    try {
+                        await auth.currentUser.delete();
+                    } catch (e) { /* ignore */ }
+                }
                 showToast(err.message || "Registration failed. Please try again.", true);
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Register & Get ₦500';

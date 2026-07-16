@@ -1,19 +1,10 @@
 /**
  * ================================================================
- *  🔥 NEXUS EARN – MASTER DASHBOARD JAVASCRIPT (FIXED REDIRECT LOOP)
- *  ================================================================
- *  File: dashboard.js
- *  Description: Complete dashboard logic. Redirects to info.html
- *  only once per session, using a localStorage flag.
+ *  🔥 NEXUS EARN – MASTER DASHBOARD JAVASCRIPT (FIXED + FALLBACK)
  *  ================================================================
  */
-
 (function() {
     'use strict';
-
-    // ================================================================
-    //  SECTION 1: FIREBASE CONFIGURATION & INITIALISATION
-    //  ================================================================
 
     const firebaseConfig = {
         apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -23,19 +14,10 @@
         messagingSenderId: "779765076952",
         appId: "1:779765076952:web:fa5fac51bef82e74b598ad"
     };
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-        console.log('🔥 Firebase initialised successfully.');
-    }
-
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
     const FieldValue = firebase.firestore.FieldValue;
-
-    // ================================================================
-    //  SECTION 2: GLOBAL STATE
-    //  ================================================================
 
     let activeUserSession = null;
     let localUserRecord = null;
@@ -69,10 +51,6 @@
 
     let reminderShownThisSession = false;
 
-    // ================================================================
-    //  SECTION 3: UTILITY FUNCTIONS
-    //  ================================================================
-
     function getNigeriaDate() {
         const now = new Date();
         const nigeriaTime = new Date(now.getTime() + 3600000);
@@ -80,37 +58,19 @@
     }
 
     function getTierValue(tierCode) {
-        const tiers = {
-            VIP1: 1, VIP2: 2, VIP3: 3, VIP4: 4, VIP5: 5,
-            VIP6: 6, VIP7: 7, VIP8: 8, VIP9: 9, VIP10: 10,
-            VIP11: 11, VIP12: 12, VIP13: 13
-        };
+        const tiers = { VIP1:1, VIP2:2, VIP3:3, VIP4:4, VIP5:5, VIP6:6, VIP7:7, VIP8:8, VIP9:9, VIP10:10, VIP11:11, VIP12:12, VIP13:13 };
         return tiers[tierCode] || 0;
     }
 
     function getDailyYieldByTier(tierCode) {
-        const yields = {
-            VIP1: 500, VIP2: 1000, VIP3: 2000, VIP4: 4000, VIP5: 8000,
-            VIP6: 16000, VIP7: 32000, VIP8: 64000, VIP9: 128000,
-            VIP10: 256000, VIP11: 512000, VIP12: 1024000, VIP13: 2048000
-        };
+        const yields = { VIP1:500, VIP2:1000, VIP3:2000, VIP4:4000, VIP5:8000, VIP6:16000, VIP7:32000, VIP8:64000, VIP9:128000, VIP10:256000, VIP11:512000, VIP12:1024000, VIP13:2048000 };
         return yields[tierCode] || 0;
     }
 
     function getPlanCost(tierCode) {
-        const costs = {
-            VIP1: 15500, VIP2: 30500, VIP3: 60000, VIP4: 120000, VIP5: 240000,
-            VIP6: 480000, VIP7: 960000, VIP8: 1920000, VIP9: 3840000,
-            VIP10: 7680000, VIP11: 15360000, VIP12: 30720000, VIP13: 61440000
-        };
+        const costs = { VIP1:15500, VIP2:30500, VIP3:60000, VIP4:120000, VIP5:240000, VIP6:480000, VIP7:960000, VIP8:1920000, VIP9:3840000, VIP10:7680000, VIP11:15360000, VIP12:30720000, VIP13:61440000 };
         return costs[tierCode] || 0;
     }
-
-    function getPlanDays() { return 365; }
-
-    // ================================================================
-    //  SECTION 4: UI HELPERS (Toast, Modals, Loader, Dark Mode)
-    //  ================================================================
 
     function showToast(message, isSuccess = true) {
         const toast = document.getElementById('customToast');
@@ -127,17 +87,13 @@
 
     function hideLoadingAndShow() {
         const loader = document.getElementById('loadingOverlay');
-        if (loader) {
-            loader.classList.add('hide');
-            setTimeout(() => { loader.style.display = 'none'; }, 400);
-        }
+        if (loader) { loader.classList.add('hide'); setTimeout(() => { loader.style.display = 'none'; }, 400); }
     }
 
     window.openPortalModal = function(id) {
         const el = document.getElementById(id);
         if (el) el.style.display = 'flex';
     };
-
     window.closePortalModal = function(id) {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -146,17 +102,13 @@
     window.switchPortalTab = function(view) {
         document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view'));
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active-tab'));
-
         const viewEl = document.getElementById('view' + view);
         const tabEl = document.getElementById('tab' + view);
         if (viewEl) viewEl.classList.add('active-view');
         if (tabEl) tabEl.classList.add('active-tab');
-
         if (view === 'Home') {
             setTimeout(() => {
-                if (document.getElementById('viewHome').classList.contains('active-view')) {
-                    showReminderModalOnce();
-                }
+                if (document.getElementById('viewHome').classList.contains('active-view')) showReminderModalOnce();
             }, 300);
         }
     };
@@ -173,22 +125,12 @@
         if (!toggle) return;
         const saved = localStorage.getItem('nexusTheme');
         const body = document.body;
-        if (saved === 'light') {
-            body.classList.add('light-mode');
-            toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        } else {
-            body.classList.remove('light-mode');
-            toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-        }
+        if (saved === 'light') { body.classList.add('light-mode'); toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; }
+        else { body.classList.remove('light-mode'); toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; }
         toggle.addEventListener('click', function() {
             const isLight = body.classList.toggle('light-mode');
-            if (isLight) {
-                toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                localStorage.setItem('nexusTheme', 'light');
-            } else {
-                toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-                localStorage.setItem('nexusTheme', 'dark');
-            }
+            if (isLight) { toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; localStorage.setItem('nexusTheme', 'light'); }
+            else { toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; localStorage.setItem('nexusTheme', 'dark'); }
         });
     }
 
@@ -198,30 +140,23 @@
             const midnightTarget = new Date();
             midnightTarget.setHours(24, 0, 0, 0);
             const diff = midnightTarget - now;
-            let h = Math.floor(diff / (1000 * 60 * 60));
-            let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            let s = Math.floor((diff % (1000 * 60)) / 1000);
-            h = h < 10 ? '0' + h : h;
-            m = m < 10 ? '0' + m : m;
-            s = s < 10 ? '0' + s : s;
+            let h = Math.floor(diff / (1000*60*60));
+            let m = Math.floor((diff % (1000*60*60)) / (1000*60));
+            let s = Math.floor((diff % (1000*60)) / 1000);
+            h = h < 10 ? '0'+h : h; m = m < 10 ? '0'+m : m; s = s < 10 ? '0'+s : s;
             const countdownEl = document.getElementById('countdownDisplay');
             if (countdownEl) countdownEl.innerText = h + ':' + m + ':' + s;
             const clockEl = document.getElementById('topSystemClock');
             if (clockEl) {
-                clockEl.innerHTML = '<i class="fa-regular fa-clock"></i> ' +
-                    now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                clockEl.innerHTML = '<i class="fa-regular fa-clock"></i> ' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
             }
         }, 1000);
     }
 
     function copyTextToClipboard(text, successMsg = 'Copied!') {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text)
-                .then(() => showToast(successMsg))
-                .catch(() => fallbackCopyText(text, successMsg));
-        } else {
-            fallbackCopyText(text, successMsg);
-        }
+            navigator.clipboard.writeText(text).then(() => showToast(successMsg)).catch(() => fallbackCopyText(text, successMsg));
+        } else { fallbackCopyText(text, successMsg); }
     }
 
     function fallbackCopyText(text, successMsg) {
@@ -231,62 +166,27 @@
         textarea.style.opacity = '0';
         document.body.appendChild(textarea);
         textarea.select();
-        try {
-            document.execCommand('copy');
-            showToast(successMsg);
-        } catch (e) {
-            showToast('Failed to copy. Please copy manually.', false);
-        }
+        try { document.execCommand('copy'); showToast(successMsg); } catch(e) { showToast('Failed to copy. Please copy manually.', false); }
         document.body.removeChild(textarea);
     }
-
-    // ================================================================
-    //  SECTION 5: ADMIN SETTINGS
-    //  ================================================================
 
     async function loadAdminSettings() {
         try {
             const settingsRef = db.collection('admin_settings').doc('platform_config');
             const docSnap = await settingsRef.get();
-            if (docSnap.exists) {
-                adminSettings = docSnap.data();
-            } else {
-                await settingsRef.set({
-                    maintenanceMode: false,
-                    disabledVIPs: [],
-                    apkDownloadUrl: '',
-                    apkVersion: '1.0.0',
-                    dailyDeduction: 0,
-                    defaultContractDays: 365,
-                    referralCommissionRate: 10,
-                    checkinBonus: 50
-                });
-                adminSettings = {
-                    maintenanceMode: false,
-                    disabledVIPs: [],
-                    apkDownloadUrl: '',
-                    apkVersion: '1.0.0',
-                    referralCommissionRate: 10,
-                    checkinBonus: 50
-                };
+            if (docSnap.exists) { adminSettings = docSnap.data(); }
+            else {
+                await settingsRef.set({ maintenanceMode:false, disabledVIPs:[], apkDownloadUrl:'', apkVersion:'1.0.0', dailyDeduction:0, defaultContractDays:365, referralCommissionRate:10, checkinBonus:50 });
+                adminSettings = { maintenanceMode:false, disabledVIPs:[], apkDownloadUrl:'', apkVersion:'1.0.0', referralCommissionRate:10, checkinBonus:50 };
             }
-            updateApkButton();
-            updateVIPDisabledState();
-            updateClaimButtonState();
-        } catch (err) {
-            console.error('Error loading admin settings:', err);
-        }
+            updateApkButton(); updateVIPDisabledState(); updateClaimButtonState();
+        } catch(err) { console.error('Error loading admin settings:', err); }
     }
 
     function listenToAdminSettings() {
         const settingsRef = db.collection('admin_settings').doc('platform_config');
         settingsUnsubscriber = settingsRef.onSnapshot((snapshot) => {
-            if (snapshot.exists) {
-                adminSettings = snapshot.data();
-                updateApkButton();
-                updateVIPDisabledState();
-                updateClaimButtonState();
-            }
+            if (snapshot.exists) { adminSettings = snapshot.data(); updateApkButton(); updateVIPDisabledState(); updateClaimButtonState(); }
         });
     }
 
@@ -298,42 +198,26 @@
             const badge = document.getElementById('apkVersionBadge');
             if (badge) badge.innerText = adminSettings.apkVersion || '1.0.0';
             apkBtn.onclick = () => { window.open(adminSettings.apkDownloadUrl, '_blank'); };
-        } else {
-            apkBtn.style.display = 'none';
-        }
+        } else { apkBtn.style.display = 'none'; }
     }
 
     function updateVIPDisabledState() {
         document.querySelectorAll('.upgrade-btn').forEach(btn => {
             const tier = btn.getAttribute('data-tier');
             if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tier)) {
-                btn.disabled = true;
-                btn.title = 'This plan is currently disabled by admin';
-                btn.style.opacity = '0.5';
-                btn.textContent = '🔒 Unavailable';
-            } else {
-                btn.disabled = false;
-                btn.title = '';
-                btn.style.opacity = '1';
-                btn.textContent = 'Activate Plan';
-            }
+                btn.disabled = true; btn.title = 'Disabled by admin'; btn.style.opacity = '0.5'; btn.textContent = '🔒 Unavailable';
+            } else { btn.disabled = false; btn.title = ''; btn.style.opacity = '1'; btn.textContent = 'Activate Plan'; }
         });
     }
-
-    // ================================================================
-    //  SECTION 6: CORE APPLICATION LOGIC
-    //  ================================================================
 
     function updateClaimButtonState() {
         const claimBox = document.getElementById('universalTaskBox');
         const statusMsgDiv = document.getElementById('claimStatusMessage');
         if (!claimBox || !localUserRecord) return;
-
         const userTier = localUserRecord.tierCode || 'NONE';
         const todayStr = getNigeriaDate();
         const alreadyClaimed = localUserRecord.lastMiningClaimDate === todayStr;
         const daysRemaining = parseInt(localUserRecord.contractDaysRemaining || 0);
-
         claimBox.classList.remove('claim-available', 'claim-disabled', 'claim-maintenance', 'claim-completed', 'claim-loading');
 
         if (adminSettings.maintenanceMode) {
@@ -346,7 +230,6 @@
             statusMsgDiv.innerHTML = '<i class="fa-solid fa-shield-halved"></i> System maintenance in progress. Please try again later.';
             return;
         }
-
         if (userTier === 'NONE') {
             claimBox.classList.add('claim-disabled');
             claimBox.style.cursor = 'not-allowed';
@@ -357,7 +240,6 @@
             statusMsgDiv.innerHTML = '<i class="fa-solid fa-crown"></i> Purchase a VIP plan to start earning daily!';
             return;
         }
-
         if (daysRemaining <= 0) {
             claimBox.classList.add('claim-disabled');
             claimBox.style.cursor = 'not-allowed';
@@ -368,7 +250,6 @@
             statusMsgDiv.innerHTML = '<i class="fa-solid fa-hourglass-end"></i> Your 365‑day contract has expired. Purchase a new plan to continue earning.';
             return;
         }
-
         if (alreadyClaimed) {
             claimBox.classList.add('claim-completed');
             claimBox.style.cursor = 'default';
@@ -379,7 +260,6 @@
             statusMsgDiv.innerHTML = '<i class="fa-solid fa-check-double"></i> You\'ve already collected today\'s earnings. Come back tomorrow at midnight reset!';
             return;
         }
-
         claimBox.classList.add('claim-available');
         claimBox.style.cursor = 'pointer';
         document.getElementById('taskIcon').className = 'fa-solid fa-hand-holding-usd';
@@ -390,36 +270,23 @@
     function renderTerminalMetrics(data) {
         const currentBal = parseFloat(data.balance || 0);
         const userTier = data.tierCode || 'NONE';
-
-        document.getElementById('displayUserBalance').innerText =
-            '₦' + currentBal.toLocaleString('en-US', { minimumFractionDigits: 2 });
-        document.getElementById('displayTotalEarnings').innerText =
-            '₦' + currentBal.toLocaleString('en-US', { minimumFractionDigits: 2 });
-        document.getElementById('displayActiveRank').innerText =
-            userTier === 'NONE' ? 'STANDARD MEMBER' : userTier;
-
+        document.getElementById('displayUserBalance').innerText = '₦' + currentBal.toLocaleString('en-US', { minimumFractionDigits:2 });
+        document.getElementById('displayTotalEarnings').innerText = '₦' + currentBal.toLocaleString('en-US', { minimumFractionDigits:2 });
+        document.getElementById('displayActiveRank').innerText = userTier === 'NONE' ? 'STANDARD MEMBER' : userTier;
         document.getElementById('profileUsernameDisplay').innerText = data.username || 'Investor';
-        document.getElementById('profileRankLabel').innerText =
-            userTier === 'NONE' ? 'STANDARD MEMBER' : 'VIP TIER: ' + userTier;
-        document.getElementById('taskPackageLabel').innerText =
-            userTier === 'NONE' ? 'NONE (STANDARD)' : 'VIP TIER: ' + userTier;
-
+        document.getElementById('profileRankLabel').innerText = userTier === 'NONE' ? 'STANDARD MEMBER' : 'VIP TIER: ' + userTier;
+        document.getElementById('taskPackageLabel').innerText = userTier === 'NONE' ? 'NONE (STANDARD)' : 'VIP TIER: ' + userTier;
         const displayYield = getDailyYieldByTier(userTier);
         document.getElementById('taskRewardLabel').innerHTML = '₦' + displayYield.toLocaleString();
-
         if (userTier !== 'NONE') {
             document.getElementById('premiumDaysTrackerRow').style.display = 'flex';
             const daysLeft = data.contractDaysRemaining !== undefined ? data.contractDaysRemaining : 365;
             document.getElementById('premiumDaysRemainingText').innerText = daysLeft + ' Days';
-        } else {
-            document.getElementById('premiumDaysTrackerRow').style.display = 'none';
-        }
-
+        } else { document.getElementById('premiumDaysTrackerRow').style.display = 'none'; }
         const refCode = data.referralCode || data.username || 'nx79402';
         document.getElementById('inviteLinkText').innerText = 'https://nexus-earn.com/?ref=' + refCode;
         document.getElementById('teamRebateText').innerText = '₦' + (data.referralBonusEarned || 0).toLocaleString();
         document.getElementById('teamCapitalVolumeText').innerText = '₦' + (data.teamCapitalVolume || 0).toLocaleString();
-
         if (data.bankName && data.accountNumber && data.accountName) {
             document.getElementById('shrunkLabelBank').innerText = data.bankName;
             document.getElementById('shrunkLabelHolder').innerText = data.accountName;
@@ -430,11 +297,9 @@
             document.getElementById('bankEditWarningNote').style.display = 'block';
             document.getElementById('bankBindingBlock').style.borderColor = '#10b981';
         }
-
         if (data.createdAt) {
             const date = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
-            document.getElementById('profileRegDateDisplay').innerText =
-                'Profile Registered: ' + date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('profileRegDateDisplay').innerText = 'Profile Registered: ' + date.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
         }
     }
 
@@ -446,7 +311,6 @@
             const snapshot = await teamQuery.get();
             const referredUsers = [];
             snapshot.forEach(doc => referredUsers.push({ uid: doc.id, ...doc.data() }));
-
             document.getElementById('teamSizeText').innerText = referredUsers.length + ' Users';
             let level2Count = 0;
             for (const ref of referredUsers) {
@@ -455,13 +319,10 @@
                 level2Count += subSnap.size;
             }
             document.getElementById('teamLvl2SizeText').innerText = level2Count + ' Users';
-
             if (referredUsers.length === 0) {
-                container.innerHTML =
-                    `<p style="font-size: 0.75rem; color: #9ca3af; text-align: center; padding: 10px;">No downline network links registered under this connection node.</p>`;
+                container.innerHTML = `<p style="font-size: 0.75rem; color: #9ca3af; text-align: center; padding: 10px;">No downline network links registered under this connection node.</p>`;
                 return;
             }
-
             container.innerHTML = '';
             for (const member of referredUsers) {
                 const row = document.createElement('div');
@@ -469,9 +330,7 @@
                 const displayName = member.username || 'Anonymous Invitee';
                 const activeTier = member.tierCode && member.tierCode !== 'NONE' ? member.tierCode : null;
                 const depositValue = parseFloat(member.totalDepositedAmount || 0);
-                let badgeHtml = member.username ?
-                    `<span class="status-badge registered">Registered</span>` :
-                    `<span class="status-badge unregistered">Unregistered</span>`;
+                let badgeHtml = member.username ? `<span class="status-badge registered">Registered</span>` : `<span class="status-badge unregistered">Unregistered</span>`;
                 if (activeTier) badgeHtml += `<span class="status-badge vip-tag">${activeTier}</span>`;
                 else badgeHtml += `<span class="status-badge not-activated">Not Activated</span>`;
                 row.innerHTML = `
@@ -487,8 +346,7 @@
             }
         } catch (error) {
             console.error('Team breakdown error:', error);
-            container.innerHTML =
-                `<p style="font-size: 0.75rem; color: #ef4444; text-align: center; padding: 10px;">Error loading team. Please refresh.</p>`;
+            container.innerHTML = `<p style="font-size: 0.75rem; color: #ef4444; text-align: center; padding: 10px;">Error loading team. Please refresh.</p>`;
         }
     }
 
@@ -498,31 +356,14 @@
         if (!container) return;
         const teamDepositTotal = parseFloat(localUserRecord.teamDepositTotal || 0);
         const claimedMilestones = localUserRecord.claimedMilestones || [];
-
         let html = '';
         for (const m of MILESTONES) {
             const reached = teamDepositTotal >= m.target;
             const alreadyClaimed = claimedMilestones.includes(m.target);
-            let statusText = '',
-                statusClass = '',
-                buttonDisabled = true,
-                buttonText = '';
-            if (alreadyClaimed) {
-                statusText = 'Claimed ✓';
-                statusClass = 'status-claimed';
-                buttonDisabled = true;
-                buttonText = 'Claimed';
-            } else if (reached) {
-                statusText = 'Available!';
-                statusClass = 'status-available';
-                buttonDisabled = false;
-                buttonText = `Claim ₦${m.reward.toLocaleString()}`;
-            } else {
-                statusText = 'Locked';
-                statusClass = 'status-locked';
-                buttonDisabled = true;
-                buttonText = 'Locked';
-            }
+            let statusText = '', statusClass = '', buttonDisabled = true, buttonText = '';
+            if (alreadyClaimed) { statusText = 'Claimed ✓'; statusClass = 'status-claimed'; buttonDisabled = true; buttonText = 'Claimed'; }
+            else if (reached) { statusText = 'Available!'; statusClass = 'status-available'; buttonDisabled = false; buttonText = `Claim ₦${m.reward.toLocaleString()}`; }
+            else { statusText = 'Locked'; statusClass = 'status-locked'; buttonDisabled = true; buttonText = 'Locked'; }
             html += `
                 <div class="milestone-item">
                     <div class="milestone-info">
@@ -547,20 +388,11 @@
     }
 
     async function claimMilestoneReward(target, reward) {
-        if (!activeUserSession || !localUserRecord) {
-            showToast('Please login first.', false);
-            return;
-        }
+        if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
         const claimedMilestones = localUserRecord.claimedMilestones || [];
-        if (claimedMilestones.includes(target)) {
-            showToast('You have already claimed this milestone.', false);
-            return;
-        }
+        if (claimedMilestones.includes(target)) { showToast('You have already claimed this milestone.', false); return; }
         const teamDepositTotal = parseFloat(localUserRecord.teamDepositTotal || 0);
-        if (teamDepositTotal < target) {
-            showToast(`You need total referral deposits of ₦${target.toLocaleString()} to claim this reward.`, false);
-            return;
-        }
+        if (teamDepositTotal < target) { showToast(`You need total referral deposits of ₦${target.toLocaleString()} to claim this reward.`, false); return; }
         try {
             const userRef = db.collection('users').doc(activeUserSession.uid);
             await db.runTransaction(async (transaction) => {
@@ -568,18 +400,9 @@
                 const currentBalance = snap.data().balance || 0;
                 const currentClaimed = snap.data().claimedMilestones || [];
                 if (currentClaimed.includes(target)) throw new Error('Already claimed');
-                transaction.update(userRef, {
-                    balance: currentBalance + reward,
-                    claimedMilestones: FieldValue.arrayUnion(target)
-                });
+                transaction.update(userRef, { balance: currentBalance + reward, claimedMilestones: FieldValue.arrayUnion(target) });
             });
-            await db.collection('ledger').add({
-                uid: activeUserSession.uid,
-                title: `🎯 Milestone Reward: ₦${target.toLocaleString()} Team Deposits`,
-                amount: reward,
-                type: 'credit',
-                timestamp: FieldValue.serverTimestamp()
-            });
+            await db.collection('ledger').add({ uid: activeUserSession.uid, title: `🎯 Milestone Reward: ₦${target.toLocaleString()} Team Deposits`, amount: reward, type: 'credit', timestamp: FieldValue.serverTimestamp() });
             showToast(`🎉 You claimed ₦${reward.toLocaleString()} milestone reward!`);
             const userDoc = await db.collection('users').doc(activeUserSession.uid).get();
             if (userDoc.exists) {
@@ -594,27 +417,15 @@
     }
 
     async function runProductActivationCycle(packageName, packageCost, dailyYield, tierCode) {
-        if (!activeUserSession || !localUserRecord) {
-            showToast('Please login first.', false);
-            return;
-        }
-        if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tierCode)) {
-            showToast('This VIP plan is currently disabled by admin. Please try another plan.', false);
-            return;
-        }
+        if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
+        if (adminSettings.disabledVIPs && adminSettings.disabledVIPs.includes(tierCode)) { showToast('This VIP plan is currently disabled by admin. Please try another plan.', false); return; }
         const userRef = db.collection('users').doc(activeUserSession.uid);
         const currentTier = localUserRecord.tierCode || 'NONE';
         const currentTierValue = getTierValue(currentTier);
         const newTierValue = getTierValue(tierCode);
-        if (currentTier !== 'NONE' && newTierValue <= currentTierValue) {
-            showToast('You cannot downgrade your VIP level. Upgrade only.', false);
-            return;
-        }
+        if (currentTier !== 'NONE' && newTierValue <= currentTierValue) { showToast('You cannot downgrade your VIP level. Upgrade only.', false); return; }
         const currentBalance = parseFloat(localUserRecord.balance || 0);
-        if (currentBalance < packageCost) {
-            showToast(`Insufficient balance! You need ₦${packageCost.toLocaleString()}.`, false);
-            return;
-        }
+        if (currentBalance < packageCost) { showToast(`Insufficient balance! You need ₦${packageCost.toLocaleString()}.`, false); return; }
         try {
             await db.runTransaction(async (transaction) => {
                 const userSnapshot = await transaction.get(userRef);
@@ -628,17 +439,9 @@
                     lastMiningClaimDate: ''
                 });
             });
-            await db.collection('ledger').add({
-                uid: activeUserSession.uid,
-                title: '🚀 Activated ' + packageName,
-                amount: packageCost,
-                type: 'debit',
-                timestamp: FieldValue.serverTimestamp()
-            });
+            await db.collection('ledger').add({ uid: activeUserSession.uid, title: '🚀 Activated ' + packageName, amount: packageCost, type: 'debit', timestamp: FieldValue.serverTimestamp() });
             showToast(packageName + ' Plan Successfully Activated!');
-            if (localUserRecord.referredBy) {
-                triggerNetworkReferralReward(localUserRecord.referredBy, packageCost);
-            }
+            if (localUserRecord.referredBy) { triggerNetworkReferralReward(localUserRecord.referredBy, packageCost); }
             const updatedDoc = await userRef.get();
             if (updatedDoc.exists) {
                 localUserRecord = updatedDoc.data();
@@ -647,11 +450,8 @@
             }
         } catch (error) {
             console.error('VIP activation error:', error);
-            if (error.message === 'INSUFFICIENT_FUNDS') {
-                showToast('Insufficient balance to activate this investment plan.', false);
-            } else {
-                showToast('Network error. Please try again.', false);
-            }
+            if (error.message === 'INSUFFICIENT_FUNDS') { showToast('Insufficient balance to activate this investment plan.', false); }
+            else { showToast('Network error. Please try again.', false); }
         }
     }
 
@@ -677,41 +477,18 @@
                     teamDepositTotal: newTeamDepositTotal,
                     teamCapitalVolume: teamCapitalVolume + purchasedPlanCost
                 });
-                await db.collection('ledger').add({
-                    uid: referrerUID,
-                    title: `🤝 ${adminSettings.referralCommissionRate || 10}% Direct Plan Referral Commission`,
-                    amount: finalPayoutSum,
-                    type: 'credit',
-                    timestamp: FieldValue.serverTimestamp()
-                });
+                await db.collection('ledger').add({ uid: referrerUID, title: `🤝 ${adminSettings.referralCommissionRate || 10}% Direct Plan Referral Commission`, amount: finalPayoutSum, type: 'credit', timestamp: FieldValue.serverTimestamp() });
             });
-        } catch (error) {
-            console.error('Referral reward error:', error);
-        }
+        } catch (error) { console.error('Referral reward error:', error); }
     }
 
     window.executeDailyMiningCycle = async function() {
-        if (isClaiming) {
-            showToast('Please wait, processing your previous claim...', false);
-            return;
-        }
-        if (!activeUserSession || !localUserRecord) {
-            showToast('Please login first.', false);
-            return;
-        }
-        if (adminSettings.maintenanceMode) {
-            showToast('System maintenance in progress. Please try again later.', false);
-            return;
-        }
-        if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') {
-            showToast('No active investment plan detected. Please purchase a VIP plan first.', false);
-            return;
-        }
+        if (isClaiming) { showToast('Please wait, processing your previous claim...', false); return; }
+        if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
+        if (adminSettings.maintenanceMode) { showToast('System maintenance in progress. Please try again later.', false); return; }
+        if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { showToast('No active investment plan detected. Please purchase a VIP plan first.', false); return; }
         const todayStr = getNigeriaDate();
-        if (localUserRecord.lastMiningClaimDate === todayStr) {
-            showToast('Today\'s earnings already collected. Come back tomorrow at midnight reset.', false);
-            return;
-        }
+        if (localUserRecord.lastMiningClaimDate === todayStr) { showToast('Today\'s earnings already collected. Come back tomorrow at midnight reset.', false); return; }
         let daysRemaining = parseInt(localUserRecord.contractDaysRemaining || 0);
         if (daysRemaining <= 0) {
             const userRef = db.collection('users').doc(activeUserSession.uid);
@@ -742,13 +519,7 @@
                     contractDaysRemaining: newRemaining
                 });
             });
-            await db.collection('ledger').add({
-                uid: activeUserSession.uid,
-                title: '💰 Daily Plan Returns',
-                amount: finalEarning,
-                type: 'credit',
-                timestamp: FieldValue.serverTimestamp()
-            });
+            await db.collection('ledger').add({ uid: activeUserSession.uid, title: '💰 Daily Plan Returns', amount: finalEarning, type: 'credit', timestamp: FieldValue.serverTimestamp() });
             showToast('✅ Success! ₦' + finalEarning.toLocaleString() + ' added to your balance.');
             const updatedDoc = await userRef.get();
             if (updatedDoc.exists) {
@@ -773,40 +544,19 @@
     };
 
     window.executeProfileAttendanceCheckIn = async function() {
-        if (!activeUserSession || !localUserRecord) {
-            showToast('Please login first.', false);
-            return;
-        }
-        if (adminSettings.maintenanceMode) {
-            showToast('System maintenance in progress. Check-in unavailable.', false);
-            return;
-        }
-        if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') {
-            showToast('Daily attendance rewards require an active plan level.', false);
-            return;
-        }
+        if (!activeUserSession || !localUserRecord) { showToast('Please login first.', false); return; }
+        if (adminSettings.maintenanceMode) { showToast('System maintenance in progress. Check-in unavailable.', false); return; }
+        if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { showToast('Daily attendance rewards require an active plan level.', false); return; }
         const todayStr = getNigeriaDate();
-        if (localUserRecord.lastAttendanceClaimDate === todayStr) {
-            showToast('Attendance bonus already processed for today.', false);
-            return;
-        }
+        if (localUserRecord.lastAttendanceClaimDate === todayStr) { showToast('Attendance bonus already processed for today.', false); return; }
         const userRef = db.collection('users').doc(activeUserSession.uid);
         try {
             await db.runTransaction(async (transaction) => {
                 const snap = await transaction.get(userRef);
                 const currentBalance = parseFloat(snap.data().balance || 0);
-                transaction.update(userRef, {
-                    balance: currentBalance + (adminSettings.checkinBonus || 50),
-                    lastAttendanceClaimDate: todayStr
-                });
+                transaction.update(userRef, { balance: currentBalance + (adminSettings.checkinBonus || 50), lastAttendanceClaimDate: todayStr });
             });
-            await db.collection('ledger').add({
-                uid: activeUserSession.uid,
-                title: '📅 Daily Attendance Check-In (+₦' + (adminSettings.checkinBonus || 50) + ')',
-                amount: (adminSettings.checkinBonus || 50),
-                type: 'credit',
-                timestamp: FieldValue.serverTimestamp()
-            });
+            await db.collection('ledger').add({ uid: activeUserSession.uid, title: '📅 Daily Attendance Check-In (+₦' + (adminSettings.checkinBonus || 50) + ')', amount: (adminSettings.checkinBonus || 50), type: 'credit', timestamp: FieldValue.serverTimestamp() });
             showToast('✅ Verified! ₦' + (adminSettings.checkinBonus || 50) + ' credited to your balance.');
             const updatedDoc = await userRef.get();
             if (updatedDoc.exists) {
@@ -818,10 +568,6 @@
             showToast('Processing fault. Try reloading.', false);
         }
     };
-
-    // ================================================================
-    //  SECTION 7: BANK DETAILS
-    //  ================================================================
 
     async function saveBankDetails() {
         if (!activeUserSession) return;
@@ -854,10 +600,6 @@
         copyTextToClipboard(textToCopy, '📋 Referral tracking URL copied to clipboard!');
     }
 
-    // ================================================================
-    //  SECTION 8: VOUCHER SYSTEM
-    //  ================================================================
-
     async function loadVoucherHistory() {
         if (!activeUserSession) return;
         try {
@@ -866,10 +608,7 @@
             const historySection = document.getElementById('voucherHistorySection');
             const historyList = document.getElementById('voucherHistoryList');
             if (!historySection || !historyList) return;
-            if (snapshot.empty) {
-                historySection.style.display = 'none';
-                return;
-            }
+            if (snapshot.empty) { historySection.style.display = 'none'; return; }
             const items = [];
             snapshot.forEach(docSnap => {
                 const redemption = docSnap.data();
@@ -895,24 +634,13 @@
                 `;
                 historyList.appendChild(div);
             }
-        } catch (error) {
-            console.error('Voucher history load error:', error);
-        }
+        } catch (error) { console.error('Voucher history load error:', error); }
     }
 
     async function claimProgressiveVoucher(code) {
-        if (!activeUserSession || !localUserRecord) {
-            showToast('Please login first', false);
-            return;
-        }
-        if (adminSettings.maintenanceMode) {
-            showToast('System maintenance in progress. Voucher claims unavailable.', false);
-            return;
-        }
-        if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') {
-            showToast('VIP 1+ membership required to claim vouchers!', false);
-            return;
-        }
+        if (!activeUserSession || !localUserRecord) { showToast('Please login first', false); return; }
+        if (adminSettings.maintenanceMode) { showToast('System maintenance in progress. Voucher claims unavailable.', false); return; }
+        if (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE') { showToast('VIP 1+ membership required to claim vouchers!', false); return; }
         const claimBtn = document.getElementById('claimVoucherBtn');
         const originalText = claimBtn.innerHTML;
         claimBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
@@ -920,40 +648,15 @@
         try {
             const voucherQuery = db.collection('progressiveVouchers').where('code', '==', code);
             const voucherSnapshot = await voucherQuery.get();
-            if (voucherSnapshot.empty) {
-                showToast('❌ Invalid voucher code.', false);
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-                return;
-            }
+            if (voucherSnapshot.empty) { showToast('❌ Invalid voucher code.', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
             const voucherDoc = voucherSnapshot.docs[0];
             const voucher = voucherDoc.data();
-            if (!voucher.isActive || voucher.isFullyClaimed) {
-                showToast('❌ This voucher has been fully claimed!', false);
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-                return;
-            }
-            if (voucher.expiry && voucher.expiry.toDate() < new Date()) {
-                showToast('❌ This voucher has expired!', false);
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-                return;
-            }
-            if (voucher.claimedBy && voucher.claimedBy.includes(activeUserSession.uid)) {
-                showToast('❌ You have already claimed this voucher!', false);
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-                return;
-            }
+            if (!voucher.isActive || voucher.isFullyClaimed) { showToast('❌ This voucher has been fully claimed!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
+            if (voucher.expiry && voucher.expiry.toDate() < new Date()) { showToast('❌ This voucher has expired!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
+            if (voucher.claimedBy && voucher.claimedBy.includes(activeUserSession.uid)) { showToast('❌ You have already claimed this voucher!', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
             const currentIndex = voucher.currentClaimIndex || 0;
             const claimAmount = voucher.splitAmounts[currentIndex];
-            if (!claimAmount || claimAmount <= 0) {
-                showToast('❌ Voucher error - no remaining value', false);
-                claimBtn.innerHTML = originalText;
-                claimBtn.disabled = false;
-                return;
-            }
+            if (!claimAmount || claimAmount <= 0) { showToast('❌ Voucher error - no remaining value', false); claimBtn.innerHTML = originalText; claimBtn.disabled = false; return; }
             const userRef = db.collection('users').doc(activeUserSession.uid);
             await db.runTransaction(async (transaction) => {
                 const freshVoucher = await transaction.get(voucherDoc.ref);
@@ -987,21 +690,12 @@
                 totalClaims: voucher.totalPeople,
                 timestamp: FieldValue.serverTimestamp()
             });
-            await db.collection('ledger').add({
-                uid: activeUserSession.uid,
-                title: `🎫 Voucher Claim: ${code} - ${voucher.name || 'Gift Card'}`,
-                amount: claimAmount,
-                type: 'credit',
-                timestamp: FieldValue.serverTimestamp()
-            });
+            await db.collection('ledger').add({ uid: activeUserSession.uid, title: `🎫 Voucher Claim: ${code} - ${voucher.name || 'Gift Card'}`, amount: claimAmount, type: 'credit', timestamp: FieldValue.serverTimestamp() });
             claimBtn.innerHTML = originalText;
             claimBtn.disabled = false;
             await Swal.fire({
                 title: '🎉 Voucher Claimed!',
-                html: `<div>
-                    <div style="font-size:2rem;color:#10b981;">+₦${claimAmount.toLocaleString()}</div>
-                    <div style="font-size:0.8rem;color:#e5b842;">${voucher.name || 'Gift Card'} - Claimant #${voucher.currentClaimIndex + 1} of ${voucher.totalPeople}</div>
-                </div>`,
+                html: `<div><div style="font-size:2rem;color:#10b981;">+₦${claimAmount.toLocaleString()}</div><div style="font-size:0.8rem;color:#e5b842;">${voucher.name || 'Gift Card'} - Claimant #${voucher.currentClaimIndex + 1} of ${voucher.totalPeople}</div></div>`,
                 icon: 'success',
                 background: '#111424',
                 color: '#fff',
@@ -1024,18 +718,11 @@
         }
     }
 
-    // ================================================================
-    //  SECTION 9: APK ONE‑TIME DOWNLOAD
-    //  ================================================================
-
     function initOneTimeApkButton() {
         const apkBtn = document.getElementById('oneTimeApkButton');
         if (!apkBtn) return;
         const alreadyInstalled = localStorage.getItem('nexus_apk_installed') === 'true';
-        if (alreadyInstalled) {
-            apkBtn.style.display = 'none';
-            return;
-        }
+        if (alreadyInstalled) { apkBtn.style.display = 'none'; return; }
         apkBtn.style.display = 'flex';
         apkBtn.onclick = function(e) {
             e.stopPropagation();
@@ -1054,14 +741,8 @@
     const originalOpenPortalModal = window.openPortalModal;
     window.openPortalModal = function(id) {
         originalOpenPortalModal(id);
-        if (id === 'couponModalPopup') {
-            initOneTimeApkButton();
-        }
+        if (id === 'couponModalPopup') { initOneTimeApkButton(); }
     };
-
-    // ================================================================
-    //  SECTION 10: LOGOUT
-    //  ================================================================
 
     window.logout = async function() {
         const result = await Swal.fire({
@@ -1078,69 +759,40 @@
         });
         if (result.isConfirmed) {
             await auth.signOut();
-            await Swal.fire({
-                title: '✅ Logged Out',
-                text: 'Successfully logged out.',
-                icon: 'success',
-                background: '#111424',
-                color: '#fff',
-                confirmButtonColor: '#e5b842',
-                timer: 2000
-            });
+            await Swal.fire({ title: '✅ Logged Out', text: 'Successfully logged out.', icon: 'success', background: '#111424', color: '#fff', confirmButtonColor: '#e5b842', timer: 2000 });
             window.location.href = 'login.html';
         }
     };
 
-    // ================================================================
-    //  SECTION 11: EVENT LISTENERS
-    //  ================================================================
-
     function bindEventListeners() {
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) logoutBtn.addEventListener('click', window.logout);
-
         const saveBankBtn = document.getElementById('saveBankBtn');
         if (saveBankBtn) saveBankBtn.addEventListener('click', saveBankDetails);
-
         const copyLinkBtn = document.getElementById('copyLinkBtn');
         if (copyLinkBtn) copyLinkBtn.addEventListener('click', copyReferralLink);
-
         const claimVoucherBtn = document.getElementById('claimVoucherBtn');
         if (claimVoucherBtn) {
             claimVoucherBtn.addEventListener('click', async () => {
-                if (!activeUserSession || !localUserRecord) {
-                    showToast('Please login first', false);
-                    return;
-                }
+                if (!activeUserSession || !localUserRecord) { showToast('Please login first', false); return; }
                 const codeInput = document.getElementById('voucherCodeField');
                 const code = codeInput.value.trim().toUpperCase();
-                if (!code) {
-                    showToast('Please enter a voucher code', false);
-                    codeInput.focus();
-                    return;
-                }
+                if (!code) { showToast('Please enter a voucher code', false); codeInput.focus(); return; }
                 await claimProgressiveVoucher(code);
             });
         }
-
         const claimBox = document.getElementById('universalTaskBox');
         if (claimBox) {
             claimBox.addEventListener('click', function(e) {
                 if (isClaiming) return;
-                if (this.classList.contains('claim-available')) {
-                    window.executeDailyMiningCycle();
-                } else if (!this.classList.contains('claim-loading')) {
-                    if (adminSettings.maintenanceMode) {
-                        showToast('System maintenance in progress. Please try again later.', false);
-                    } else if (localUserRecord && (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE')) {
-                        showToast('No active investment plan. Purchase a VIP plan to start earning.', false);
-                    } else if (localUserRecord && localUserRecord.lastMiningClaimDate === getNigeriaDate()) {
-                        showToast('You\'ve already collected today\'s earnings. Come back tomorrow!', false);
-                    }
+                if (this.classList.contains('claim-available')) { window.executeDailyMiningCycle(); }
+                else if (!this.classList.contains('claim-loading')) {
+                    if (adminSettings.maintenanceMode) { showToast('System maintenance in progress. Please try again later.', false); }
+                    else if (localUserRecord && (!localUserRecord.tierCode || localUserRecord.tierCode === 'NONE')) { showToast('No active investment plan. Purchase a VIP plan to start earning.', false); }
+                    else if (localUserRecord && localUserRecord.lastMiningClaimDate === getNigeriaDate()) { showToast('You\'ve already collected today\'s earnings. Come back tomorrow!', false); }
                 }
             });
         }
-
         document.querySelectorAll('.upgrade-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const name = this.getAttribute('data-name');
@@ -1150,7 +802,6 @@
                 runProductActivationCycle(name, cost, yieldAmt, tier);
             });
         });
-
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -1162,23 +813,18 @@
 
     // ================================================================
     //  SECTION 12: 🎯 REDIRECT TO INFO (ONCE PER SESSION – FIXED)
-    //  ================================================================
+    // ================================================================
 
-    /**
-     * Checks if we should redirect to info.html.
-     * Only redirects if we are NOT on info.html AND the info page has NOT been shown before.
-     * Uses localStorage flag 'nexusInfoShown' to remember.
-     */
     function shouldRedirectToInfo() {
         const currentPath = window.location.pathname;
         const isOnInfoPage = currentPath.includes('info.html') || currentPath === '/' || currentPath === '';
-        const infoShown = localStorage.getItem('nexusInfoShown') === 'true';
+        const infoShown = sessionStorage.getItem('nexusInfoShown') === 'true';
         return !isOnInfoPage && !infoShown;
     }
 
     // ================================================================
     //  SECTION 13: AUTHENTICATION & INIT
-    //  ================================================================
+    // ================================================================
 
     function initApp() {
         bindEventListeners();
@@ -1190,15 +836,13 @@
                 activeUserSession = user;
                 console.log('👤 User authenticated:', user.uid);
 
-                // 🎯 Redirect to info.html only once (fixed)
                 if (shouldRedirectToInfo()) {
-                    console.log('🔄 Redirecting to info page (first time)...');
-                    localStorage.setItem('nexusInfoShown', 'true');
+                    console.log('🔄 First visit – showing info page');
+                    sessionStorage.setItem('nexusInfoShown', 'true');
                     window.location.href = 'info.html?redirect=dashboard.html';
                     return;
                 }
 
-                // User is on dashboard (or info already shown) – proceed
                 if (dbSnapshotUnsubscriber) {
                     dbSnapshotUnsubscriber();
                     dbSnapshotUnsubscriber = null;
@@ -1209,18 +853,12 @@
                     if (snapshot.exists) {
                         localUserRecord = snapshot.data();
                         const updates = {};
-                        if (localUserRecord.firstReferralBonusPaid !== undefined) {
-                            updates.firstReferralBonusPaid = FieldValue.deleteField();
-                        }
-                        if (localUserRecord.extraReferral300 !== undefined) {
-                            updates.extraReferral300 = FieldValue.deleteField();
-                        }
+                        if (localUserRecord.firstReferralBonusPaid !== undefined) { updates.firstReferralBonusPaid = FieldValue.deleteField(); }
+                        if (localUserRecord.extraReferral300 !== undefined) { updates.extraReferral300 = FieldValue.deleteField(); }
                         if (Object.keys(updates).length > 0) {
                             await userDocRef.update(updates);
                             const refreshedSnap = await userDocRef.get();
-                            if (refreshedSnap.exists) {
-                                localUserRecord = refreshedSnap.data();
-                            }
+                            if (refreshedSnap.exists) { localUserRecord = refreshedSnap.data(); }
                         }
                         renderTerminalMetrics(localUserRecord);
                         loadTeamBreakdownNetwork(user.uid);
@@ -1229,13 +867,43 @@
                         updateClaimButtonState();
                         hideLoadingAndShow();
                         setTimeout(() => {
-                            if (document.getElementById('viewHome').classList.contains('active-view')) {
-                                showReminderModalOnce();
-                            }
+                            if (document.getElementById('viewHome').classList.contains('active-view')) showReminderModalOnce();
                         }, 500);
                     } else {
-                        console.warn('User document does not exist. Redirecting to login.');
-                        window.location.href = 'login.html';
+                        // ================================================
+                        // ⭐ FALLBACK: CREATE MISSING USER DOCUMENT
+                        // ================================================
+                        console.warn('⚠️ User document missing – creating one now...');
+                        try {
+                            await userDocRef.set({
+                                uid: user.uid,
+                                username: user.email?.split('@')[0] || 'Investor',
+                                email: user.email || '',
+                                phone: '',
+                                referralCode: 'NX' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+                                referredBy: '',
+                                balance: 0,
+                                totalEarnings: 0,
+                                referralBonusEarned: 0,
+                                directInvitesCount: 0,
+                                level2InvitesCount: 0,
+                                teamDepositTotal: 0,
+                                teamCapitalVolume: 0,
+                                tierCode: 'NONE',
+                                contractDaysRemaining: 0,
+                                activeDailyYield: 0,
+                                status: 'active',
+                                createdAt: FieldValue.serverTimestamp()
+                            });
+                            showToast('✅ Account repaired. Reloading...', true);
+                            setTimeout(() => window.location.reload(), 1500);
+                        } catch (err) {
+                            console.error('Failed to create user document:', err);
+                            showToast('Account data error. Please contact support.', false);
+                            // Redirect to login as last resort
+                            setTimeout(() => window.location.href = 'login.html', 2000);
+                        }
+                        return;
                     }
                 }, (error) => {
                     console.error('User document listener error:', error);
@@ -1254,7 +922,7 @@
 
     // ================================================================
     //  SECTION 14: START
-    //  ================================================================
+    // ================================================================
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initApp);
@@ -1262,7 +930,6 @@
         initApp();
     }
 
-    // Expose functions
     window.showToast = showToast;
     window.executeDailyMiningCycle = executeDailyMiningCycle;
     window.executeProfileAttendanceCheckIn = executeProfileAttendanceCheckIn;
