@@ -1,10 +1,10 @@
 /**
  * ================================================================
- *  🔥 NEXUS EARN – MASTER DASHBOARD JAVASCRIPT (ALWAYS REDIRECT TO INFO)
+ *  🔥 NEXUS EARN – MASTER DASHBOARD JAVASCRIPT (FIXED REDIRECT LOOP)
  *  ================================================================
  *  File: dashboard.js
- *  Description: Complete dashboard logic. On login, always redirects
- *  to info.html (unless already there). No snooze/hide logic.
+ *  Description: Complete dashboard logic. Redirects to info.html
+ *  only once per session, using a localStorage flag.
  *  ================================================================
  */
 
@@ -1161,18 +1161,19 @@
     }
 
     // ================================================================
-    //  SECTION 12: 🎯 ALWAYS REDIRECT TO INFO (no snooze)
+    //  SECTION 12: 🎯 REDIRECT TO INFO (ONCE PER SESSION – FIXED)
     //  ================================================================
 
     /**
      * Checks if we should redirect to info.html.
-     * Always redirects to info.html unless the user is already on info.html.
+     * Only redirects if we are NOT on info.html AND the info page has NOT been shown before.
+     * Uses localStorage flag 'nexusInfoShown' to remember.
      */
     function shouldRedirectToInfo() {
-        // Only redirect if we are NOT already on the info page
         const currentPath = window.location.pathname;
         const isOnInfoPage = currentPath.includes('info.html') || currentPath === '/' || currentPath === '';
-        return !isOnInfoPage;
+        const infoShown = localStorage.getItem('nexusInfoShown') === 'true';
+        return !isOnInfoPage && !infoShown;
     }
 
     // ================================================================
@@ -1189,18 +1190,15 @@
                 activeUserSession = user;
                 console.log('👤 User authenticated:', user.uid);
 
-                // 🎯 Always redirect to info.html (unless already there)
+                // 🎯 Redirect to info.html only once (fixed)
                 if (shouldRedirectToInfo()) {
-                    console.log('🔄 Redirecting to info page...');
-                    // Mark that info page has been shown (so dashboard JS doesn't loop)
+                    console.log('🔄 Redirecting to info page (first time)...');
                     localStorage.setItem('nexusInfoShown', 'true');
                     window.location.href = 'info.html?redirect=dashboard.html';
                     return;
                 }
 
-                // We are on info.html – load user data (though info page doesn't need much)
-                // But we can still load data in background
-
+                // User is on dashboard (or info already shown) – proceed
                 if (dbSnapshotUnsubscriber) {
                     dbSnapshotUnsubscriber();
                     dbSnapshotUnsubscriber = null;
