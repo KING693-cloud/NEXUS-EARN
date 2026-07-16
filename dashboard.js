@@ -144,7 +144,7 @@
         toggle.addEventListener('click', function() {
             const isLight = body.classList.toggle('light-mode');
             if (isLight) { toggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; localStorage.setItem('nexusTheme', 'light'); }
-            else { toggle.innerHTML = '<i class="fa-solid fa-moon</i>'; localStorage.setItem('nexusTheme', 'dark'); }
+            else { toggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; localStorage.setItem('nexusTheme', 'dark'); }
         });
     }
 
@@ -185,16 +185,16 @@
     }
 
     // ================================================================
-    //  ADMIN SETTINGS (Firestore – optional, can be moved to RTDB)
+    //  ADMIN SETTINGS (Realtime DB – FIXED)
     // ================================================================
     async function loadAdminSettings() {
         try {
-            const db = firebase.firestore();
-            const settingsRef = db.collection('admin_settings').doc('platform_config');
-            const docSnap = await settingsRef.get();
-            if (docSnap.exists) { adminSettings = docSnap.data(); }
-            else {
-                await settingsRef.set({
+            const snap = await rtdb.ref('settings/platform').once('value');
+            if (snap.exists()) {
+                adminSettings = snap.val();
+            } else {
+                // Set defaults if not exist
+                await rtdb.ref('settings/platform').set({
                     maintenanceMode: false,
                     disabledVIPs: [],
                     apkDownloadUrl: '',
@@ -216,15 +216,16 @@
             updateApkButton();
             updateVIPDisabledState();
             updateClaimButtonState();
-        } catch(err) { console.error('Error loading admin settings:', err); }
+        } catch(err) {
+            console.error('Error loading admin settings:', err);
+        }
     }
 
     function listenToAdminSettings() {
-        const db = firebase.firestore();
-        const settingsRef = db.collection('admin_settings').doc('platform_config');
-        settingsRef.onSnapshot((snapshot) => {
-            if (snapshot.exists) {
-                adminSettings = snapshot.data();
+        const settingsRef = rtdb.ref('settings/platform');
+        settingsRef.on('value', (snapshot) => {
+            if (snapshot.exists()) {
+                adminSettings = snapshot.val();
                 updateApkButton();
                 updateVIPDisabledState();
                 updateClaimButtonState();
