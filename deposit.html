@@ -3,60 +3,36 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-
-    <!-- ============================================================
-     MASTER HEADER – meta, AdSense, fonts, Firebase
-     ============================================================ -->
-    <meta property="og:title" content="NEXUS EARN – Secure Deposit via Bank Transfer" />
-    <meta property="og:description" content="Fund your NEXUS EARN wallet via PalmPay bank transfer. Use your unique narration code, submit the form, and admin credits your balance instantly." />
-    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://nexus-earn.com" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="NEXUS EARN" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="NEXUS EARN – Deposit via Bank Transfer" />
-    <meta name="twitter:description" content="Deposit ₦15,000+ via PalmPay with a unique narration code. Fast, secure, and admin‑approved." />
-    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
-    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-
-    <title>NEXUS EARN – Deposit | Bank Transfer via PalmPay</title>
-    <meta name="description" content="Deposit securely via PalmPay bank transfer. Minimum ₦15,000. Unique narration code required. Admin approves within 24 hours." />
-    <meta name="theme-color" content="#e5b842" />
-
-    <!-- Fonts & Icons -->
+    <title>NEXUS EARN – Deposit Funds</title>
+    <meta name="description" content="Fund your NEXUS EARN account via bank transfer. Use the details below to deposit." />
+    <meta name="theme-color" content="#3b82f6" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
     <style>
-        /* ============================================================
-           GLOBAL RESET & BASE (same as before – kept perfect)
-           ============================================================ */
+        /* ================================================================
+           RESET & BASE
+           ================================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: #0b0d17;
-            color: #ffffff;
+            color: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            transition: background-color 0.3s ease, color 0.2s ease;
+            transition: background 0.3s, color 0.2s;
             padding-bottom: 40px;
         }
 
@@ -65,10 +41,10 @@
             color: #1a1e2e;
         }
         body.light-mode .app-container {
-            background: #ffffff;
+            background: #fff;
         }
         body.light-mode .hero-banner {
-            background: #ffffff;
+            background: #fff;
         }
         body.light-mode .deposit-card,
         body.light-mode .bank-details-box,
@@ -79,14 +55,14 @@
             color: #1a1e2e;
         }
         body.light-mode .input-row-container {
-            background: #ffffff;
+            background: #fff;
             border-color: #d1d5db;
         }
         body.light-mode .input-row-container input {
             color: #1a1e2e;
         }
         body.light-mode .input-row-container i {
-            color: #e5b842;
+            color: #3b82f6;
         }
         body.light-mode .subtitle,
         body.light-mode .label-text,
@@ -102,13 +78,21 @@
         body.light-mode .trust-item strong {
             color: #1a1e2e;
         }
-        body.light-mode .timer-warning {
-            background: rgba(239, 68, 68, 0.08);
-            border-color: rgba(239, 68, 68, 0.2);
+        body.light-mode .timer-box {
+            background: #f0f2f8;
+            border-color: #d1d5db;
         }
-        body.light-mode .opay-note {
-            background: rgba(229, 184, 66, 0.08);
-            border-color: rgba(229, 184, 66, 0.2);
+        body.light-mode .timer-box .timer-label {
+            color: #4b5563;
+        }
+        body.light-mode .timer-box .timer-value {
+            color: #1a1e2e;
+        }
+        body.light-mode .copy-btn-icon {
+            color: #4b5563;
+        }
+        body.light-mode .copy-btn-icon:hover {
+            color: #3b82f6;
         }
 
         ::-webkit-scrollbar {
@@ -118,7 +102,7 @@
             background: #1b203a;
         }
         ::-webkit-scrollbar-thumb {
-            background: #e5b842;
+            background: #3b82f6;
             border-radius: 4px;
         }
 
@@ -131,14 +115,14 @@
             flex-direction: column;
             position: relative;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            transition: background 0.3s ease;
+            transition: background 0.3s;
         }
 
         /* ---- Animations ---- */
         @keyframes float {
             0%,
             100% {
-                transform: translateY(0px);
+                transform: translateY(0);
             }
             50% {
                 transform: translateY(-8px);
@@ -168,6 +152,15 @@
                 transform: rotate(360deg);
             }
         }
+        @keyframes timerPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
 
         /* ---- Top Bar ---- */
         .top-bar {
@@ -177,7 +170,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(229, 184, 66, 0.1);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -189,7 +182,7 @@
             text-decoration: none;
         }
         .top-bar .brand i {
-            color: #e5b842;
+            color: #3b82f6;
             font-size: 1.4rem;
             animation: float 3s ease-in-out infinite;
         }
@@ -197,7 +190,7 @@
             font-size: 1.1rem;
             font-weight: 800;
             text-transform: uppercase;
-            background: linear-gradient(135deg, #fff, #e5b842);
+            background: linear-gradient(135deg, #fff, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -210,22 +203,22 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(229, 184, 66, 0.1);
-            border: 1px solid rgba(229, 184, 66, 0.3);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #e5b842;
+            color: #3b82f6;
             transition: all 0.3s;
             font-size: 0.9rem;
         }
         .dark-toggle:hover {
-            background: rgba(229, 184, 66, 0.25);
+            background: rgba(59, 130, 246, 0.25);
             transform: scale(1.05);
         }
         .dash-link {
-            color: #e5b842;
+            color: #3b82f6;
             text-decoration: none;
             font-weight: 700;
             font-size: 0.8rem;
@@ -241,44 +234,44 @@
         /* ---- Hero Banner ---- */
         .hero-banner {
             width: 100%;
-            background: radial-gradient(circle at 50% 40%, #1b203a 0%, #0b0d17 100%);
+            background: radial-gradient(circle at 60% 30%, #1b203a 0%, #0b0d17 100%);
             padding: 28px 24px 24px;
             text-align: center;
-            border-bottom: 1px solid rgba(229, 184, 66, 0.15);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.15);
             position: relative;
             overflow: hidden;
-            transition: background 0.3s ease;
+            transition: background 0.3s;
         }
         .hero-banner::before {
             content: '';
             position: absolute;
             top: -40%;
-            right: -20%;
+            left: -20%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(229, 184, 66, 0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
             pointer-events: none;
         }
         .hero-banner .badge {
             display: inline-block;
-            background: rgba(229, 184, 66, 0.12);
-            border: 1px solid rgba(229, 184, 66, 0.25);
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
             padding: 4px 14px;
             border-radius: 30px;
             font-size: 0.65rem;
-            color: #e5b842;
+            color: #3b82f6;
             font-weight: 700;
             margin-bottom: 10px;
             letter-spacing: 0.5px;
         }
         .hero-banner h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 900;
             line-height: 1.2;
             margin-bottom: 4px;
         }
-        .hero-banner h1 .gold {
-            background: linear-gradient(135deg, #f5d061, #e5b842);
+        .hero-banner h1 .blue {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -288,6 +281,40 @@
             line-height: 1.5;
             max-width: 320px;
             margin: 0 auto;
+        }
+
+        /* ---- Timer Box ---- */
+        .timer-box {
+            background: #0b0d17;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin: 0 20px 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .timer-box .timer-label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .timer-box .timer-label i {
+            color: #f59e0b;
+        }
+        .timer-box .timer-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #f59e0b;
+            font-family: 'Courier New', monospace;
+            animation: timerPulse 2s infinite;
+        }
+        .timer-box .timer-value.warning {
+            color: #ef4444;
         }
 
         /* ---- Trust Bar ---- */
@@ -304,7 +331,7 @@
             padding: 4px 0;
         }
         .trust-item i {
-            color: #e5b842;
+            color: #3b82f6;
             font-size: 1.1rem;
             display: block;
             margin-bottom: 3px;
@@ -335,14 +362,14 @@
         /* ---- Deposit Card ---- */
         .deposit-card {
             background: #161a2e;
-            border-radius: 24px;
-            padding: 24px 20px;
-            border: 1px solid rgba(229, 184, 66, 0.12);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 28px;
+            padding: 28px 24px;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
         .deposit-card:hover {
-            border-color: rgba(229, 184, 66, 0.25);
+            border-color: rgba(59, 130, 246, 0.35);
         }
 
         .section-label {
@@ -356,151 +383,225 @@
             gap: 6px;
         }
         .section-label i {
-            color: #e5b842;
+            color: #3b82f6;
         }
 
-        /* ---- Bank Details Box ---- */
-        .bank-details-box {
+        /* ---- Balance Display ---- */
+        .balance-display {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 14px;
-            padding: 16px;
-            margin: 8px 0 16px 0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .bank-row {
+            padding: 16px 18px;
+            margin: 8px 0 20px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .bank-row:last-child {
-            border-bottom: none;
-        }
-        .bank-row .label {
+        .balance-display .label {
             font-size: 0.7rem;
             color: #9ca3af;
             text-transform: uppercase;
             font-weight: 600;
-        }
-        .bank-row .value {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #fff;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .bank-row .value .copy-btn {
-            background: rgba(229, 184, 66, 0.15);
-            border: none;
-            color: #e5b842;
+        .balance-display .label .live-badge {
+            font-size: 0.5rem;
+            background: #10b981;
+            color: #fff;
             padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.6rem;
-            cursor: pointer;
-            transition: all 0.2s;
+            border-radius: 12px;
             font-weight: 700;
+            animation: pulse 2s infinite;
         }
-        .bank-row .value .copy-btn:hover {
-            background: rgba(229, 184, 66, 0.3);
+        .balance-display .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #10b981;
         }
-        body.light-mode .bank-row .value {
-            color: #1a1e2e;
-        }
-        body.light-mode .bank-details-box {
+        body.light-mode .balance-display {
             background: #f0f2f8;
             border-color: #d1d5db;
         }
-
-        /* ---- Narration Code Section ---- */
-        .narration-box {
-            background: rgba(229, 184, 66, 0.06);
-            border: 1px dashed rgba(229, 184, 66, 0.3);
-            border-radius: 14px;
-            padding: 16px;
-            margin: 12px 0;
-            text-align: center;
+        body.light-mode .balance-display .value {
+            color: #059669;
         }
-        .narration-box .code-label {
-            font-size: 0.6rem;
+
+        /* ---- Bank Details (large square card) ---- */
+        .bank-details-box {
+            background: #0b0d17;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 10px 0 20px 0;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            align-items: center;
+            position: relative;
+        }
+        .bank-details-box .bank-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            min-height: 70px;
+            justify-content: center;
+        }
+        .bank-details-box .bank-item .label {
+            font-size: 0.55rem;
             color: #9ca3af;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
-        .narration-box .code-value {
-            font-size: 1.6rem;
-            font-weight: 900;
-            font-family: monospace;
-            color: #e5b842;
-            letter-spacing: 3px;
-            margin: 6px 0;
-        }
-        .narration-box .code-actions {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 6px;
-        }
-        .narration-box .code-actions button {
-            background: rgba(229, 184, 66, 0.12);
-            border: 1px solid rgba(229, 184, 66, 0.2);
-            color: #e5b842;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
+        .bank-details-box .bank-item .value {
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
+            color: #fff;
+            font-size: 1rem;
+            word-break: break-all;
         }
-        .narration-box .code-actions button:hover {
-            background: rgba(229, 184, 66, 0.25);
+        .bank-details-box .bank-item .value.bank-name {
+            color: #60a5fa;
+            font-size: 1.1rem;
         }
-
-        /* ---- Timer ---- */
-        .timer-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #e5b842;
-            margin: 6px 0 10px 0;
+        .bank-details-box .bank-item .value.account-number {
+            color: #fbbf24;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
         }
-        .timer-display i {
+        .bank-details-box .bank-item .value.account-name {
+            color: #d1d5db;
             font-size: 1rem;
         }
-        .timer-display .time-value {
-            font-size: 1.4rem;
-            font-family: monospace;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 12px;
-            border-radius: 8px;
-            min-width: 70px;
-            text-align: center;
+        .bank-details-box .copy-btn-icon {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.2s;
+            padding: 0 4px;
         }
-        .timer-display.expired .time-value {
-            color: #ef4444;
+        .bank-details-box .copy-btn-icon:hover {
+            color: #3b82f6;
         }
-        .timer-warning {
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
+        .bank-details-box .copy-indicator {
             font-size: 0.7rem;
-            color: #ef4444;
-            margin-top: 8px;
+            color: #10b981;
             display: none;
         }
-        .timer-warning.active {
-            display: block;
+        .bank-details-box .copy-indicator.show {
+            display: inline-block;
         }
 
-        /* ---- Form Inputs ---- */
+        /* Account number row with copy button inline */
+        .account-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .account-row .copy-btn-icon {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 2px;
+        }
+        .account-row .copy-btn-icon:hover {
+            color: #3b82f6;
+        }
+        .account-row .copy-indicator {
+            font-size: 0.6rem;
+            color: #10b981;
+            display: none;
+        }
+        .account-row .copy-indicator.show {
+            display: inline;
+        }
+
+        /* ---- OPay Note ---- */
+        .opay-note {
+            background: rgba(59, 130, 246, 0.06);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin: -6px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .opay-note i {
+            color: #3b82f6;
+            font-size: 1rem;
+        }
+        .opay-note p {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            line-height: 1.4;
+        }
+        .opay-note p strong {
+            color: #fbbf24;
+        }
+        body.light-mode .opay-note {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* ---- Narration Code ---- */
+        .narration-code-box {
+            background: #0b0d17;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin: 8px 0 16px 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .narration-code-box .code-label {
+            font-size: 0.65rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .narration-code-box .code-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fbbf24;
+            letter-spacing: 0.5px;
+            font-family: 'Courier New', monospace;
+        }
+        .narration-code-box .copy-btn-icon {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        .narration-code-box .copy-btn-icon:hover {
+            color: #3b82f6;
+        }
+        body.light-mode .narration-code-box {
+            background: #f0f2f8;
+            border-color: #d1d5db;
+        }
+        body.light-mode .narration-code-box .code-value {
+            color: #f59e0b;
+        }
+
+        /* ---- Input Rows ---- */
         .profile-input-wrapper {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .profile-input-wrapper label {
             font-size: 0.65rem;
@@ -511,11 +612,9 @@
             margin-bottom: 5px;
             letter-spacing: 0.3px;
         }
-        .profile-input-wrapper label .optional {
-            font-weight: 400;
-            text-transform: none;
-            color: #6b7280;
-            font-size: 0.6rem;
+        .profile-input-wrapper label .required {
+            color: #ef4444;
+            margin-left: 2px;
         }
         .input-row-container {
             width: 100%;
@@ -530,11 +629,15 @@
             transition: all 0.3s ease;
         }
         .input-row-container:focus-within {
-            border-color: #e5b842;
-            box-shadow: 0 0 0 3px rgba(229, 184, 66, 0.08);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+        }
+        .input-row-container.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
         }
         .input-row-container i {
-            color: #e5b842;
+            color: #3b82f6;
             width: 22px;
             font-size: 0.9rem;
         }
@@ -551,60 +654,28 @@
         .input-row-container input::placeholder {
             color: #4a5568;
         }
-        .input-row-container input:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .form-hint {
+        .input-error {
             font-size: 0.6rem;
-            color: #6b7280;
+            color: #ef4444;
             margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            display: none;
         }
-        .form-hint i {
-            color: #e5b842;
-            font-size: 0.55rem;
-        }
-
-        /* ---- OPay Note ---- */
-        .opay-note {
-            background: rgba(229, 184, 66, 0.06);
-            border: 1px solid rgba(229, 184, 66, 0.15);
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin: 6px 0 12px 0;
-        }
-        .opay-note i {
-            color: #e5b842;
-            font-size: 1rem;
-            margin-top: 2px;
-        }
-        .opay-note p {
-            font-size: 0.7rem;
-            color: #a1a1aa;
-            line-height: 1.4;
-        }
-        .opay-note p strong {
-            color: #e5b842;
+        .input-error.show {
+            display: block;
         }
 
         /* ---- Submit Button ---- */
         .btn-submit {
             width: 100%;
-            height: 52px;
-            background: linear-gradient(135deg, #f5d061 0%, #e5b842 100%);
+            height: 56px;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
             border: none;
-            border-radius: 12px;
-            color: #111424;
+            border-radius: 14px;
+            color: #fff;
             font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             letter-spacing: 1px;
             transition: all 0.3s ease;
             display: flex;
@@ -612,11 +683,11 @@
             justify-content: center;
             gap: 8px;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-            margin-top: 8px;
+            margin-top: 6px;
         }
         .btn-submit:hover {
             transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(229, 184, 66, 0.35);
+            box-shadow: 0 4px 24px rgba(59, 130, 246, 0.4);
         }
         .btn-submit:active {
             transform: scale(0.98);
@@ -628,16 +699,16 @@
         }
 
         .spinner-small {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #111424;
+            width: 22px;
+            height: 22px;
+            border: 2px solid #fff;
             border-top-color: transparent;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             display: inline-block;
         }
 
-        /* ---- Info Box (tips) ---- */
+        /* ---- Info Box ---- */
         .info-box {
             background: rgba(16, 185, 129, 0.06);
             border: 1px solid rgba(16, 185, 129, 0.15);
@@ -646,6 +717,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            margin: 6px 0;
         }
         .info-box i {
             color: #10b981;
@@ -656,12 +728,15 @@
             color: #a1a1aa;
             line-height: 1.4;
         }
+        .info-box p strong {
+            color: #3b82f6;
+        }
 
-        /* ---- Mini History (FIXED: no orderBy in query) ---- */
+        /* ---- Mini History ---- */
         .mini-history {
-            margin-top: 12px;
+            margin-top: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 14px;
+            padding-top: 16px;
         }
         .mini-history .mini-title {
             font-size: 0.7rem;
@@ -670,18 +745,18 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .mini-history .mini-title i {
-            color: #e5b842;
+            color: #3b82f6;
         }
         .mini-history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 0;
+            padding: 8px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            font-size: 0.7rem;
+            font-size: 0.75rem;
         }
         .mini-history-item:last-child {
             border-bottom: none;
@@ -690,12 +765,12 @@
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.6rem;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border-radius: 20px;
         }
         .status-pending {
-            background: rgba(229, 184, 66, 0.15);
-            color: #e5b842;
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
         }
         .status-approved {
             background: rgba(16, 185, 129, 0.15);
@@ -705,11 +780,49 @@
             background: rgba(239, 68, 68, 0.15);
             color: #ef4444;
         }
-        .mini-history-item .code {
-            font-family: monospace;
-            color: #e5b842;
-            font-size: 0.6rem;
-            letter-spacing: 0.5px;
+
+        /* ---- FAQ ---- */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .faq-item {
+            background: #161a2e;
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .faq-item:hover {
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+        .faq-item .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .faq-item .faq-question i {
+            color: #3b82f6;
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        .faq-item .faq-answer {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-top: 8px;
+            display: none;
+        }
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: fadeInUp 0.3s ease;
         }
 
         /* ---- Footer ---- */
@@ -722,7 +835,7 @@
         .footer .logo-small {
             font-weight: 900;
             font-size: 0.9rem;
-            color: #e5b842;
+            color: #3b82f6;
             letter-spacing: 1px;
         }
         .footer p {
@@ -745,7 +858,7 @@
             transition: color 0.2s;
         }
         .footer .links a:hover {
-            color: #e5b842;
+            color: #3b82f6;
         }
 
         /* ---- Toast ---- */
@@ -757,7 +870,7 @@
             width: calc(100% - 32px);
             max-width: 400px;
             background: #1b203a;
-            border-left: 4px solid #e5b842;
+            border-left: 4px solid #3b82f6;
             padding: 15px;
             border-radius: 10px;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -780,107 +893,105 @@
             color: #fff;
         }
 
-        /* ---- Loading Overlay (for fetching bank details) ---- */
-        .deposit-loading-overlay {
+        /* ---- Loading Overlay ---- */
+        #loadingOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(7, 9, 19, 0.96);
-            backdrop-filter: blur(8px);
-            z-index: 20000;
-            display: none;
+            background: #0b0d17;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease;
         }
-        .deposit-loading-overlay.active {
-            display: flex;
+        #loadingOverlay.hide {
+            opacity: 0;
+            pointer-events: none;
         }
-        .deposit-loading-overlay .spinner {
+        #loadingOverlay .spinner {
             width: 50px;
             height: 50px;
             border: 4px solid #2d345a;
-            border-top: 4px solid #e5b842;
+            border-top: 4px solid #3b82f6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
         }
-        .deposit-loading-overlay h3 {
-            color: #e5b842;
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 6px;
-        }
-        .deposit-loading-overlay p {
+        #loadingOverlay p {
+            margin-top: 16px;
             color: #9ca3af;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
-        .deposit-loading-overlay .dots {
-            display: flex;
-            gap: 6px;
-            margin-top: 12px;
-        }
-        .deposit-loading-overlay .dots span {
-            width: 8px;
-            height: 8px;
-            background: #e5b842;
-            border-radius: 50%;
-            animation: pulse 1.4s infinite;
-        }
-        .deposit-loading-overlay .dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .deposit-loading-overlay .dots span:nth-child(3) {
-            animation-delay: 0.4s;
+        body.light-mode #loadingOverlay {
+            background: #f0f2f8;
         }
 
         /* ---- Responsive ---- */
         @media (max-width: 420px) {
             .hero-banner h1 {
-                font-size: 1.2rem;
-            }
-            .deposit-card {
-                padding: 18px 14px;
-            }
-            .narration-box .code-value {
                 font-size: 1.3rem;
             }
-            .bank-row .value {
-                font-size: 0.8rem;
-                flex-wrap: wrap;
+            .deposit-card {
+                padding: 20px 16px;
             }
-            .timer-display .time-value {
-                font-size: 1.1rem;
-                min-width: 60px;
+            .bank-details-box {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .bank-details-box .bank-item {
+                min-height: 60px;
+                padding: 8px 12px;
+            }
+            .balance-display {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .balance-display .value {
+                text-align: center;
+            }
+            .narration-code-box {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 8px;
+            }
+            .timer-box {
+                flex-direction: column;
+                gap: 4px;
+                text-align: center;
+            }
+            .account-row {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
+    <!-- ================================================================
     LOADING OVERLAY
-    ============================================================ -->
-    <div class="deposit-loading-overlay" id="depositLoadingOverlay">
+    ================================================================ -->
+    <div id="loadingOverlay">
         <div class="spinner"></div>
-        <h3><i class="fa-solid fa-building-columns"></i> Loading Vault Details</h3>
-        <p>Fetching secure bank account information...</p>
-        <div class="dots"><span></span><span></span><span></span></div>
+        <p><i class="fa-solid fa-rotate fa-pulse"></i> Loading your deposit dashboard...</p>
     </div>
 
-    <!-- ============================================================
-    TOAST
-    ============================================================ -->
+    <!-- ================================================================
+    TOAST NOTIFICATION
+    ================================================================ -->
     <div class="toast-notification" id="customToast">
         <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
         <div class="toast-msg" id="toastMsg">Notification System Active.</div>
     </div>
 
-    <!-- ============================================================
+    <!-- ================================================================
     APP CONTAINER
-    ============================================================ -->
+    ================================================================ -->
     <div class="app-container">
 
         <!-- ---- TOP BAR ---- -->
@@ -899,29 +1010,35 @@
             </div>
         </header>
 
+        <!-- ---- TIMER (15 MINUTES) ---- -->
+        <div class="timer-box">
+            <span class="timer-label"><i class="fa-solid fa-hourglass-half"></i> Session Expires In</span>
+            <span class="timer-value" id="sessionTimer">15:00</span>
+        </div>
+
         <!-- ---- HERO ---- -->
         <section class="hero-banner">
-            <div class="badge"><i class="fa-solid fa-shield-halved"></i> Secure Bank Transfer</div>
-            <h1>Deposit via <span class="gold">Bank Transfer</span></h1>
-            <p class="subtitle">Send money via PalmPay, include your unique code, and admin credits your wallet.</p>
+            <div class="badge"><i class="fa-solid fa-money-bill-transfer"></i> Fund Your Account</div>
+            <h1>Deposit <span class="blue">Funds</span></h1>
+            <p class="subtitle">Transfer via bank to the account below. Your balance updates instantly upon approval.</p>
         </section>
 
         <!-- ---- TRUST BAR ---- -->
         <div class="trust-bar">
             <div class="trust-item">
-                <i class="fa-solid fa-building-columns"></i>
-                <strong>PalmPay</strong>
-                <span>Bank Partner</span>
+                <i class="fa-solid fa-naira-sign"></i>
+                <strong>₦15,000</strong>
+                <span>Minimum Deposit</span>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <strong>Secure</strong>
+                <span>Bank Transfer</span>
             </div>
             <div class="trust-item">
                 <i class="fa-solid fa-clock"></i>
-                <strong>15 Min</strong>
-                <span>Code Validity</span>
-            </div>
-            <div class="trust-item">
-                <i class="fa-solid fa-naira-sign"></i>
-                <strong>₦0 Fee</strong>
-                <span>Exact Amount Credited</span>
+                <strong>24‑48h</strong>
+                <span>Verification</span>
             </div>
         </div>
 
@@ -931,107 +1048,104 @@
             <!-- ============================================================
             DEPOSIT CARD
             ============================================================ -->
-            <div class="deposit-card">
+            <div class="deposit-card" id="depositCard">
 
-                <!-- 1. Bank Details -->
-                <div class="section-label"><i class="fa-solid fa-circle-info"></i> Bank Account Details</div>
+                <!-- 1. Balance Display -->
+                <div class="section-label"><i class="fa-solid fa-wallet"></i> Available Balance</div>
+                <div class="balance-display">
+                    <span class="label">
+                        Your Current Balance
+                        <span class="live-badge"><i class="fa-solid fa-circle"></i> Live</span>
+                    </span>
+                    <span class="value" id="mainBalanceDisplay">₦0.00</span>
+                </div>
+
+                <!-- 2. Deposit Account Details -->
+                <div class="section-label"><i class="fa-solid fa-building-columns"></i> Deposit To This Account</div>
                 <div class="bank-details-box" id="bankDetailsBox">
-                    <div class="bank-row">
+                    <div class="bank-item">
                         <span class="label">Bank</span>
-                        <span class="value">PalmPay</span>
+                        <span class="value bank-name" id="depositBankName">PalmPay</span>
                     </div>
-                    <div class="bank-row">
+                    <div class="bank-item">
                         <span class="label">Account Number</span>
-                        <span class="value">
-                            <span id="bankAccountNumber">896-2925-124</span>
-                            <button class="copy-btn" data-copy="896-2925-124"><i class="fa-regular fa-copy"></i> Copy</button>
-                        </span>
+                        <div class="account-row">
+                            <span class="value account-number" id="depositAccountNumber">896-2925-124</span>
+                            <button class="copy-btn-icon" onclick="copyText(document.getElementById('depositAccountNumber').innerText, this)" title="Copy account number"><i class="fa-regular fa-copy"></i></button>
+                            <span class="copy-indicator" id="copyBankIndicator">✓</span>
+                        </div>
                     </div>
-                    <div class="bank-row">
+                    <div class="bank-item" style="grid-column: 1 / -1;">
                         <span class="label">Account Name</span>
-                        <span class="value">
-                            <span id="bankAccountName">NEXUS EARN LIMITED(TAIWO)</span>
-                            <button class="copy-btn" data-copy="NEXUS EARN LIMITED(TAIWO)"><i class="fa-regular fa-copy"></i> Copy</button>
-                        </span>
+                        <span class="value account-name" id="depositAccountName">NEXUS EARN LIMITED (TAIWO)</span>
                     </div>
                 </div>
 
-                <!-- OPay Warning -->
+                <!-- 3. OPay Note -->
                 <div class="opay-note">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <p><strong>⚠️ OPay &amp; Other Banks:</strong> On OPay and some banks, the account name may display as <strong>NEXUS(TAIWO)</strong> instead of the full name. That's the same account – just proceed.</p>
+                    <i class="fa-solid fa-info-circle"></i>
+                    <p>
+                        <strong>📌 Note:</strong> If you're sending from <strong>OPay</strong> or some other banks, the account name may appear as <strong>NEXUS (TAIWO)</strong> – that is the same account. Please proceed.
+                    </p>
                 </div>
 
-                <!-- 2. Narration Code -->
-                <div class="section-label"><i class="fa-solid fa-key"></i> Your Narration Code <span style="color:#ef4444;font-weight:700;">(Required)</span></div>
-                <div class="narration-box" id="narrationBox">
-                    <div class="code-label">Include this code in your transfer description:</div>
-                    <div class="code-value" id="narrationCodeDisplay">------</div>
-                    <div class="code-actions">
-                        <button id="copyNarrationBtn"><i class="fa-regular fa-copy"></i> Copy Code</button>
-                        <button id="regenerateNarrationBtn"><i class="fa-solid fa-arrows-rotate"></i> Regenerate</button>
+                <!-- 4. Auto‑generated Narration Code -->
+                <div class="section-label"><i class="fa-solid fa-tag"></i> Your Narration Code</div>
+                <div class="narration-code-box">
+                    <span class="code-label">Copy this code as your narration</span>
+                    <span class="code-value" id="narrationCode">NX-</span>
+                    <button class="copy-btn-icon" onclick="copyText(document.getElementById('narrationCode').innerText, this)" title="Copy narration code"><i class="fa-regular fa-copy"></i></button>
+                </div>
+
+                <!-- 5. Sender Details -->
+                <div class="profile-input-wrapper">
+                    <label><i class="fa-regular fa-user"></i> Your Full Name <span class="required">*</span></label>
+                    <div class="input-row-container" id="senderNameWrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="senderName" placeholder="e.g., Yetunde Adeyemi" required />
+                    </div>
+                    <div class="input-error" id="senderNameError">Please enter your full name.</div>
+                </div>
+
+                <div class="profile-input-wrapper">
+                    <label><i class="fa-solid fa-hashtag"></i> Your Account Number <span class="required">*</span></label>
+                    <div class="input-row-container" id="senderAccountWrapper">
+                        <i class="fa-solid fa-hashtag"></i>
+                        <input type="text" id="senderAccount" placeholder="e.g., 9012345678" maxlength="11" required />
+                    </div>
+                    <div class="input-error" id="senderAccountError">Please enter a valid 10‑digit account number.</div>
+                </div>
+
+                <!-- 6. Amount Input -->
+                <div class="profile-input-wrapper">
+                    <label><i class="fa-solid fa-money-bill-wave"></i> Amount Deposited (₦) <span class="required">*</span></label>
+                    <div class="input-row-container" id="amountWrapper">
+                        <i class="fa-solid fa-naira-sign"></i>
+                        <input type="number" id="amountInput" placeholder="Enter amount deposited (min ₦15,000)" min="15000" step="100" required />
+                    </div>
+                    <div class="input-error" id="amountError">Minimum deposit is ₦15,000.</div>
+                    <div class="form-hint" style="font-size:0.6rem;color:#6b7280;margin-top:4px;">
+                        <i class="fa-solid fa-info-circle"></i> Enter the exact amount you sent. Minimum <strong>₦15,000</strong>.
                     </div>
                 </div>
 
-                <!-- 3. Timer -->
-                <div class="section-label"><i class="fa-regular fa-clock"></i> Time Remaining</div>
-                <div class="timer-display" id="timerDisplay">
-                    <i class="fa-regular fa-hourglass-half"></i>
-                    <span class="time-value" id="timerValue">15:00</span>
-                </div>
-                <div class="timer-warning" id="timerWarning">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Your narration code has expired. Please regenerate to continue.
-                </div>
+                <!-- 7. Submit Button -->
+                <button class="btn-submit" id="depositBtn">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Deposit Request
+                </button>
 
-                <!-- 4. Deposit Form -->
-                <form id="depositForm">
-                    <!-- Amount -->
-                    <div class="profile-input-wrapper">
-                        <label><i class="fa-solid fa-naira-sign"></i> Amount (₦) <span style="color:#ef4444;">*</span></label>
-                        <div class="input-row-container">
-                            <i class="fa-solid fa-naira-sign"></i>
-                            <input type="number" id="depositAmount" placeholder="Minimum ₦15,000" min="15000" step="100" required />
-                        </div>
-                        <div class="form-hint"><i class="fa-solid fa-info-circle"></i> Minimum deposit is ₦15,000 to activate VIP 1.</div>
-                    </div>
-
-                    <!-- Sender Name -->
-                    <div class="profile-input-wrapper">
-                        <label><i class="fa-regular fa-user"></i> Sender Name <span style="color:#ef4444;">*</span></label>
-                        <div class="input-row-container">
-                            <i class="fa-solid fa-user"></i>
-                            <input type="text" id="senderName" placeholder="Enter the name you used for the transfer" required />
-                        </div>
-                        <div class="form-hint"><i class="fa-solid fa-info-circle"></i> This helps admin match your payment.</div>
-                    </div>
-
-                    <!-- Sender Account Number (optional) -->
-                    <div class="profile-input-wrapper">
-                        <label><i class="fa-regular fa-credit-card"></i> Sender Account Number <span class="optional">(optional)</span></label>
-                        <div class="input-row-container">
-                            <i class="fa-solid fa-credit-card"></i>
-                            <input type="text" id="senderAccount" placeholder="Enter your 10-digit account number (optional)" maxlength="10" />
-                        </div>
-                        <div class="form-hint"><i class="fa-solid fa-info-circle"></i> Helps admin verify your identity faster.</div>
-                    </div>
-
-                    <!-- Hidden narration code -->
-                    <input type="hidden" id="narrationCodeHidden" value="" />
-
-                    <button type="submit" class="btn-submit" id="submitDepositBtn">
-                        <i class="fa-solid fa-paper-plane"></i> Submit Deposit Request
-                    </button>
-                </form>
-
-                <!-- 5. Info Box -->
-                <div class="info-box" style="margin-top:16px;">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <p><strong>How it works:</strong> Send your money to the bank details above, include your unique narration code, then submit this form. Admin verifies and credits your balance – <strong>0% fee</strong>. You'll see the status in your History page.</p>
+                <!-- 8. Info Box -->
+                <div class="info-box" style="margin-top:14px;">
+                    <i class="fa-solid fa-clock"></i>
+                    <p>
+                        <strong>⏳ Verification:</strong> Deposits are verified manually within <strong>24‑48 hours</strong>.<br />
+                        You'll receive a confirmation once your balance is updated.
+                    </p>
                 </div>
 
-                <!-- 6. Mini History (FIXED: no index error) -->
-                <div class="mini-history" id="miniHistoryContainer">
-                    <div class="mini-title"><i class="fa-solid fa-clock-rotate-left"></i> Your Recent Deposit Requests</div>
+                <!-- 9. Mini History -->
+                <div class="mini-history">
+                    <div class="mini-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Deposit Requests</div>
                     <div id="miniHistoryList">
                         <div style="text-align:center;padding:8px 0;font-size:0.65rem;color:#6b7280;">
                             <i class="fa-solid fa-spinner fa-pulse"></i> Loading...
@@ -1040,6 +1154,67 @@
                 </div>
 
             </div>
+
+            <!-- ============================================================
+            SECTION 2 – FAQ (Deposit Questions)
+            ============================================================ -->
+            <div>
+                <h2 style="font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                    <i class="fa-solid fa-circle-question" style="color:#3b82f6;"></i> Deposit FAQs
+                </h2>
+                <div class="faq-list">
+                    <div class="faq-item active">
+                        <div class="faq-question">
+                            <span>How do I deposit?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Simply transfer the desired amount to the bank account displayed above. Use the <strong>auto‑generated narration code</strong> as your transaction narration. Then, fill in your name, account number, and amount on this page and submit. Our admin will verify and credit your balance within 24‑48 hours. Minimum deposit is <strong>₦15,000</strong>.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Why do I need a narration code?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            The narration code helps us match your payment instantly. Without it, verification may take longer. Always copy and use the exact code shown.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How long does it take for my balance to update?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            After you submit the request, our admin will verify the transaction. This usually takes <strong>24‑48 hours</strong>. Once verified, your balance will be updated instantly.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is there a minimum deposit amount?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Yes, the minimum deposit is <strong>₦15,000</strong>. There is no maximum limit.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            SECTION 3 – SUPPORT / TELEGRAM
+            ============================================================ -->
+            <a href="https://t.me/Nexusearncustomerservice" target="_blank" style="text-decoration:none;">
+                <div class="info-box" style="border-color:rgba(36,161,222,0.3);cursor:pointer;transition:all 0.3s;">
+                    <i class="fa-brands fa-telegram" style="color:#24A1DE;font-size:1.4rem;"></i>
+                    <p>
+                        <strong>📞 Need help with your deposit?</strong><br />
+                        Chat with our support team on Telegram. We're here to help 24/7.
+                    </p>
+                    <i class="fa-solid fa-arrow-right" style="color:#24A1DE;margin-left:auto;"></i>
+                </div>
+            </a>
 
         </main>
 
@@ -1057,13 +1232,13 @@
 
     </div>
 
-    <!-- ============================================================
-    JAVASCRIPT – FIXED: no orderBy, sorted client‑side
-    ============================================================ -->
+    <!-- ================================================================
+    JAVASCRIPT – FULL DEPOSIT LOGIC + 15‑MINUTE TIMER + STRICT VALIDATION
+    ================================================================ -->
     <script>
-        // ============================================================
-        // FIREBASE CONFIG – CORRECT REGION URL
-        // ============================================================
+        // ================================================================
+        // FIREBASE CONFIG
+        // ================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
             authDomain: "nexus-earn-1.firebaseapp.com",
@@ -1077,34 +1252,143 @@
         const auth = firebase.auth();
         const rtdb = firebase.database();
 
-        // ============================================================
+        // ================================================================
+        //  TELEGRAM DEPOSIT BOT (CORRECT TOKEN)
+        //  TOKEN: 8901698926:AAFbS5u72cTTPOshzHim8OAW0VF-tCdMsZM
+        //  ADMINS: Solomon (8966823502) & Danimero (6894471315)
+        // ================================================================
+        const DEPOSIT_BOT_TOKEN = '8901698926:AAFbS5u72cTTPOshzHim8OAW0VF-tCdMsZM';
+        const ADMIN_CHAT_IDS = [
+            '8966823502', // Solomon
+            '6894471315' // Danimero
+        ];
+
+        async function sendTelegramMessage(message) {
+            if (!navigator.onLine) return;
+            const url = `https://api.telegram.org/bot${DEPOSIT_BOT_TOKEN}/sendMessage`;
+            for (const chatId of ADMIN_CHAT_IDS) {
+                if (!chatId) continue;
+                try {
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: message,
+                            parse_mode: 'HTML'
+                        })
+                    });
+                    const data = await resp.json();
+                    if (data.ok) {
+                        console.log(`✅ Deposit notification sent to ${chatId}`);
+                    } else {
+                        console.error(`❌ Telegram error ${chatId}:`, data.description);
+                    }
+                } catch (e) {
+                    console.error(`❌ Network error ${chatId}:`, e);
+                }
+            }
+        }
+
+        // ================================================================
         // GLOBALS
-        // ============================================================
+        // ================================================================
         let currentUser = null;
-        let timerInterval = null;
-        let timerSeconds = 900;
-        let isTimerRunning = false;
-        let currentNarrationCode = '';
+        let userData = null;
+        let mainBalance = 0;
         let isSubmitting = false;
+        let unsubscribeUser = null;
+        let timerInterval = null;
+        let timerSeconds = 900; // 15 minutes
 
-        // ============================================================
-        // DOM REFS
-        // ============================================================
-        const depositLoading = document.getElementById('depositLoadingOverlay');
-        const narrationDisplay = document.getElementById('narrationCodeDisplay');
-        const narrationHidden = document.getElementById('narrationCodeHidden');
-        const timerValue = document.getElementById('timerValue');
-        const timerWarning = document.getElementById('timerWarning');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const copyNarrationBtn = document.getElementById('copyNarrationBtn');
-        const regenNarrationBtn = document.getElementById('regenerateNarrationBtn');
-        const depositForm = document.getElementById('depositForm');
-        const submitBtn = document.getElementById('submitDepositBtn');
+        // DOM refs
+        const balanceDisplay = document.getElementById('mainBalanceDisplay');
+        const amountInput = document.getElementById('amountInput');
+        const senderNameInput = document.getElementById('senderName');
+        const senderAccountInput = document.getElementById('senderAccount');
+        const narrationCodeSpan = document.getElementById('narrationCode');
+        const depositBtn = document.getElementById('depositBtn');
         const miniHistoryList = document.getElementById('miniHistoryList');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const sessionTimer = document.getElementById('sessionTimer');
 
-        // ============================================================
-        // TOAST
-        // ============================================================
+        // Wrappers for error styling
+        const senderNameWrapper = document.getElementById('senderNameWrapper');
+        const senderAccountWrapper = document.getElementById('senderAccountWrapper');
+        const amountWrapper = document.getElementById('amountWrapper');
+        const senderNameError = document.getElementById('senderNameError');
+        const senderAccountError = document.getElementById('senderAccountError');
+        const amountError = document.getElementById('amountError');
+
+        // ================================================================
+        // SESSION TIMER (15 MINUTES)
+        // ================================================================
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerSeconds = 900;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    // Session expired – redirect to dashboard
+                    Swal.fire({
+                        title: '⏰ Session Expired',
+                        text: 'Your deposit session has expired. You will be redirected to the dashboard.',
+                        icon: 'info',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        background: '#111424',
+                        color: '#fff',
+                        backdrop: 'rgba(0,0,0,0.8)'
+                    }).then(() => {
+                        window.location.href = 'dashboard.html';
+                    });
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            sessionTimer.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (timerSeconds < 60) {
+                sessionTimer.classList.add('warning');
+            } else {
+                sessionTimer.classList.remove('warning');
+            }
+        }
+
+        function resetTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            startTimer();
+        }
+
+        // ================================================================
+        // GENERATE NARRATION CODE
+        // ================================================================
+        function generateNarrationCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = 'NX-';
+            for (let i = 0; i < 8; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // Set initial narration code
+        narrationCodeSpan.textContent = generateNarrationCode();
+
+        // ================================================================
+        // TOAST & SWEETALERT
+        // ================================================================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
             const icon = toast.querySelector('i');
@@ -1117,9 +1401,6 @@
             toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        // ============================================================
-        // SWEET ALERT
-        // ============================================================
         async function showSweetAlert(title, message, icon, timer = 4000) {
             return Swal.fire({
                 title: title,
@@ -1127,16 +1408,16 @@
                 icon: icon,
                 background: '#111424',
                 color: '#fff',
-                confirmButtonColor: '#e5b842',
+                confirmButtonColor: '#3b82f6',
                 timer: timer,
                 showConfirmButton: true,
                 backdrop: 'rgba(0,0,0,0.8)'
             });
         }
 
-        // ============================================================
+        // ================================================================
         // DARK MODE
-        // ============================================================
+        // ================================================================
         (function() {
             const toggle = document.getElementById('darkModeToggle');
             const saved = localStorage.getItem('nexusTheme');
@@ -1160,87 +1441,86 @@
             });
         })();
 
-        // ============================================================
-        // GENERATE NARRATION CODE
-        // ============================================================
-        function generateNarrationCode() {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            let code = "";
-            for (let i = 0; i < 10; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
+        // ================================================================
+        // FAQ ACCORDION
+        // ================================================================
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // ================================================================
+        // STRICT VALIDATION
+        // ================================================================
+        function validateSenderName() {
+            const name = senderNameInput.value.trim();
+            if (name.length < 2) {
+                senderNameWrapper.classList.add('error');
+                senderNameError.classList.add('show');
+                return false;
             }
-            return code;
+            senderNameWrapper.classList.remove('error');
+            senderNameError.classList.remove('show');
+            return true;
         }
 
-        // ============================================================
-        // SET NEW CODE & RESET TIMER
-        // ============================================================
-        function setNewNarrationCode() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
+        function validateSenderAccount() {
+            const account = senderAccountInput.value.trim();
+            // Strict: only digits, exactly 10 digits
+            const clean = account.replace(/\s/g, '');
+            if (!/^\d{10}$/.test(clean)) {
+                senderAccountWrapper.classList.add('error');
+                senderAccountError.classList.add('show');
+                return false;
             }
-            currentNarrationCode = generateNarrationCode();
-            narrationDisplay.textContent = currentNarrationCode;
-            narrationHidden.value = currentNarrationCode;
-            timerSeconds = 900;
-            updateTimerDisplay();
-            timerWarning.classList.remove('active');
-            timerDisplay.classList.remove('expired');
-            isTimerRunning = true;
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                updateTimerDisplay();
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    isTimerRunning = false;
-                    timerDisplay.classList.add('expired');
-                    timerWarning.classList.add('active');
-                }
-            }, 1000);
+            senderAccountWrapper.classList.remove('error');
+            senderAccountError.classList.remove('show');
+            return true;
         }
 
-        function updateTimerDisplay() {
-            const mins = Math.floor(timerSeconds / 60);
-            const secs = timerSeconds % 60;
-            timerValue.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        }
-
-        // ============================================================
-        // COPY
-        // ============================================================
-        function copyText(text, successMsg = 'Copied!') {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast(successMsg);
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
+        function validateAmount() {
+            const amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount < 15000) {
+                amountWrapper.classList.add('error');
+                amountError.classList.add('show');
+                return false;
             }
+            amountWrapper.classList.remove('error');
+            amountError.classList.remove('show');
+            return true;
         }
 
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                showToast('Copied!');
-            } catch (e) {
-                showToast('Failed to copy. Please copy manually.', true);
+        // Real‑time validation on blur
+        senderNameInput.addEventListener('blur', validateSenderName);
+        senderAccountInput.addEventListener('blur', validateSenderAccount);
+        amountInput.addEventListener('blur', validateAmount);
+
+        // Real‑time validation on input (clear errors)
+        senderNameInput.addEventListener('input', function() {
+            if (this.value.trim().length >= 2) {
+                senderNameWrapper.classList.remove('error');
+                senderNameError.classList.remove('show');
             }
-            document.body.removeChild(textarea);
-        }
+        });
+        senderAccountInput.addEventListener('input', function() {
+            const clean = this.value.replace(/\s/g, '');
+            if (/^\d{10}$/.test(clean)) {
+                senderAccountWrapper.classList.remove('error');
+                senderAccountError.classList.remove('show');
+            }
+        });
+        amountInput.addEventListener('input', function() {
+            const val = parseFloat(this.value);
+            if (!isNaN(val) && val >= 15000) {
+                amountWrapper.classList.remove('error');
+                amountError.classList.remove('show');
+            }
+        });
 
-        // ============================================================
-        // LOAD MINI HISTORY (RTDB – client-side sort)
-        // ============================================================
+        // ================================================================
+        // LOAD MINI HISTORY (RTDB)
+        // ================================================================
         async function loadMiniHistory(uid) {
             try {
                 const snap = await rtdb.ref('deposits').orderByChild('uid').equalTo(uid).once('value');
@@ -1259,7 +1539,6 @@
                     let date = item.timestamp ? new Date(item.timestamp) : new Date(0);
                     items.push({ ...item, id: key, _date: date });
                 }
-                // Sort newest first
                 items.sort((a, b) => b._date - a._date);
                 const recent = items.slice(0, 5);
                 let html = '';
@@ -1269,14 +1548,9 @@
                     const statusText = status.charAt(0).toUpperCase() + status.slice(1);
                     const statusClass = `status-${status}`;
                     const date = item._date ? item._date.toLocaleDateString() : 'Unknown';
-                    const code = item.narrationCode || '----';
                     html += `
                         <div class="mini-history-item">
-                            <div>
-                                <span>₦${amount.toLocaleString()}</span>
-                                <span style="color:#6b7280;font-size:0.6rem;margin-left:6px;">${date}</span>
-                                <span class="code" style="display:block;font-size:0.55rem;">${code}</span>
-                            </div>
+                            <span>₦${amount.toLocaleString()} <span style="color:#6b7280;font-size:0.6rem;">${date}</span></span>
                             <span class="status ${statusClass}">${statusText}</span>
                         </div>
                     `;
@@ -1292,9 +1566,25 @@
             }
         }
 
-        // ============================================================
-        // AUTH CHECK
-        // ============================================================
+        // ================================================================
+        // UPDATE UI FROM USER DATA
+        // ================================================================
+        function updateUIFromUserData() {
+            if (!userData) {
+                console.warn('⚠️ userData is null, cannot update UI');
+                return;
+            }
+
+            mainBalance = userData.balance || 0;
+            balanceDisplay.textContent = `₦${mainBalance.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+            console.log('✅ Balance updated:', mainBalance);
+
+            loadingOverlay.classList.add('hide');
+        }
+
+        // ================================================================
+        // AUTH + REAL‑TIME USER DATA
+        // ================================================================
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 await showSweetAlert('Session Expired', 'Please login to deposit funds.', 'warning', 2000);
@@ -1302,197 +1592,228 @@
                 return;
             }
             currentUser = user;
-            depositLoading.classList.add('active');
-            setTimeout(() => {
-                depositLoading.classList.remove('active');
-                setNewNarrationCode();
-                loadMiniHistory(user.uid);
-                // Real-time listener for history updates
-                rtdb.ref('deposits').orderByChild('uid').equalTo(user.uid).on('value', () => {
-                    loadMiniHistory(user.uid);
-                });
-            }, 1200);
-        });
+            console.log('✅ User authenticated:', user.uid);
 
-        // ============================================================
-        // COPY BUTTONS (Bank details & Narration)
-        // ============================================================
-        document.querySelectorAll('.copy-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const text = this.getAttribute('data-copy');
-                if (text) copyText(text, 'Copied!');
+            // Start the 15‑minute timer
+            startTimer();
+
+            if (unsubscribeUser) {
+                rtdb.ref('users/' + user.uid).off();
+                unsubscribeUser = null;
+            }
+
+            const userRef = rtdb.ref('users/' + user.uid);
+            userRef.on('value', (snap) => {
+                if (!snap.exists()) {
+                    console.warn('⚠️ User data not found in Firebase for:', user.uid);
+                    showToast('User data not found. Please contact support.', true);
+                    loadingOverlay.classList.add('hide');
+                    return;
+                }
+                userData = snap.val();
+                console.log('📦 User data loaded:', userData);
+                updateUIFromUserData();
             });
+            unsubscribeUser = userRef;
+
+            loadMiniHistory(user.uid);
         });
 
-        copyNarrationBtn.addEventListener('click', function() {
-            if (currentNarrationCode) {
-                copyText(currentNarrationCode, 'Narration code copied!');
-            } else {
-                showToast('No code generated yet.', true);
+        // ================================================================
+        // COPY FUNCTION (for account number, narration code)
+        // ================================================================
+        function copyText(text, btnElement) {
+            if (!text) return;
+            // Clean up account number if it has dashes (remove them for copying)
+            let copyText = text;
+            if (text.includes('-')) {
+                copyText = text.replace(/-/g, '');
             }
-        });
-
-        // ============================================================
-        // REGENERATE
-        // ============================================================
-        regenNarrationBtn.addEventListener('click', function() {
-            if (isTimerRunning && timerSeconds > 0) {
-                Swal.fire({
-                    title: 'Regenerate Code?',
-                    text: 'This will expire your current code and start a new 15‑minute timer.',
-                    icon: 'question',
-                    background: '#111424',
-                    color: '#fff',
-                    confirmButtonColor: '#e5b842',
-                    cancelButtonColor: '#ef4444',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, regenerate',
-                    cancelButtonText: 'Cancel'
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        setNewNarrationCode();
-                        showToast('✅ New narration code generated!');
-                    }
-                });
+            const fallback = () => {
+                const textarea = document.createElement('textarea');
+                textarea.value = copyText;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback(btnElement);
+                } catch (e) {
+                    Swal.fire({ title: 'Error', text: 'Could not copy.', icon: 'error', background: '#111424', color: '#fff' });
+                }
+                document.body.removeChild(textarea);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(copyText).then(() => showCopyFeedback(btnElement)).catch(fallback);
             } else {
-                setNewNarrationCode();
-                showToast('✅ New narration code generated!');
+                fallback();
             }
-        });
+        }
 
-        // ============================================================
-        // DEPOSIT FORM SUBMIT (RTDB)
-        // ============================================================
-        depositForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if (!currentUser) {
-                showToast('Please login first.', true);
+        function showCopyFeedback(btn) {
+            if (!btn) return;
+            // Find the nearest copy indicator
+            const parent = btn.closest('.account-row') || btn.closest('.narration-code-box') || btn.closest('.bank-item');
+            if (parent) {
+                const indicator = parent.querySelector('.copy-indicator');
+                if (indicator) {
+                    indicator.classList.add('show');
+                    setTimeout(() => indicator.classList.remove('show'), 2000);
+                }
+            }
+            Swal.fire({ title: 'Copied!', icon: 'success', timer: 800, showConfirmButton: false, background: '#111424', color: '#fff' });
+        }
+
+        // ================================================================
+        // DEPOSIT SUBMIT (with strict validation)
+        // ================================================================
+        depositBtn.addEventListener('click', async function() {
+            if (!currentUser || !userData) {
+                showToast('Please wait, loading user data...', true);
                 return;
             }
-            if (isSubmitting) return;
 
-            // Timer check
-            if (!isTimerRunning || timerSeconds <= 0) {
-                await showSweetAlert(
-                    '⏰ Code Expired',
-                    'Your narration code has expired. Please regenerate a new code and try again.',
-                    'warning',
-                    3000
-                );
+            // Run all validations
+            const isNameValid = validateSenderName();
+            const isAccountValid = validateSenderAccount();
+            const isAmountValid = validateAmount();
+
+            if (!isNameValid || !isAccountValid || !isAmountValid) {
+                showToast('Please fix all errors before submitting.', true);
                 return;
             }
 
-            const amount = parseFloat(document.getElementById('depositAmount').value);
-            const senderName = document.getElementById('senderName').value.trim();
-            const senderAccount = document.getElementById('senderAccount').value.trim();
-            const narrationCode = narrationHidden.value;
+            const amount = parseFloat(amountInput.value);
+            const senderName = senderNameInput.value.trim();
+            const senderAccount = senderAccountInput.value.trim().replace(/\s/g, '');
+            const narrationCode = narrationCodeSpan.textContent;
 
-            if (!amount || amount < 15000) {
+            // Extra strict: ensure account is exactly 10 digits
+            if (!/^\d{10}$/.test(senderAccount)) {
+                showToast('Account number must be exactly 10 digits.', true);
+                senderAccountWrapper.classList.add('error');
+                senderAccountError.classList.add('show');
+                return;
+            }
+
+            // Extra strict: ensure amount is at least 15000
+            if (amount < 15000) {
                 showToast('Minimum deposit is ₦15,000.', true);
-                return;
-            }
-            if (amount > 10000000) {
-                showToast('Maximum deposit is ₦10,000,000 per request.', true);
-                return;
-            }
-            if (!senderName || senderName.length < 2) {
-                showToast('Please enter your full sender name.', true);
-                return;
-            }
-            if (!narrationCode) {
-                showToast('Narration code is missing. Please regenerate.', true);
+                amountWrapper.classList.add('error');
+                amountError.classList.add('show');
                 return;
             }
 
-            // Confirm
             const confirmResult = await Swal.fire({
                 title: 'Confirm Deposit Request',
                 html: `
                     <div style="text-align:left;">
                         <p><strong>Amount:</strong> ₦${amount.toLocaleString()}</p>
-                        <p><strong>Narration Code:</strong> <span style="color:#e5b842;font-weight:700;">${narrationCode}</span></p>
-                        <p><strong>Sender:</strong> ${senderName}</p>
-                        <p style="margin-top:10px;font-size:0.75rem;color:#a1a1aa;">
-                            <i class="fa-solid fa-triangle-exclamation" style="color:#e5b842;"></i>
-                            Double‑check that you used the <strong>exact</strong> narration code in your bank transfer description.
+                        <p><strong>Sender Name:</strong> ${senderName}</p>
+                        <p><strong>Sender Account:</strong> ${senderAccount}</p>
+                        <p><strong>Narration Code:</strong> <span style="color:#fbbf24;">${narrationCode}</span></p>
+                        <p style="font-size:0.7rem;color:#9ca3af;margin-top:10px;">
+                            <i class="fa-solid fa-info-circle"></i> Please ensure you have sent this exact amount using the narration code above.
+                        </p>
+                        <p style="font-size:0.7rem;color:#ef4444;margin-top:6px;">
+                            <i class="fa-solid fa-triangle-exclamation"></i> This action cannot be undone. Please double‑check your details.
                         </p>
                     </div>
                 `,
                 icon: 'question',
                 background: '#111424',
                 color: '#fff',
-                confirmButtonColor: '#10b981',
+                confirmButtonColor: '#3b82f6',
                 cancelButtonColor: '#ef4444',
                 showCancelButton: true,
-                confirmButtonText: '✅ Yes, Submit',
+                confirmButtonText: '✅ Confirm Deposit',
                 cancelButtonText: 'Cancel'
             });
 
             if (!confirmResult.isConfirmed) return;
 
             isSubmitting = true;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<div class="spinner-small"></div> Submitting...';
+            depositBtn.disabled = true;
+            depositBtn.innerHTML = '<div class="spinner-small"></div> Submitting...';
 
             try {
                 const depositRef = rtdb.ref('deposits').push();
-                await depositRef.set({
+                const depositData = {
                     uid: currentUser.uid,
-                    username: currentUser.displayName || 'User',
-                    email: currentUser.email,
+                    username: userData.username || 'User',
+                    email: currentUser.email || '',
                     amount: amount,
                     narrationCode: narrationCode,
                     senderName: senderName,
-                    senderAccount: senderAccount || '',
+                    senderAccount: senderAccount,
                     status: 'pending',
-                    timestamp: new Date().toISOString()
-                });
+                    timestamp: new Date().toISOString(),
+                    requestedAt: new Date().toISOString()
+                };
+                await depositRef.set(depositData);
+                console.log('✅ Deposit saved:', depositData);
+
+                // Send Telegram notification
+                const msg = `
+        💰 <b>New Deposit Request</b>
+
+        👤 User: ${userData.username || 'User'} (UID: ${currentUser.uid})
+        💰 Amount: ₦${amount.toLocaleString()}
+        📝 Narration Code: ${narrationCode}
+        👤 Sender: ${senderName} (${senderAccount})
+        🕐 Time: ${new Date().toLocaleString()}
+        `;
+                await sendTelegramMessage(msg);
 
                 await showSweetAlert(
                     '✅ Deposit Request Submitted!',
                     `
-                        <div style="text-align:left;">
-                            <p><strong>Amount:</strong> ₦${amount.toLocaleString()}</p>
-                            <p><strong>Narration Code:</strong> <span style="color:#e5b842;font-weight:700;">${narrationCode}</span></p>
-                            <p><strong>Sender Name:</strong> ${senderName}</p>
-                            <div style="background:rgba(229,184,66,0.1);padding:12px;border-radius:8px;margin-top:12px;">
-                                <p style="color:#e5b842;font-weight:700;">⏳ Status: PENDING</p>
-                                <p style="font-size:0.7rem;color:#a1a1aa;">Admin will verify and approve your deposit within 24 hours.</p>
-                                <p style="font-size:0.7rem;color:#a1a1aa;">You'll see the status update in your History page.</p>
-                            </div>
+                    <div style="text-align:left;">
+                        <p><strong>Amount:</strong> ₦${amount.toLocaleString()}</p>
+                        <p><strong>Narration Code:</strong> <span style="color:#fbbf24;">${narrationCode}</span></p>
+                        <div style="background:rgba(59,130,246,0.1);padding:12px;border-radius:8px;margin-top:12px;">
+                            <p style="color:#3b82f6;font-weight:700;">⏳ Status: PENDING</p>
+                            <p style="font-size:0.7rem;color:#a1a1aa;">Admin will verify and credit your balance within 24‑48 hours.</p>
+                            <p style="font-size:0.7rem;color:#a1a1aa;">Check your History page for real‑time updates.</p>
                         </div>
+                    </div>
                     `,
                     'success',
                     5000
                 );
 
                 // Reset form
-                document.getElementById('depositAmount').value = '';
-                document.getElementById('senderName').value = '';
-                document.getElementById('senderAccount').value = '';
-                // Reload mini history
+                amountInput.value = '';
+                senderNameInput.value = '';
+                senderAccountInput.value = '';
+                // Generate new narration code
+                narrationCodeSpan.textContent = generateNarrationCode();
                 loadMiniHistory(currentUser.uid);
+                depositBtn.disabled = true;
+                depositBtn.innerHTML = '<i class="fa-solid fa-clock"></i> Request Pending...';
+
+                // Reset timer on successful submission (extends session)
+                resetTimer();
 
             } catch (error) {
-                console.error('Deposit submit error:', error);
+                console.error('❌ Deposit error:', error);
                 showToast('Error submitting deposit. Please try again.', true);
+                depositBtn.disabled = false;
+                depositBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Deposit Request';
             } finally {
                 isSubmitting = false;
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Deposit Request';
             }
         });
 
-        // ============================================================
-        // CLEANUP TIMER ON PAGE UNLOAD
-        // ============================================================
-        window.addEventListener('beforeunload', function() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-        });
+        // ================================================================
+        // INIT
+        // ================================================================
+        console.log('🚀 Deposit page initialized with CORRECT deposit bot.');
+        loadingOverlay.classList.remove('hide');
+
+        // Expose copyText to global scope for inline onclick
+        window.copyText = copyText;
     </script>
-
 </body>
 </html>

@@ -3,60 +3,36 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-
-    <!-- ============================================================
-     MASTER HEADER – meta, AdSense, fonts, Firebase
-     ============================================================ -->
-    <meta property="og:title" content="NEXUS EARN – Secure Withdrawals" />
-    <meta property="og:description" content="Withdraw your earnings securely. VIP 1+ required. ₦500 minimum. 10% processing fee. Admin approved within 24-48 hours." />
-    <meta property="og:image" content="https://nexus-earn.com/logo.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://nexus-earn.com" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="NEXUS EARN" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="NEXUS EARN – Withdraw Funds" />
-    <meta name="twitter:description" content="Withdraw your earnings to your bank account. Fast, secure, and admin‑verified." />
-    <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
-    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-
-    <title>NEXUS EARN – Withdraw | Secure Cash Out</title>
-    <meta name="description" content="Withdraw your NEXUS EARN earnings. VIP 1+ required. ₦500 min. 10% fee. Admin approves within 24-48 hours." />
+    <title>NEXUS EARN – Withdraw Funds</title>
+    <meta name="description" content="Withdraw your earnings securely. VIP 1+ required. ₦500 minimum. 10% fee. Admin approved within 24-48 hours." />
     <meta name="theme-color" content="#e5b842" />
-
-    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Firebase (compat) – ORDER MATTERS -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
     <style>
-        /* ============================================================
-           GLOBAL RESET & BASE
-           ============================================================ */
+        /* ================================================================
+           RESET & BASE – same as before, with a few additions
+           ================================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: #0b0d17;
-            color: #ffffff;
+            color: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            transition: background-color 0.3s ease, color 0.2s ease;
+            transition: background 0.3s, color 0.2s;
             padding-bottom: 40px;
         }
 
@@ -65,10 +41,10 @@
             color: #1a1e2e;
         }
         body.light-mode .app-container {
-            background: #ffffff;
+            background: #fff;
         }
         body.light-mode .hero-banner {
-            background: #ffffff;
+            background: #fff;
         }
         body.light-mode .withdraw-card,
         body.light-mode .bank-details-box,
@@ -79,7 +55,7 @@
             color: #1a1e2e;
         }
         body.light-mode .input-row-container {
-            background: #ffffff;
+            background: #fff;
             border-color: #d1d5db;
         }
         body.light-mode .input-row-container input {
@@ -131,24 +107,42 @@
             flex-direction: column;
             position: relative;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-            transition: background 0.3s ease;
+            transition: background 0.3s;
         }
 
         /* ---- Animations ---- */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
         }
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ---- Top Bar ---- */
@@ -229,7 +223,7 @@
             border-bottom: 1px solid rgba(229, 184, 66, 0.15);
             position: relative;
             overflow: hidden;
-            transition: background 0.3s ease;
+            transition: background 0.3s;
         }
         .hero-banner::before {
             content: '';
@@ -351,17 +345,48 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .balance-display .label {
             font-size: 0.7rem;
             color: #9ca3af;
             text-transform: uppercase;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .balance-display .label .live-badge {
+            font-size: 0.5rem;
+            background: #10b981;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            animation: pulse 2s infinite;
         }
         .balance-display .value {
             font-size: 1.3rem;
             font-weight: 800;
             color: #10b981;
+        }
+        .balance-display .refresh-btn {
+            background: rgba(229, 184, 66, 0.1);
+            border: 1px solid rgba(229, 184, 66, 0.2);
+            color: #e5b842;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .balance-display .refresh-btn:hover {
+            background: rgba(229, 184, 66, 0.2);
         }
         body.light-mode .balance-display {
             background: #f0f2f8;
@@ -418,36 +443,91 @@
             line-height: 1.3;
         }
 
-        /* ---- Bank Details (read-only) ---- */
+        /* ---- Bank Details – SQUARE CARD ---- */
         .bank-details-box {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 12px 14px;
+            background: #0b0d17;
+            border-radius: 16px;
+            padding: 16px;
             margin: 8px 0 14px 0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(229, 184, 66, 0.15);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            position: relative;
         }
-        .bank-row {
+        .bank-details-box .bank-item {
             display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            font-size: 0.75rem;
+            flex-direction: column;
+            gap: 2px;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            min-height: 60px;
+            justify-content: center;
         }
-        .bank-row .label {
+        .bank-details-box .bank-item .label {
+            font-size: 0.55rem;
             color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-        .bank-row .value {
+        .bank-details-box .bank-item .value {
             font-weight: 700;
             color: #fff;
+            font-size: 0.95rem;
+            word-break: break-all;
         }
-        body.light-mode .bank-row .value {
-            color: #1a1e2e;
+        .bank-details-box .bank-item .value.bank-name {
+            color: #fbbf24;
         }
+        .bank-details-box .bank-item .value.account-number {
+            color: #10b981;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        .bank-details-box .bank-item .value.account-name {
+            color: #d1d5db;
+            font-size: 0.9rem;
+        }
+        .bank-details-box .copy-btn-icon {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        .bank-details-box .copy-btn-icon:hover {
+            color: #e5b842;
+        }
+        .bank-details-box .copy-indicator {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 0.6rem;
+            color: #10b981;
+            display: none;
+        }
+        .bank-details-box .copy-indicator.show {
+            display: block;
+        }
+
         body.light-mode .bank-details-box {
             background: #f0f2f8;
             border-color: #d1d5db;
         }
+        body.light-mode .bank-details-box .bank-item {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        body.light-mode .bank-details-box .bank-item .value {
+            color: #1a1e2e;
+        }
 
-        /* ---- Amount Input + Presets ---- */
+        /* ---- Presets ---- */
         .preset-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -635,7 +715,7 @@
             display: inline-block;
         }
 
-        /* ---- Info Box (hours / support) ---- */
+        /* ---- Info Box ---- */
         .info-box {
             background: rgba(16, 185, 129, 0.06);
             border: 1px solid rgba(16, 185, 129, 0.15);
@@ -831,28 +911,38 @@
             .preset-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
-            .bank-row {
+            .bank-details-box {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .bank-details-box .bank-item {
+                min-height: 50px;
+                padding: 4px 8px;
+            }
+            .balance-display {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 2px;
-                padding: 6px 0;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .balance-display .value {
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
+    <!-- ================================================================
     TOAST NOTIFICATION
-    ============================================================ -->
+    ================================================================ -->
     <div class="toast-notification" id="customToast">
         <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
         <div class="toast-msg" id="toastMsg">Notification System Active.</div>
     </div>
 
-    <!-- ============================================================
+    <!-- ================================================================
     APP CONTAINER
-    ============================================================ -->
+    ================================================================ -->
     <div class="app-container">
 
         <!-- ---- TOP BAR ---- -->
@@ -905,11 +995,17 @@
             ============================================================ -->
             <div class="withdraw-card" id="withdrawCard">
 
-                <!-- 1. Balance Display -->
+                <!-- 1. Balance Display with Live Badge & Refresh -->
                 <div class="section-label"><i class="fa-solid fa-wallet"></i> Available Balance</div>
                 <div class="balance-display">
-                    <span class="label">Your Withdrawable Funds</span>
+                    <span class="label">
+                        Your Withdrawable Funds
+                        <span class="live-badge"><i class="fa-solid fa-circle"></i> Live</span>
+                    </span>
                     <span class="value" id="mainBalanceDisplay">₦0.00</span>
+                    <button class="refresh-btn" onclick="refreshBalance()">
+                        <i class="fa-solid fa-arrows-rotate"></i> Sync
+                    </button>
                 </div>
 
                 <!-- 2. Warnings: VIP, Pending, Bank Details -->
@@ -928,12 +1024,23 @@
                     <p><strong>BANK DETAILS MISSING</strong> – Please add your bank details in the Profile tab before requesting a withdrawal.</p>
                 </div>
 
-                <!-- 3. Bank Details (Read‑only) -->
+                <!-- 3. Bank Details – SQUARE CARD with copy -->
                 <div class="section-label"><i class="fa-solid fa-building-columns"></i> Your Linked Bank Account</div>
-                <div class="bank-details-box">
-                    <div class="bank-row"><span class="label">Bank</span><span class="value" id="bankName">Not set</span></div>
-                    <div class="bank-row"><span class="label">Account Number</span><span class="value" id="accountNumber">Not set</span></div>
-                    <div class="bank-row"><span class="label">Account Name</span><span class="value" id="accountName">Not set</span></div>
+                <div class="bank-details-box" id="bankDetailsBox">
+                    <div class="bank-item">
+                        <span class="label">Bank</span>
+                        <span class="value bank-name" id="bankName">Not set</span>
+                    </div>
+                    <div class="bank-item">
+                        <span class="label">Account Number</span>
+                        <span class="value account-number" id="accountNumber">Not set</span>
+                        <button class="copy-btn-icon" onclick="copyText(document.getElementById('accountNumber').innerText, this)" title="Copy account number"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <div class="bank-item" style="grid-column: 1 / -1;">
+                        <span class="label">Account Name</span>
+                        <span class="value account-name" id="accountName">Not set</span>
+                    </div>
+                    <div class="copy-indicator" id="copyBankIndicator">✓ Copied</div>
                 </div>
 
                 <!-- 4. Amount Input + Presets -->
@@ -1006,7 +1113,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            The 10% fee covers transaction costs, bank processing, and administrative verification. It ensures that all withdrawals are handled securely and efficiently. You receive <strong>90%</strong> of your requested amount.
+                            The 10% fee covers transaction costs, bank processing, and administrative verification. You receive <strong>90%</strong> of your requested amount.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -1015,7 +1122,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            Withdrawals are processed <strong>manually</strong> by admin for security. Please allow <strong>24‑48 hours</strong> for approval. You'll see the status update in your History page. Requests made outside working hours (Mon–Sat, 10‑6 WAT) are processed the next business day.
+                            Withdrawals are processed <strong>manually</strong> by admin for security. Please allow <strong>24‑48 hours</strong> for approval. Requests made outside working hours (Mon–Sat, 10‑6 WAT) are processed the next business day.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -1069,13 +1176,13 @@
 
     </div>
 
-    <!-- ============================================================
-    JAVASCRIPT – All withdrawal logic: VIP check, pending, tax, submit (RTDB)
-    ============================================================ -->
+    <!-- ================================================================
+    JAVASCRIPT – FULL USER WITHDRAWAL LOGIC (SYNCED WITH FIREBASE)
+    ================================================================ -->
     <script>
-        // ============================================================
-        // FIREBASE CONFIG – CORRECT REGION URL
-        // ============================================================
+        // ================================================================
+        // FIREBASE CONFIG
+        // ================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
             authDomain: "nexus-earn-1.firebaseapp.com",
@@ -1089,9 +1196,47 @@
         const auth = firebase.auth();
         const rtdb = firebase.database();
 
-        // ============================================================
+        // ================================================================
+        //  TELEGRAM WITHDRAWAL BOT (CORRECT TOKEN)
+        //  TOKEN: 8841432213:AAETCxJWPmJx_Dq-_tLyVSski0j7sctBgiA
+        //  ADMINS: Solomon (8966823502) & Bamzy (8558942573)
+        // ================================================================
+        const WITHDRAWAL_BOT_TOKEN = '8841432213:AAETCxJWPmJx_Dq-_tLyVSski0j7sctBgiA';
+        const ADMIN_CHAT_IDS = [
+            '8966823502', // Solomon
+            '8558942573' // Bamzy
+        ];
+
+        async function sendTelegramMessage(message) {
+            if (!navigator.onLine) return;
+            const url = `https://api.telegram.org/bot${WITHDRAWAL_BOT_TOKEN}/sendMessage`;
+            for (const chatId of ADMIN_CHAT_IDS) {
+                if (!chatId) continue;
+                try {
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: message,
+                            parse_mode: 'HTML'
+                        })
+                    });
+                    const data = await resp.json();
+                    if (data.ok) {
+                        console.log(`✅ Withdrawal notification sent to ${chatId}`);
+                    } else {
+                        console.error(`❌ Telegram error ${chatId}:`, data.description);
+                    }
+                } catch (e) {
+                    console.error(`❌ Network error ${chatId}:`, e);
+                }
+            }
+        }
+
+        // ================================================================
         // GLOBALS
-        // ============================================================
+        // ================================================================
         let currentUser = null;
         let userData = null;
         let mainBalance = 0;
@@ -1100,9 +1245,7 @@
         let unsubscribeUser = null;
         let unsubscribePending = null;
 
-        // ============================================================
-        // DOM REFS
-        // ============================================================
+        // DOM refs
         const balanceDisplay = document.getElementById('mainBalanceDisplay');
         const vipWarning = document.getElementById('vipWarning');
         const lockoutBox = document.getElementById('lockoutBox');
@@ -1119,9 +1262,9 @@
         const withdrawBtn = document.getElementById('withdrawBtn');
         const miniHistoryList = document.getElementById('miniHistoryList');
 
-        // ============================================================
+        // ================================================================
         // TOAST & SWEETALERT
-        // ============================================================
+        // ================================================================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
             const icon = toast.querySelector('i');
@@ -1148,9 +1291,9 @@
             });
         }
 
-        // ============================================================
+        // ================================================================
         // DARK MODE
-        // ============================================================
+        // ================================================================
         (function() {
             const toggle = document.getElementById('darkModeToggle');
             const saved = localStorage.getItem('nexusTheme');
@@ -1174,18 +1317,18 @@
             });
         })();
 
-        // ============================================================
+        // ================================================================
         // FAQ ACCORDION
-        // ============================================================
+        // ================================================================
         document.querySelectorAll('.faq-item').forEach(item => {
             item.addEventListener('click', function() {
                 this.classList.toggle('active');
             });
         });
 
-        // ============================================================
+        // ================================================================
         // PRESET BUTTONS
-        // ============================================================
+        // ================================================================
         presetBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 const amt = parseInt(this.getAttribute('data-amt'));
@@ -1196,9 +1339,9 @@
             });
         });
 
-        // ============================================================
+        // ================================================================
         // TAX CALCULATION (live)
-        // ============================================================
+        // ================================================================
         function updateTaxBreakdown() {
             let val = parseFloat(amountInput.value) || 0;
             const maxBalance = mainBalance;
@@ -1239,9 +1382,9 @@
             });
         });
 
-        // ============================================================
+        // ================================================================
         // LOAD MINI HISTORY (RTDB)
-        // ============================================================
+        // ================================================================
         async function loadMiniHistory(uid) {
             try {
                 const snap = await rtdb.ref('withdrawals').orderByChild('uid').equalTo(uid).once('value');
@@ -1288,9 +1431,80 @@
             }
         }
 
-        // ============================================================
-        // AUTH + REAL‑TIME USER DATA + PENDING CHECK (RTDB)
-        // ============================================================
+        // ================================================================
+        // REFRESH BALANCE (manual)
+        // ================================================================
+        window.refreshBalance = async function() {
+            if (!currentUser) {
+                showToast('Please login first.', true);
+                return;
+            }
+            try {
+                const snap = await rtdb.ref('users/' + currentUser.uid).once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    mainBalance = data.balance || 0;
+                    balanceDisplay.textContent = `₦${mainBalance.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+                    showToast('Balance synced successfully!');
+                } else {
+                    showToast('User data not found.', true);
+                }
+            } catch (e) {
+                console.error('Refresh error:', e);
+                showToast('Error syncing balance.', true);
+            }
+        };
+
+        // ================================================================
+        // UPDATE UI FROM USER DATA
+        // ================================================================
+        function updateUIFromUserData() {
+            if (!userData) {
+                console.warn('⚠️ userData is null, cannot update UI');
+                return;
+            }
+
+            // Update balance
+            mainBalance = userData.balance || 0;
+            balanceDisplay.textContent = `₦${mainBalance.toLocaleString(undefined, {minimumFractionDigits:2})}`;
+
+            // VIP check
+            const tier = userData.tierCode || 'NONE';
+            if (tier === 'NONE') {
+                vipWarning.classList.add('active');
+                withdrawBtn.disabled = true;
+            } else {
+                vipWarning.classList.remove('active');
+                if (!hasPending && userData.bankName && userData.accountNumber) {
+                    withdrawBtn.disabled = false;
+                }
+            }
+
+            // Bank details – update the square card
+            const bank = userData.bankName || 'Not set';
+            const accNum = userData.accountNumber || 'Not set';
+            const accName = userData.accountName || 'Not set';
+            bankName.textContent = bank;
+            accountNumber.textContent = accNum;
+            accountName.textContent = accName;
+
+            if (bank === 'Not set' || accNum === 'Not set') {
+                bankWarning.classList.add('active');
+                withdrawBtn.disabled = true;
+            } else {
+                bankWarning.classList.remove('active');
+                if (tier !== 'NONE' && !hasPending) {
+                    withdrawBtn.disabled = false;
+                }
+            }
+
+            updateTaxBreakdown();
+            console.log('✅ UI updated:', { balance: mainBalance, tier, bank, accNum });
+        }
+
+        // ================================================================
+        // AUTH + REAL‑TIME USER DATA + PENDING CHECK
+        // ================================================================
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 await showSweetAlert('Session Expired', 'Please login to withdraw funds.', 'warning', 2000);
@@ -1298,54 +1512,29 @@
                 return;
             }
             currentUser = user;
+            console.log('✅ User authenticated:', user.uid);
 
             if (unsubscribeUser) {
                 rtdb.ref('users/' + user.uid).off();
+                unsubscribeUser = null;
             }
             if (unsubscribePending) {
                 rtdb.ref('withdrawals').orderByChild('uid').equalTo(user.uid).off();
+                unsubscribePending = null;
             }
 
             const userRef = rtdb.ref('users/' + user.uid);
             userRef.on('value', (snap) => {
                 if (!snap.exists()) {
+                    console.warn('⚠️ User data not found in Firebase for:', user.uid);
                     showToast('User data not found. Please contact support.', true);
                     return;
                 }
                 userData = snap.val();
-                mainBalance = userData.balance || 0;
-                balanceDisplay.textContent = `₦${mainBalance.toLocaleString(undefined, {minimumFractionDigits:2})}`;
-
-                const tier = userData.tierCode || 'NONE';
-                if (tier === 'NONE') {
-                    vipWarning.classList.add('active');
-                    withdrawBtn.disabled = true;
-                } else {
-                    vipWarning.classList.remove('active');
-                    if (!hasPending && userData.bankName && userData.accountNumber) {
-                        withdrawBtn.disabled = false;
-                    }
-                }
-
-                const bank = userData.bankName || 'Not set';
-                const accNum = userData.accountNumber || 'Not set';
-                const accName = userData.accountName || 'Not set';
-                bankName.textContent = bank;
-                accountNumber.textContent = accNum;
-                accountName.textContent = accName;
-
-                if (bank === 'Not set' || accNum === 'Not set') {
-                    bankWarning.classList.add('active');
-                    withdrawBtn.disabled = true;
-                } else {
-                    bankWarning.classList.remove('active');
-                    if (tier !== 'NONE' && !hasPending) {
-                        withdrawBtn.disabled = false;
-                    }
-                }
-
-                updateTaxBreakdown();
+                console.log('📦 User data loaded:', userData);
+                updateUIFromUserData();
             });
+            unsubscribeUser = userRef;
 
             // Pending withdrawal listener
             const pendingRef = rtdb.ref('withdrawals').orderByChild('uid').equalTo(user.uid);
@@ -1360,6 +1549,7 @@
                         }
                     }
                 }
+                console.log('📌 Pending status:', hasPending);
                 if (hasPending) {
                     lockoutBox.classList.add('active');
                     withdrawBtn.disabled = true;
@@ -1370,13 +1560,51 @@
                     }
                 }
             });
+            unsubscribePending = pendingRef;
 
             loadMiniHistory(user.uid);
         });
 
-        // ============================================================
-        // WITHDRAW SUBMIT (RTDB)
-        // ============================================================
+        // ================================================================
+        // COPY FUNCTION (for account number)
+        // ================================================================
+        function copyText(text, btnElement) {
+            if (!text) return;
+            const fallback = () => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback(btnElement);
+                } catch (e) {
+                    Swal.fire({ title: 'Error', text: 'Could not copy.', icon: 'error', background: '#111424', color: '#fff' });
+                }
+                document.body.removeChild(textarea);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showCopyFeedback(btnElement)).catch(fallback);
+            } else {
+                fallback();
+            }
+        }
+
+        function showCopyFeedback(btn) {
+            if (!btn) return;
+            const indicator = document.getElementById('copyBankIndicator');
+            if (indicator) {
+                indicator.classList.add('show');
+                setTimeout(() => indicator.classList.remove('show'), 2000);
+            }
+            Swal.fire({ title: 'Copied!', icon: 'success', timer: 800, showConfirmButton: false, background: '#111424', color: '#fff' });
+        }
+
+        // ================================================================
+        // WITHDRAW SUBMIT (with correct bot and live sync)
+        // ================================================================
         withdrawBtn.addEventListener('click', async function() {
             if (!currentUser || !userData) {
                 showToast('Please wait, loading user data...', true);
@@ -1473,15 +1701,16 @@
                 const snap = await userRef.once('value');
                 const currentBalance = snap.val().balance || 0;
                 if (currentBalance < amount) throw new Error('Insufficient balance');
+
                 await userRef.update({
                     balance: currentBalance - amount
                 });
 
                 const withdrawalRef = rtdb.ref('withdrawals').push();
-                await withdrawalRef.set({
+                const withdrawalData = {
                     uid: currentUser.uid,
                     username: userData.username || 'User',
-                    email: currentUser.email,
+                    email: currentUser.email || '',
                     grossAmount: amount,
                     taxWithheld: tax,
                     netAmount: net,
@@ -1491,21 +1720,37 @@
                     status: 'pending',
                     timestamp: new Date().toISOString(),
                     requestedAt: new Date().toISOString()
-                });
+                };
+                await withdrawalRef.set(withdrawalData);
+                console.log('✅ Withdrawal saved:', withdrawalData);
+
+                // Send Telegram notification (withdrawal bot)
+                const msg = `
+        💸 <b>New Withdrawal Request</b>
+
+        👤 User: ${userData.username || 'User'} (UID: ${currentUser.uid})
+        💰 Requested: ₦${amount.toLocaleString()}
+        📉 Fee (10%): -₦${tax.toLocaleString()}
+        🏦 Net: ₦${net.toLocaleString()}
+        🏦 Bank: ${userData.bankName}
+        🔢 Account: ${userData.accountNumber} (${userData.accountName})
+        📅 Time: ${new Date().toLocaleString()}
+        `;
+                await sendTelegramMessage(msg);
 
                 await showSweetAlert(
                     '✅ Withdrawal Request Submitted!',
                     `
-                        <div style="text-align:left;">
-                            <p><strong>Requested:</strong> ₦${amount.toLocaleString()}</p>
-                            <p style="color:#ef4444;"><strong>Fee (10%):</strong> -₦${tax.toLocaleString()}</p>
-                            <p style="color:#10b981;font-size:1.1rem;"><strong>Net Receivable:</strong> ₦${net.toLocaleString()}</p>
-                            <div style="background:rgba(229,184,66,0.1);padding:12px;border-radius:8px;margin-top:12px;">
-                                <p style="color:#e5b842;font-weight:700;">⏳ Status: PENDING</p>
-                                <p style="font-size:0.7rem;color:#a1a1aa;">Admin will verify and process within 24‑48 hours.</p>
-                                <p style="font-size:0.7rem;color:#a1a1aa;">Check your History page for real‑time updates.</p>
-                            </div>
+                    <div style="text-align:left;">
+                        <p><strong>Requested:</strong> ₦${amount.toLocaleString()}</p>
+                        <p style="color:#ef4444;"><strong>Fee (10%):</strong> -₦${tax.toLocaleString()}</p>
+                        <p style="color:#10b981;font-size:1.1rem;"><strong>Net Receivable:</strong> ₦${net.toLocaleString()}</p>
+                        <div style="background:rgba(229,184,66,0.1);padding:12px;border-radius:8px;margin-top:12px;">
+                            <p style="color:#e5b842;font-weight:700;">⏳ Status: PENDING</p>
+                            <p style="font-size:0.7rem;color:#a1a1aa;">Admin will verify and process within 24‑48 hours.</p>
+                            <p style="font-size:0.7rem;color:#a1a1aa;">Check your History page for real‑time updates.</p>
                         </div>
+                    </div>
                     `,
                     'success',
                     5000
@@ -1515,11 +1760,19 @@
                 taxBreakdown.classList.remove('active');
                 presetBtns.forEach(b => b.classList.remove('active-preset'));
                 loadMiniHistory(currentUser.uid);
+
+                // Refresh user data to update balance instantly
+                const updatedSnap = await userRef.once('value');
+                if (updatedSnap.exists()) {
+                    userData = updatedSnap.val();
+                    updateUIFromUserData();
+                }
+
                 withdrawBtn.disabled = true;
                 withdrawBtn.innerHTML = '<i class="fa-solid fa-clock"></i> Request Pending...';
 
             } catch (error) {
-                console.error('Withdrawal error:', error);
+                console.error('❌ Withdrawal error:', error);
                 if (error.message === 'Insufficient balance') {
                     showToast('Insufficient balance. Please try again.', true);
                 } else {
@@ -1534,10 +1787,12 @@
             }
         });
 
-        // ============================================================
+        // ================================================================
         // INIT: hide tax breakdown initially
-        // ============================================================
+        // ================================================================
         taxBreakdown.classList.remove('active');
+
+        console.log('🚀 Withdraw page initialized with CORRECT withdrawal bot and FULL Firebase sync.');
     </script>
 </body>
 </html>

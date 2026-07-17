@@ -38,7 +38,7 @@
 
     <style>
         /* ============================================================
-           GLOBAL RESET & BASE
+           GLOBAL RESET & BASE – same as before
            ============================================================ */
         * {
             margin: 0;
@@ -295,14 +295,14 @@
         .stat-card .stat-value.green {
             color: #10b981;
         }
-        .stat-card .stat-value.gold {
-            color: #e5b842;
+        .stat-card .stat-value.blue {
+            color: #3b82f6;
         }
         .stat-card .stat-value.red {
             color: #ef4444;
         }
-        .stat-card .stat-value.blue {
-            color: #3b82f6;
+        .stat-card .stat-value.gold {
+            color: #e5b842;
         }
         body.light-mode .stat-card {
             background: #f0f2f8;
@@ -435,7 +435,6 @@
         }
         .tx-card:hover {
             transform: translateX(3px);
-            border-color: rgba(229, 184, 66, 0.4);
         }
         .tx-card.type-deposit {
             border-left-color: #3b82f6;
@@ -451,6 +450,12 @@
         }
         .tx-card.type-bonus {
             border-left-color: #f59e0b;
+        }
+        .tx-card.type-refund {
+            border-left-color: #06b6d4;
+        }
+        .tx-card.type-debit {
+            border-left-color: #ef4444;
         }
 
         .tx-card .tx-header {
@@ -799,7 +804,7 @@
         <section class="hero-banner">
             <div class="badge"><i class="fa-solid fa-receipt"></i> Complete Ledger</div>
             <h1>Transaction <span class="gold">History</span></h1>
-            <p class="subtitle">Every deposit, withdrawal, earning, and VIP activation — all in one place.</p>
+            <p class="subtitle">Every deposit, withdrawal, earning, VIP activation, and refund — all in one place.</p>
         </section>
 
         <!-- ---- STATS ROW ---- -->
@@ -833,6 +838,8 @@
                 <button class="tab-btn" data-filter="deposit">Deposits</button>
                 <button class="tab-btn" data-filter="withdrawal">Withdrawals</button>
                 <button class="tab-btn" data-filter="earning">Earnings</button>
+                <button class="tab-btn" data-filter="activation">VIP Activations</button>
+                <button class="tab-btn" data-filter="refund">Refunds</button>
             </div>
             <button class="refresh-btn" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
         </div>
@@ -860,11 +867,11 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT – RTDB Version (fetch from 3 nodes, client‑side sort)
+    JAVASCRIPT – FIXED: VIP ACTIVATIONS NOW DETECTED BEFORE DEBIT
     ============================================================ -->
     <script>
         // ============================================================
-        // FIREBASE CONFIG – CORRECT REGION URL
+        // FIREBASE CONFIG
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
@@ -996,7 +1003,7 @@
         }
 
         // ============================================================
-        // UPDATE STATS
+        // UPDATE STATS – ONLY approved deposits & withdrawals, earnings/bonuses
         // ============================================================
         function updateStats(transactions) {
             const list = transactions || allTransactions;
@@ -1007,14 +1014,26 @@
 
             list.forEach(tx => {
                 const amount = tx.amount || 0;
+                // Earnings & bonuses – always counted (they are credits)
                 if (tx.type === 'earning' || tx.type === 'bonus') {
                     totalEarned += amount;
-                } else if (tx.type === 'deposit') {
-                    totalDeposited += amount;
-                } else if (tx.type === 'withdrawal') {
-                    totalWithdrawn += amount;
                 }
-                if (tx.status === 'pending') pending++;
+                // Deposits – only if status is 'approved' or 'completed'
+                else if (tx.type === 'deposit') {
+                    if (tx.status === 'approved' || tx.status === 'completed') {
+                        totalDeposited += amount;
+                    }
+                }
+                // Withdrawals – only if status is 'approved' or 'completed' or 'paid'
+                else if (tx.type === 'withdrawal') {
+                    if (tx.status === 'approved' || tx.status === 'completed' || tx.status === 'paid') {
+                        totalWithdrawn += Math.abs(amount);
+                    }
+                }
+                // Pending count – deposits and withdrawals with status 'pending'
+                if ((tx.type === 'deposit' || tx.type === 'withdrawal') && tx.status === 'pending') {
+                    pending++;
+                }
             });
 
             statTotalEarned.textContent = `₦${totalEarned.toLocaleString(undefined, {minimumFractionDigits:2})}`;
@@ -1040,8 +1059,8 @@
 
             let html = '';
             transactions.forEach((tx, index) => {
-                const isCredit = tx.type === 'earning' || tx.type === 'bonus' || tx.type === 'deposit';
-                const isDebit = tx.type === 'withdrawal' || tx.type === 'activation';
+                const isCredit = tx.type === 'earning' || tx.type === 'bonus' || tx.type === 'deposit' || tx.type === 'refund';
+                const isDebit = tx.type === 'withdrawal' || tx.type === 'activation' || tx.type === 'debit';
                 const amountClass = isCredit ? 'positive' : (isDebit ? 'negative' : 'neutral');
                 const prefix = isCredit ? '+' : (isDebit ? '-' : '');
                 const typeIcon = getTypeIcon(tx.type);
@@ -1057,7 +1076,7 @@
                     detailsHtml += `<span><i class="fa-solid fa-building-columns"></i> ${tx.bankName}</span>`;
                 }
                 if (tx.type === 'withdrawal' && tx.grossAmount) {
-                    const tax = (tx.grossAmount - tx.amount);
+                    const tax = (tx.grossAmount - Math.abs(tx.amount));
                     detailsHtml += `<span class="tx-tax"><i class="fa-solid fa-percent"></i> Tax: -₦${tax.toLocaleString(undefined, {minimumFractionDigits:2})}</span>`;
                 }
 
@@ -1078,7 +1097,7 @@
                                 <i class="${typeIcon}"></i> ${tx.title}
                             </div>
                             <div class="tx-amount ${amountClass}">
-                                ${prefix}₦${tx.amount.toLocaleString(undefined, {minimumFractionDigits:2})}
+                                ${prefix}₦${Math.abs(tx.amount).toLocaleString(undefined, {minimumFractionDigits:2})}
                             </div>
                         </div>
                         <div class="tx-details">
@@ -1099,13 +1118,15 @@
                 'withdrawal': 'fa-solid fa-circle-arrow-up',
                 'earning': 'fa-solid fa-coins',
                 'activation': 'fa-solid fa-crown',
-                'bonus': 'fa-solid fa-gift'
+                'bonus': 'fa-solid fa-gift',
+                'refund': 'fa-solid fa-rotate-left',
+                'debit': 'fa-solid fa-circle-minus'
             };
             return icons[type] || 'fa-solid fa-circle';
         }
 
         // ============================================================
-        // LOAD ALL HISTORY (RTDB – no orderBy, client‑side sort)
+        // LOAD ALL HISTORY – VIP ACTIVATION DETECTED BEFORE DEBIT
         // ============================================================
         async function loadAllHistory(uid) {
             if (isLoading) return;
@@ -1123,37 +1144,80 @@
             try {
                 const combined = [];
 
-                // 1. Ledger (earnings, bonuses, VIP activations)
+                // ---- 1. LEDGER ----
                 const ledgerSnap = await rtdb.ref('ledger').orderByChild('uid').equalTo(uid).once('value');
                 if (ledgerSnap.exists()) {
                     const data = ledgerSnap.val();
                     for (const key in data) {
                         const item = data[key];
-                        let type = 'earning';
-                        let title = item.title || 'Transaction';
+                        const title = item.title || 'Transaction';
                         const lowerTitle = title.toLowerCase();
 
-                        if (lowerTitle.includes('welcome') || lowerTitle.includes('bonus')) {
-                            type = 'bonus';
-                        } else if (lowerTitle.includes('activated vip') || lowerTitle.includes('vip 1') ||
-                            lowerTitle.includes('vip 2') || lowerTitle.includes('vip 3') ||
-                            lowerTitle.includes('vip 4') || lowerTitle.includes('vip 5') ||
-                            lowerTitle.includes('vip 6') || lowerTitle.includes('vip 7') ||
-                            lowerTitle.includes('vip 8') || lowerTitle.includes('vip 9') ||
-                            lowerTitle.includes('vip 10') || lowerTitle.includes('vip 11') ||
-                            lowerTitle.includes('vip 12') || lowerTitle.includes('vip 13') ||
-                            lowerTitle.includes('starter') || lowerTitle.includes('bronze') ||
-                            lowerTitle.includes('silver') || lowerTitle.includes('gold')) {
-                            type = 'activation';
-                        } else if (lowerTitle.includes('daily plan') || lowerTitle.includes('daily mining') ||
-                            lowerTitle.includes('daily claim')) {
-                            type = 'earning';
-                        } else if (lowerTitle.includes('referral')) {
-                            type = 'bonus';
+                        // ---- Skip deposit approval entries ----
+                        if (lowerTitle.includes('deposit approved') || lowerTitle.includes('💰 deposit approved')) {
+                            continue;
                         }
 
-                        const amount = parseFloat(item.amount) || 0;
-                        const finalAmount = type === 'activation' ? -Math.abs(amount) : Math.abs(amount);
+                        // ---- Determine display type ----
+                        let type = 'earning';
+
+                        // 1. Check for refunds
+                        if (lowerTitle.includes('refund') || lowerTitle.includes('🔄')) {
+                            type = 'refund';
+                        }
+                        // 2. Check for VIP activation (BEFORE debit check)
+                        else if (lowerTitle.includes('activated vip') || lowerTitle.includes('vip ') ||
+                            lowerTitle.includes('starter') || lowerTitle.includes('bronze') ||
+                            lowerTitle.includes('silver') || lowerTitle.includes('gold') ||
+                            lowerTitle.includes('platinum') || lowerTitle.includes('diamond') ||
+                            lowerTitle.includes('omega') || lowerTitle.includes('🚀')) {
+                            type = 'activation';
+                        }
+                        // 3. Manual debit
+                        else if (item.type === 'debit') {
+                            type = 'debit';
+                        }
+                        // 4. Credit classification
+                        else if (item.type === 'credit') {
+                            if (lowerTitle.includes('welcome') || lowerTitle.includes('bonus') || lowerTitle.includes('referral')) {
+                                type = 'bonus';
+                            } else if (lowerTitle.includes('daily plan') || lowerTitle.includes('daily mining') ||
+                                lowerTitle.includes('daily claim')) {
+                                type = 'earning';
+                            } else {
+                                type = 'earning';
+                            }
+                        }
+                        // 5. Fallback (if type field missing)
+                        else {
+                            if (lowerTitle.includes('welcome') || lowerTitle.includes('bonus') || lowerTitle.includes('referral')) {
+                                type = 'bonus';
+                            } else if (lowerTitle.includes('activated vip') || lowerTitle.includes('vip ') ||
+                                lowerTitle.includes('starter') || lowerTitle.includes('bronze') ||
+                                lowerTitle.includes('silver') || lowerTitle.includes('gold')) {
+                                type = 'activation';
+                            } else if (lowerTitle.includes('daily plan') || lowerTitle.includes('daily mining') ||
+                                lowerTitle.includes('daily claim')) {
+                                type = 'earning';
+                            } else {
+                                type = 'earning';
+                            }
+                        }
+
+                        // ---- Determine amount SIGN ----
+                        const rawAmount = parseFloat(item.amount) || 0;
+                        let finalAmount;
+                        if (type === 'refund') {
+                            finalAmount = Math.abs(rawAmount);
+                        } else if (type === 'activation' || type === 'debit') {
+                            finalAmount = -Math.abs(rawAmount);
+                        } else if (item.type === 'credit' || type === 'bonus' || type === 'earning') {
+                            finalAmount = Math.abs(rawAmount);
+                        } else {
+                            // Fallback: activation is a debit, everything else credit
+                            finalAmount = type === 'activation' ? -Math.abs(rawAmount) : Math.abs(rawAmount);
+                        }
+
                         const date = item.timestamp ? new Date(item.timestamp) : new Date(0);
 
                         combined.push({
@@ -1164,7 +1228,7 @@
                             date: date,
                             type: type,
                             status: 'completed',
-                            reason: null,
+                            reason: item.reason || null,
                             narrationCode: null,
                             bankName: null,
                             raw: item
@@ -1172,7 +1236,7 @@
                     }
                 }
 
-                // 2. Withdrawals
+                // ---- 2. WITHDRAWALS ----
                 const withdrawalsSnap = await rtdb.ref('withdrawals').orderByChild('uid').equalTo(uid).once('value');
                 if (withdrawalsSnap.exists()) {
                     const data = withdrawalsSnap.val();
@@ -1201,7 +1265,7 @@
                     }
                 }
 
-                // 3. Deposits
+                // ---- 3. DEPOSITS ----
                 const depositsSnap = await rtdb.ref('deposits').orderByChild('uid').equalTo(uid).once('value');
                 if (depositsSnap.exists()) {
                     const data = depositsSnap.val();
@@ -1227,7 +1291,7 @@
                     }
                 }
 
-                // Sort by date descending (newest first)
+                // ---- SORT: newest first ----
                 combined.sort((a, b) => b.date - a.date);
 
                 allTransactions = combined;
@@ -1269,7 +1333,7 @@
             currentUser = user;
             await loadAllHistory(user.uid);
 
-            // Real‑time listeners on all three nodes (without orderBy on timestamp – we sort client‑side)
+            // Real‑time listeners – refresh on any change
             const nodes = ['ledger', 'withdrawals', 'deposits'];
             nodes.forEach(node => {
                 rtdb.ref(node).orderByChild('uid').equalTo(user.uid).on('value', () => {
