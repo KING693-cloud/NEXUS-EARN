@@ -8,14 +8,16 @@
     🔥 NEXUS EARN – MASTER HEADER (include this in all pages)
     ============================================================ -->
 
-    <!-- ---- Primary Meta Tags ---- -->
+    <!-- ---- Primary Meta Tags (SEO & Browser) ---- -->
     <title>NEXUS EARN – Premium Investment Platform | Earn Daily</title>
-    <meta name="description" content="NEXUS EARN – Invest in VIP plans (1‑year contracts) and earn daily returns up to ₦2,048,000. Secure bank deposits, instant approvals, 10% referral bonus." />
-    <meta name="keywords" content="NEXUS EARN, investment, daily earnings, VIP plans, Nigeria, earn money, referral, bank transfer" />
+    <meta name="description" content="NEXUS EARN – Invest in VIP plans (1‑year contracts) and earn daily returns up to ₦2,048,000. Secure bank deposits via PalmPay, instant approvals, 10% referral bonus." />
+    <meta name="keywords" content="NEXUS EARN, investment, daily earnings, VIP plans, Nigeria, earn money, referral, bank transfer, PalmPay, 365 days, crypto, passive income" />
     <meta name="author" content="NEXUS EARN" />
     <meta name="theme-color" content="#e5b842" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://nexus-earn.com" />
 
-    <!-- ---- Open Graph (WhatsApp, Facebook, Telegram) ---- -->
+    <!-- ---- Open Graph (WhatsApp, Facebook, Telegram, etc.) ---- -->
     <meta property="og:title" content="NEXUS EARN – Earn Daily Returns for 1 Year" />
     <meta property="og:description" content="VIP 1–13 plans with daily payouts from ₦500 to ₦2,048,000. 365‑day contracts. Secure bank deposit via PalmPay. Start with ₦15,500." />
     <meta property="og:image" content="https://nexus-earn.com/logo.png" />
@@ -24,58 +26,60 @@
     <meta property="og:url" content="https://nexus-earn.com" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="NEXUS EARN" />
+    <meta property="og:locale" content="en_NG" />
 
-    <!-- ---- Twitter Card ---- -->
+    <!-- ---- Twitter Card (X/Twitter) ---- -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="NEXUS EARN – 1‑Year Investment Plans" />
     <meta name="twitter:description" content="Earn daily from ₦500 to ₦2,048,000. Secure bank deposits, 10% referral commission, instant approvals." />
     <meta name="twitter:image" content="https://nexus-earn.com/logo.png" />
 
-    <!-- ---- Google AdSense (disabled for now) ---- -->
-    <!--
-    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    -->
+    <!-- ---- Google AdSense (ACTIVATED with your publisher ID) ---- -->
+    <meta name="google-adsense-account" content="ca-pub-4735091807839425" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4735091807839425" crossorigin="anonymous"></script>
 
-    <!-- ---- Fonts & Icons ---- -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <!-- ---- Fonts & Icons (Google Fonts + Font Awesome) ---- -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <!-- ---- SweetAlert2 (for all pages) ---- -->
+    <!-- ---- SweetAlert2 (for all modals and alerts) ---- -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- ---- Firebase (compat) – loaded globally ---- -->
+    <!-- ---- Firebase (compat) – loaded globally for all pages ---- -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    <!-- ---- Global Firebase Config + Init (centralised) ---- -->
+    <!-- ---- Global Firebase Config + Initialisation (UPDATED with new project) ---- -->
     <script>
         // ============================================================
-        //  FIREBASE CONFIG – SAME FOR ALL PAGES
+        //  FIREBASE CONFIG – NEW PROJECT (nexus-earn-df06d)
+        //  Replace with your own if needed, but this is the latest.
         // ============================================================
         const firebaseConfig = {
-            apiKey: "AIzaSyDUIQ5s-MI2V3rsi_uWBbRb5YGcFmjjKK4",
-            authDomain: "nexus-earn-1.firebaseapp.com",
-            projectId: "nexus-earn-1",
-            storageBucket: "nexus-earn-1.firebasestorage.app",
-            messagingSenderId: "779765076952",
-            appId: "1:779765076952:web:fa5fac51bef82e74b598ad",
-            databaseURL: "https://nexus-earn-1-default-rtdb.europe-west1.firebasedatabase.app"   // ← Correct region
+            apiKey: "AIzaSyBCtEQGgQSWOxvWpMfe61KywCfLLMz5wng",
+            authDomain: "nexus-earn-df06d.firebaseapp.com",
+            projectId: "nexus-earn-df06d",
+            storageBucket: "nexus-earn-df06d.firebasestorage.app",
+            messagingSenderId: "163268569174",
+            appId: "1:163268569174:web:a5fdb8d29c0058d41d33f7",
+            measurementId: "G-NQPQ0X1SR7"
         };
 
         // Initialize only once (guard against multiple inclusions)
         if (!window._firebaseInitialized) {
             firebase.initializeApp(firebaseConfig);
             window._firebaseInitialized = true;
-            console.log("🔥 Firebase initialised from master header.");
+            console.log("🔥 Firebase initialised from master header (new project).");
         }
 
-        // Expose auth and rtdb for all pages (optional)
-        // (You can also access them directly via firebase.auth() and firebase.database())
+        // Expose auth, db, and FieldValue for convenience (optional)
+        // You can also access them via firebase.auth() etc.
     </script>
 
-    <!-- ---- Base CSS (shared across all pages) ---- -->
+    <!-- ---- Base CSS (shared across all pages – minimal reset + scrollbar) ---- -->
     <style>
         /* ============================================================
            GLOBAL RESET & BASE STYLES (shared by all NEXUS pages)
@@ -99,7 +103,7 @@
             transition: background-color 0.3s ease, color 0.2s ease;
         }
 
-        /* ---- Light mode overrides ---- */
+        /* ---- Light mode overrides (will be extended by each page) ---- */
         body.light-mode {
             background-color: #f0f2f8 !important;
             color: #1a1e2e;
@@ -121,7 +125,7 @@
         .header-preview-placeholder {
             display: none;
         }
-        /* When this file is opened alone, show a nice splash */
+        /* When this file is opened alone, show a branded splash */
         body:not(.loaded) .header-preview-placeholder {
             display: flex;
             flex-direction: column;
@@ -157,6 +161,17 @@
             color: #e5b842;
             margin-top: 15px;
         }
+        .header-preview-placeholder .meta-info {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #6b7280;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .header-preview-placeholder .meta-info strong {
+            color: #e5b842;
+        }
     </style>
 </head>
 <body>
@@ -165,11 +180,16 @@
          ============================================================ -->
     <div class="header-preview-placeholder">
         <h1>NEXUS EARN</h1>
-        <p>Master header file – contains all meta tags, fonts, Firebase config, and global styles.</p>
+        <p>Master header file – contains all meta tags, AdSense, fonts, Firebase config, and global styles.</p>
         <p style="font-size:0.8rem;color:#6b7280;margin-top:8px;">
             <i class="fa-solid fa-code"></i> Include this file in every page's <code>&lt;head&gt;</code> section.
         </p>
         <div class="badge"><i class="fa-regular fa-circle-check"></i> Ready for production</div>
+        <div class="meta-info">
+            <span><strong>AdSense:</strong> Active (ca-pub-4735091807839425)</span>
+            <span><strong>Firebase:</strong> nexus-earn-df06d</span>
+            <span><strong>Version:</strong> 2.0.0</span>
+        </div>
     </div>
 
     <!-- ============================================================
@@ -178,11 +198,9 @@
     <script>
         // If this file is included inside another document, the placeholder
         // will be hidden because the body will not have the class 'loaded'
-        // – we add 'loaded' to show that we are in a proper page context.
         (function() {
-            // Check if we are inside a full page (not an iframe or standalone)
             if (window.parent === window) {
-                // Only if the document has no other content (standalone)
+                // If the document has only this placeholder, it's standalone
                 if (document.body.children.length === 1) {
                     document.body.classList.add('loaded');
                 } else {
